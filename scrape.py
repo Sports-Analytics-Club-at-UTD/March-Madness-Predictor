@@ -9,6 +9,7 @@ load_dotenv()
 API_KEY = os.getenv("CBBD_API_KEY")
 BASE_URL = "https://api.collegebasketballdata.com"
 HEADERS = {"Authorization": f"Bearer {API_KEY}"}
+SEASONS = range(2000, 2009)  # 2000 through 2008, inclusive.
 
 def safe_get(endpoint, params=None):
     url = f"{BASE_URL}{endpoint}"
@@ -26,55 +27,121 @@ def safe_get(endpoint, params=None):
 def sanitize(name):
     return "".join(c for c in str(name) if c.isalnum() or c in (" ", "_", "-")).strip().replace(" ", "_").lower()
 
+
+def collect_teams_from_games(games):
+    teams = set()
+    if not games:
+        return teams
+
+    for game in games:
+        if not isinstance(game, dict):
+            continue
+
+        for key in ("team", "opponent", "homeTeam", "awayTeam", "home_team", "away_team"):
+            value = game.get(key)
+            if value:
+                teams.add(str(value))
+
+        nested_teams = game.get("teams")
+        if isinstance(nested_teams, list):
+            for value in nested_teams:
+                if value:
+                    teams.add(str(value))
+
+    return sorted(teams)
+
+
+def choose_team_list(tournament_teams, raw_games):
+    """Merge teams from both sources; coverage may still be incomplete."""
+    tournament_list = sorted(set(tournament_teams or []))
+    raw_team_list = collect_teams_from_games(raw_games)
+
+    if not tournament_list:
+        return raw_team_list, "games"
+    if set(raw_team_list) - set(tournament_list):
+        return sorted(set(raw_team_list) | set(tournament_list)), "games"
+    return tournament_list, "tournament"
+
+
 def calculate_missing_four_factors(df, prefix=""):
+    """Fill missing factors in calc_* columns; preserve API values.
+
+    Turnovers: season fraction, game/player percent. Other factors: percent.
+    Use API_column.combine_first(calc_column) to combine values.
+    """
     if df is None or df.empty:
         return df
 
-    def get_col(suffix_options):
-        for col in df.columns:
-            clean = col.lower().split(".")[-1]
-            if clean in suffix_options:
-                return pd.to_numeric(df[col], errors='coerce')
-        return None
+    def numeric(column):
+        if column not in df.columns:
+            return pd.Series(float("nan"), index=df.index)
+        return pd.to_numeric(df[column], errors="coerce").replace(
+            [float("inf"), -float("inf")], float("nan")
+        )
 
-    fga = get_col(["attempted", "fga"])
-    fgm = get_col(["made", "fgm"])
-    fg3m = get_col(["made", "3pm"])
-    fta = get_col(["attempted", "fta"])
-    tov = get_col(["total", "turnovers", "tov"])
+    def divide(numerator, denominator):
+        return (numerator / denominator.where(denominator > 0)).replace(
+            [float("inf"), -float("inf")], float("nan")
+        )
 
-    calc_count = 0
-    if fga is not None and fgm is not None and fg3m is not None:
-        if f"{prefix}calc_efg_pct" not in df.columns:
-            df[f"{prefix}calc_efg_pct"] = (fgm + 0.5 * fg3m) / fga
-            calc_count += 1
+    # Team fields are nested; player fields are unprefixed.
+    is_team = any(c.startswith("teamStats.") for c in df.columns)
+    root = "teamStats." if is_team else ""
+    api_root = "teamStats.fourFactors." if is_team else ""
 
-    if tov is not None and fga is not None and fta is not None:
-        if f"{prefix}calc_tov_pct" not in df.columns:
-            df[f"{prefix}calc_tov_pct"] = tov / (fga + 0.44 * fta + tov)
-            calc_count += 1
+    def add_fallback(api_name, fallback_name, calculate):
+        missing = numeric(api_root + api_name).isna()
+        if missing.any():
+            values = calculate().where(missing)
+            # Missing inputs remain empty.
+            df[f"{prefix}calc_{fallback_name}"] = values
 
-    if fta is not None and fga is not None:
-        if f"{prefix}calc_ft_rate" not in df.columns:
-            df[f"{prefix}calc_ft_rate"] = fta / fga
-            calc_count += 1
+    fgm = numeric(root + "fieldGoals.made")
+    fga = numeric(root + "fieldGoals.attempted")
+    threes = numeric(root + "threePointFieldGoals.made")
+    fta = numeric(root + "freeThrows.attempted")
+    tov = numeric("teamStats.turnovers.total" if is_team else "turnovers")
+    orb = numeric(root + "rebounds.offensive")
 
-    if calc_count > 0:
-        print(f"      [Calculation] Derived {calc_count} missing Four Factors metrics.")
+    add_fallback("effectiveFieldGoalPct", "efg_pct",
+                 lambda: 100 * divide(fgm + 0.5 * threes, fga))
+    add_fallback("freeThrowRate", "ft_rate",
+                 lambda: 100 * divide(fta, fga))
 
+    def turnover_ratio():
+        # Estimate possessions only when unavailable.
+        estimate = fga + 0.44 * fta + tov
+        if is_team:
+            estimate = estimate - orb
+        possessions = numeric(root + "possessions")
+        possessions = possessions.where(possessions > 0).combine_first(estimate)
+        scale = 100 if "gameId" in df.columns or not is_team else 1
+        return scale * divide(tov, possessions)
+
+    add_fallback("turnoverRatio", "turnover_ratio", turnover_ratio)
+    def offensive_rebound_pct():
+        if not is_team:
+            # Player rebound context is unavailable.
+            return pd.Series(float("nan"), index=df.index)
+        if "gameId" in df.columns:
+            # Observed CBBD game definition.
+            return 100 * divide(orb, numeric("teamStats.rebounds.total"))
+        return 100 * divide(orb, orb + numeric("opponentStats.rebounds.defensive"))
+
+    add_fallback("offensiveReboundPct", "orb_pct", offensive_rebound_pct)
     return df
 
+
 def main():
-    seasons = range(2009, 2018)
     data_dir = "data"
     os.makedirs(data_dir, exist_ok=True)
     
     print("=" * 70)
-    print(f"Starting Extraction for seasons: {list(seasons)}")
+    print(f"Starting Extraction for seasons: {list(SEASONS)}")
     print(f"Destination: {os.path.abspath(data_dir)}")
     print("=" * 70)
 
-    for season in seasons:
+    for season in SEASONS:
         print(f"\n{'#' * 60}")
         print(f"--> Processing Season: {season}")
         print(f"{'#' * 60}")
@@ -86,21 +153,31 @@ def main():
         
         print(f"[API] Fetching tournament teams for {season}...")
         plays = safe_get("/plays/tournament", {"season": season, "tournament": "NCAA"})
-        
-        if not plays:
-            print(f"[Warning] No tournament plays found for {season}. Skipping season.")
+        tournament_teams = set()
+        if plays:
+            for play in plays:
+                if play.get("team"):
+                    tournament_teams.add(play.get("team"))
+                if play.get("opponent"):
+                    tournament_teams.add(play.get("opponent"))
+
+        raw_games = safe_get("/games", {"season": season, "tournament": "NCAA"})
+        if not tournament_teams:
+            print(f"[Fallback] /plays/tournament empty for {season}; using /games fallback.")
+            team_list, source = choose_team_list(tournament_teams, raw_games)
+            total_teams = len(team_list)
+            print(f"[Fallback] Found {total_teams} teams from raw game data for {season}.")
+        else:
+            team_list, source = choose_team_list(tournament_teams, raw_games)
+            total_teams = len(team_list)
+            if source == "games":
+                print(f"[Fallback] /plays/tournament looks partial for {season}; using full raw games list ({total_teams} teams).")
+            else:
+                print(f"[Success] Found {total_teams} tournament teams.")
+
+        if not team_list:
+            print(f"[Warning] No teams found from raw games fallback for {season}. Skipping season.")
             continue
-            
-        teams = set()
-        for play in plays:
-            if play.get("team"):
-                teams.add(play.get("team"))
-            if play.get("opponent"):
-                teams.add(play.get("opponent"))
-            
-        team_list = sorted(list(teams))
-        total_teams = len(team_list)
-        print(f"[Success] Found {total_teams} tournament teams.")
 
         for idx, team in enumerate(team_list, 1):
             team_safe = sanitize(team)
@@ -109,14 +186,15 @@ def main():
             team_dir = os.path.join(season_dir, team_safe)
             os.makedirs(team_dir, exist_ok=True)
 
-            # 1. Collect Team Season Stats & Ratings into master aggregation list
+            # Team season stats and ratings.
             print(f"    Fetching season stats & ratings...")
+            team_row = {"season": season, "team": team}
             t_stats = safe_get("/stats/team/season", {"season": season, "team": team})
             
             if t_stats and len(t_stats) > 0:
                 df_team_season = pd.json_normalize(t_stats[0])
                 
-                # Fetch Adjusted Efficiency ratings
+                # Adjusted efficiency.
                 adj = safe_get("/ratings/adjusted", {"season": season, "team": team})
                 if adj:
                     df_adj = pd.json_normalize(adj[0]).add_prefix("adj_")
@@ -133,10 +211,13 @@ def main():
                     df_team_season["elo_rating"] = elo[0].get("elo")
 
                 df_team_season = calculate_missing_four_factors(df_team_season)
-                all_teams_season_data.append(df_team_season.iloc[0].to_dict())
+                team_row.update(df_team_season.iloc[0].to_dict())
+                team_row.update(season=season, team=team)
                 print(f"      [OK] Added {team} to season aggregate ledger.")
             else:
-                print(f"      [--] No season stats found for {team}.")
+                print(f"      [--] No season stats found for {team}; preserving roster row with blank stats.")
+
+            all_teams_season_data.append(team_row)
 
             # 2. Team Game Stats
             print(f"    Fetching regular season games...")
@@ -150,7 +231,7 @@ def main():
             else:
                 print(f"      [--] No regular season game records found.")
 
-            # 3. All Players into One Combined CSV per Team
+            # Player season stats per team.
             print(f"    Fetching player rosters and season stats...")
             p_stats = safe_get("/stats/player/season", {"season": season, "team": team})
             if p_stats:
@@ -164,7 +245,7 @@ def main():
 
             time.sleep(0.3)
 
-        # 4. Save Master Season CSV containing all teams for the year
+        # Save the season aggregate.
         print(f"\n[Aggregate] Saving all teams season stats for {season}...")
         if all_teams_season_data:
             df_master = pd.DataFrame(all_teams_season_data)
