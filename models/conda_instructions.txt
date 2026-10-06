@@ -1,0 +1,3 @@
+conda create -n march_madness python=3.11 -y
+conda activate march_madness
+pip install "numpy<2" pandas pyarrow bottleneck numexpr scikit-learn xgboost torch pytorch-tabnet shap optuna umap-learn matplotlib seaborn scipy python-dotenv requests joblib --upgrade

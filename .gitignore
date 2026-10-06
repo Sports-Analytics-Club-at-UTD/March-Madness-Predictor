@@ -24,7 +24,8 @@ dist-ssr
 *.sw?
 *.env
 *.csv
-
+*.png
+model_outputs/
 __pycache__/
 *.py[cod]
 
