@@ -8,6 +8,13 @@ from sklearn.ensemble import RandomForestRegressor
 import shap
 import optuna
 import umap.umap_ as umap
+
+# --- MATPLOTLIB BACKEND FIX ---
+# Forces non-interactive rendering to prevent Tkinter main loop thread crashes
+import matplotlib
+matplotlib.use('Agg')
+# ------------------------------
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 from mpl_toolkits.mplot3d import Axes3D
@@ -94,12 +101,10 @@ def build_team_features(data_dir, season, output_dir):
         player_file = os.path.join(team_dir, f"{team_safe}_players_season_stats.csv")
         
         if not os.path.exists(game_file) or not os.path.exists(player_file):
-            print(f"      [Skip] Missing game/player files for {team_safe}. Skipping.")
             continue
             
         df_g = pd.read_csv(game_file)
         if df_g.empty: 
-            print(f"      [Skip] Empty game stats file for {team_safe}. Skipping.")
             continue
             
         actual_team_name = df_g['team'].iloc[0]
@@ -154,7 +159,9 @@ def compute_recency_weights(seasons_series, target_season, half_life=3.0):
     weights = np.power(0.5, delta / half_life)
     normalized_weights = weights / weights.mean()
     print(f"  [Weights] Weight range -> Min: {normalized_weights.min():.4f} | Max: {normalized_weights.max():.4f} | Mean: {normalized_weights.mean():.4f}")
-    return normalized_weights
+    
+    # Must return pure array to prevent Pandas index misalignment inside CV loops
+    return normalized_weights.values
 
 def generate_eda(df, out_dir, title_prefix=""):
     """Generates distribution, custom matplotlib scatter matrices, and heatmaps."""
@@ -307,7 +314,8 @@ def optimize_random_forest(X_train, y_train, sample_weights=None):
             'min_samples_leaf': trial.suggest_int('min_samples_leaf', 1, 10),
             'max_features': trial.suggest_categorical('max_features', ['sqrt', 'log2', 1.0]),
             'random_state': 42,
-            'n_jobs': -1
+            # n_jobs=1 absolutely mandatory here to prevent Windows silent exit / thread starvation
+            'n_jobs': 1 
         }
         
         kf = KFold(n_splits=3, shuffle=True, random_state=42)
@@ -315,7 +323,7 @@ def optimize_random_forest(X_train, y_train, sample_weights=None):
         for tr_idx, val_idx in kf.split(X_train):
             X_tr, X_val = X_train.iloc[tr_idx], X_train.iloc[val_idx]
             y_tr, y_val = y_train.iloc[tr_idx], y_train.iloc[val_idx]
-            w_tr = sample_weights.iloc[tr_idx] if sample_weights is not None else None
+            w_tr = sample_weights[tr_idx] if sample_weights is not None else None
             
             model = RandomForestRegressor(**params)
             model.fit(X_tr, y_tr, sample_weight=w_tr)
@@ -340,7 +348,7 @@ def train_rf_with_evals(best_params, X_train, y_train, X_val, y_val, sample_weig
         n_estimators=1,
         warm_start=True,
         random_state=42,
-        n_jobs=-1
+        n_jobs=1
     )
     
     evals_result = {
@@ -397,15 +405,25 @@ def generate_3d_umap(df, out_dir):
     print(f"  [UMAP] Render Saved: {umap_path}")
 
 def main():
-    data_dir = "data"
-    output_base = "model_outputs"
+    # --- DYNAMIC PATH ROUTING ---
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    
+    data_dir = os.path.join(project_root, "data")
+    output_base = os.path.join(project_root, "model_outputs")
     rf_base = os.path.join(output_base, "random_forest")
+    # ----------------------------
+    
     os.makedirs(output_base, exist_ok=True)
     os.makedirs(rf_base, exist_ok=True)
     
     print(f"[System] Ensured output directories exist:")
     print(f"         Root: {os.path.abspath(output_base)}")
     print(f"         Models: {os.path.abspath(rf_base)}")
+    
+    if not os.path.exists(data_dir):
+        print(f"\n[Fatal Error] Data directory not found at: {data_dir}")
+        return
     
     existing_seasons = sorted([
         int(f) for f in os.listdir(data_dir) 
@@ -519,9 +537,17 @@ def main():
         ndcg_val = ndcg_score([y_val.values], [preds]) if len(y_val) > 1 else 0
         spearman_corr, _ = spearmanr(y_val, preds)
         
+        # Mode collapse safeguards
+        if np.isnan(spearman_corr):
+            spearman_corr = 0.0
+            ndcg_val = 0.0
+            
         actual_rank = y_val.rank(method='average', ascending=False).values
         pred_rank = pd.Series(preds).rank(method='average', ascending=False).values
         mare = np.mean(np.abs(actual_rank - pred_rank))
+        
+        if np.isnan(mare):
+            mare = 34.0
         
         print(f"  [Metrics] {val_yr} Holdout -> MAE: {mae:.3f} | RMSE: {rmse:.3f} | R2: {r2:.3f}")
         print(f"  [Metrics] Ranking -> NDCG: {ndcg_val:.4f} | Rank Corr: {spearman_corr:.4f} | MARE: {mare:.2f} positions")
@@ -636,7 +662,7 @@ def main():
     
     print("\n  [Model] Final 100% Fit on ALL available data points...")
     final_master_model = RandomForestRegressor(
-        **best_params_all, random_state=42, n_jobs=-1
+        **best_params_all, random_state=42, n_jobs=1
     )
     final_master_model.fit(X_all, y_all, sample_weight=all_weights)
     
