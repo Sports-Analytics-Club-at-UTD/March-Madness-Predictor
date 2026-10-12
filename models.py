@@ -19,7 +19,11 @@ def execute_model_scripts(root_dir, models_dir):
         print(f"[Error] Models directory not found at {models_dir}")
         sys.exit(1)
         
-    scripts = sorted([f for f in os.listdir(models_dir) if f.endswith('.py')])
+    # Filter out FT Transformer scripts if they are still in the directory
+    scripts = sorted([
+        f for f in os.listdir(models_dir) 
+        if f.endswith('.py') and not f.lower().startswith('ft')
+    ])
     
     print("=" * 80)
     print(f"Master Execution Pipeline Initiated. Discovered {len(scripts)} models.")
@@ -49,9 +53,12 @@ def parse_training_logs(outputs_dir):
         return pd.DataFrame()
         
     for model_name in os.listdir(outputs_dir):
-        model_dir = os.path.join(outputs_dir, model_name)
-        if not os.path.isdir(model_dir) or model_name == "tournament_wins":
+        # Exclude metadata folders and forcefully exclude FT Transformer artifacts
+        if not os.path.isdir(os.path.join(outputs_dir, model_name)): continue
+        if model_name.lower() in ["tournament_wins", "bracket_evaluations", "ft_transformer", "ft"]:
             continue
+            
+        model_dir = os.path.join(outputs_dir, model_name)
             
         for run_folder in os.listdir(model_dir):
             run_dir = os.path.join(model_dir, run_folder)
@@ -83,8 +90,11 @@ def parse_training_logs(outputs_dir):
                 # 34.0 error positions is mathematically equivalent to random guessing for a 68 team field
                 mare_float = 34.0 if mare_val == 'nan' else float(mare_val) 
                 
+                # Format names cleanly (e.g., lasso_rf_meta -> Lasso Rf Meta)
+                clean_model_title = model_name.replace('_', ' ').title()
+                
                 records.append({
-                    'Model': model_name.replace('_', ' ').title(),
+                    'Model': clean_model_title,
                     'Year': int(year_match.group(1)),
                     'NDCG': ndcg_float,
                     'Spearman': sp_float,
@@ -101,19 +111,24 @@ def generate_global_comparison_plots(df, outputs_dir):
         print("[Warning] No metric records found. Skipping global plots.")
         return
         
-    print(f"  [Plot] Generating 4 separate Comparison Plots for {len(df['Model'].unique())} models...")
+    num_models = len(df['Model'].unique())
+    print(f"  [Plot] Generating 4 separate Comparison Plots for {num_models} models...")
     
     os.makedirs(outputs_dir, exist_ok=True)
     sns.set_theme(style="whitegrid")
     unique_years = sorted(df['Year'].unique())
-    markers = ['o', 's', '^', 'D', 'v', 'p', '*', 'X', 'P', 'H']
+    
+    # Expanded marker list to guarantee support for up to 15 models without crashing
+    markers = ['o', 's', '^', 'D', 'v', 'p', '*', 'X', 'P', 'H', 'd', '<', '>', '8', 'h']
+    # If the number of models exceeds 10, we must use tab20 so Seaborn doesn't run out of colors
+    active_palette = 'tab20' if num_models > 10 else 'tab10'
     
     # --- PLOT 1: NDCG ---
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=(14, 7))
     sns.lineplot(
         data=df, x='Year', y='NDCG', hue='Model', style='Model', 
-        markers=markers[:len(df['Model'].unique())], dashes=False, 
-        lw=2.5, markersize=8, palette='tab10'
+        markers=markers[:num_models], dashes=False, 
+        lw=2.5, markersize=9, palette=active_palette
     )
     plt.title('Global Model Comparison: Ranking Fidelity (NDCG) Over Time', fontsize=16, fontweight='bold')
     plt.xlabel('Holdout Target Season', fontsize=12)
@@ -127,11 +142,11 @@ def generate_global_comparison_plots(df, outputs_dir):
     print(f"  [Output] NDCG plot saved to: {ndcg_path}")
     
     # --- PLOT 2: SPEARMAN ---
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=(14, 7))
     sns.lineplot(
         data=df, x='Year', y='Spearman', hue='Model', style='Model', 
-        markers=markers[:len(df['Model'].unique())], dashes=False, 
-        lw=2.5, markersize=8, palette='tab10'
+        markers=markers[:num_models], dashes=False, 
+        lw=2.5, markersize=9, palette=active_palette
     )
     plt.title('Global Model Comparison: Spearman Rank Correlation Over Time', fontsize=16, fontweight='bold')
     plt.xlabel('Holdout Target Season', fontsize=12)
@@ -145,11 +160,11 @@ def generate_global_comparison_plots(df, outputs_dir):
     print(f"  [Output] Spearman plot saved to: {spearman_path}")
     
     # --- PLOT 3: MARE ---
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=(14, 7))
     sns.lineplot(
         data=df, x='Year', y='MARE', hue='Model', style='Model', 
-        markers=markers[:len(df['Model'].unique())], dashes=False, 
-        lw=2.5, markersize=8, palette='tab10'
+        markers=markers[:num_models], dashes=False, 
+        lw=2.5, markersize=9, palette=active_palette
     )
     plt.title('Global Model Comparison: Mean Absolute Rank Error (MARE) Over Time', fontsize=16, fontweight='bold')
     plt.xlabel('Holdout Target Season', fontsize=12)
@@ -178,8 +193,8 @@ def generate_global_comparison_plots(df, outputs_dir):
     leaderboard = df.groupby('Model')['total_points'].mean().reset_index()
     leaderboard = leaderboard.sort_values(by='total_points', ascending=False)
     
-    plt.figure(figsize=(10, 6))
-    # Fixed the Seaborn deprecation by mapping hue directly to Model and disabling the legend
+    plt.figure(figsize=(12, 8))
+    # Map hue directly to Model and disable the legend to satisfy Seaborn requirements
     sns.barplot(
         x='total_points', y='Model', hue='Model', data=leaderboard, 
         palette='viridis', edgecolor='black', zorder=2, legend=False

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "season": 2008,
+  "status": "incomplete",
+  "errors": [
+    "Tournament coverage incomplete: 63/64 games, 64 teams"
+  ],
+  "tables": {
+    "team_seasons": 64,
+    "player_seasons": 904,
+    "tournament_games": 63,
+    "team_games": 2081
+  },
+  "statistics_scope": "regular season, before NCAA tournament",
+  "ratings_scope": "season-end; descriptive only",
+  "recovered_opening_game_ids": [],
+  "tournament_games": 63,
+  "tournament_teams": 64,
+  "expected_games": 64,
+  "statistics_cutoff": "2008-03-20T16:19:59.999000+00:00",
+  "requests_this_run": 55,
+  "quota_remaining": "409"
+}
