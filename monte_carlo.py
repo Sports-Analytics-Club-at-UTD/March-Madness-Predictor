@@ -58,6 +58,11 @@ def simulate_team_success(raw_team_features, ridge_bundle, n_simulations=10000, 
     if predictions.shape != (1,) or not np.isfinite(predictions).all():
         raise ValueError("Ridge must produce one finite tournament-win prediction.")
     baseline = float(predictions[0])
+    return _bootstrap_summary(baseline, residuals, n_simulations, seed)
+
+
+def _bootstrap_summary(baseline, residuals, n_simulations, seed):
+    """Add residuals resampled with replacement to a baseline and summarize."""
     rng = np.random.default_rng(seed)
     values = baseline + rng.choice(residuals, size=n_simulations, replace=True)
     return {
@@ -70,6 +75,115 @@ def simulate_team_success(raw_team_features, ridge_bundle, n_simulations=10000, 
         "percentile_95": float(np.percentile(values, 95)),
         "probabilities": {wins: float(np.mean(values >= wins)) for wins in range(1, 7)},
     }
+
+
+def simulate_season_from_scores(
+    baselines, residuals, season, n_simulations=10000, seed=42,
+    expected_teams=None, return_samples=False,
+):
+    """Simulate a season from precomputed baselines (e.g. calibrated SHAP-ensemble scores).
+
+    baselines is a DataFrame with team and baseline_prediction columns; any
+    extra columns are carried into the output. residuals may be a 1D array
+    shared by all teams or a Mapping[team -> 1D array] for stratified /
+    heteroskedastic residual resampling. Uses the same alphabetical
+    SeedSequence streams and output schema as simulate_season_success.
+    """
+    if isinstance(n_simulations, (bool, np.bool_)) or not isinstance(n_simulations, (int, np.integer)) \
+            or n_simulations <= 0:
+        raise ValueError("n_simulations must be a positive integer.")
+    if not isinstance(baselines, pd.DataFrame) or not {"team", "baseline_prediction"}.issubset(baselines.columns):
+        raise ValueError("Baselines must be a DataFrame with team and baseline_prediction columns.")
+    if baselines.empty or baselines["team"].duplicated().any():
+        raise ValueError("Baselines must contain unique, nonempty teams.")
+    base = pd.to_numeric(baselines["baseline_prediction"], errors="coerce").to_numpy(float)
+    if not np.isfinite(base).all():
+        raise ValueError("Baseline predictions must be finite.")
+    if isinstance(residuals, Mapping):
+        residual_map = {}
+        for team in baselines["team"]:
+            vec = np.asarray(residuals.get(team, []), dtype=float)
+            if vec.ndim != 1 or not vec.size or not np.isfinite(vec).all():
+                raise ValueError(f"Residual pool for {team} must be a nonempty finite vector.")
+            residual_map[team] = vec
+    else:
+        vec = np.asarray(residuals, dtype=float)
+        if vec.ndim != 1 or not vec.size or not np.isfinite(vec).all():
+            raise ValueError("Residual pool must be a nonempty finite vector.")
+        residual_map = {team: vec for team in baselines["team"]}
+    if expected_teams is not None and len(baselines) != expected_teams:
+        raise ValueError(f"Expected {expected_teams} teams, found {len(baselines)}.")
+
+    ordered = baselines.sort_values("team").reset_index(drop=True)
+    extra = [c for c in ordered.columns if c not in ("team", "season", "baseline_prediction")]
+    streams = np.random.SeedSequence(seed).spawn(len(ordered))
+    rows, samples = [], {}
+    for index, stream in enumerate(streams):
+        record = ordered.iloc[index]
+        team = record["team"]
+        result = _bootstrap_summary(float(record["baseline_prediction"]), residual_map[team], n_simulations, stream)
+        samples[team] = result["simulated_values"]
+        summary = {
+            "team": team,
+            "season": season,
+            "baseline_prediction": result["baseline_prediction"],
+            "simulated_mean": result["mean"],
+            "simulated_median": result["median"],
+            "simulated_std": result["std"],
+            "percentile_5": result["percentile_5"],
+            "percentile_95": result["percentile_95"],
+        }
+        summary.update({f"probability_ge_{wins}_win{'s' if wins != 1 else ''}": result["probabilities"][wins]
+                        for wins in range(1, 7)})
+        summary.update({c: record[c] for c in extra})
+        rows.append(summary)
+    table = pd.DataFrame(rows).sort_values(
+        ["simulated_mean", "team"], ascending=[False, True]
+    ).reset_index(drop=True)
+    core = [c for c in table.columns if c not in extra and c != "team"]
+    if not np.isfinite(table[core].to_numpy(dtype=float)).all():
+        raise ValueError("Simulation summary contains nonfinite values.")
+    probability_columns = [name for name in table.columns if name.startswith("probability_ge_")]
+    probabilities = table[probability_columns].to_numpy()
+    if not ((probabilities >= 0) & (probabilities <= 1)).all() or (np.diff(probabilities, axis=1) > 0).any():
+        raise ValueError("Threshold frequencies must be in [0, 1] and nonincreasing.")
+    return (table, samples) if return_samples else table
+
+
+def simulate_bracket_tree(round1_pairs, tree_edges, teams, prob_matrix, n_simulations=10000, seed=42):
+    """Simulate a 63-game single-elimination bracket tree N times.
+
+    round1_pairs: list of 32 (home_idx, away_idx) integer pairs for games 0..31.
+    tree_edges:   list of 31 (left_game_idx, right_game_idx) pairs for games 32..62.
+    teams:        ordered list of 64 team names corresponding to indices 0..63.
+    prob_matrix:  (64, 64) array where prob_matrix[i, j] = P(team i beats team j).
+
+    Returns (win_counts_per_team_sim, slot_winners) with shapes (64, n_simulations)
+    and (63, n_simulations).
+    """
+    n_teams = len(teams)
+    prob_matrix = np.asarray(prob_matrix, dtype=float)
+    rng = np.random.default_rng(seed)
+    slot_winners = np.empty((63, n_simulations), dtype=np.int32)
+    win_counts = np.zeros((n_teams, n_simulations), dtype=np.int32)
+    sim_idx = np.arange(n_simulations)
+
+    for g, (h, a) in enumerate(round1_pairs):
+        p = prob_matrix[h, a]
+        w = np.where(rng.random(n_simulations) < p, h, a)
+        slot_winners[g] = w
+        win_counts[w, sim_idx] += 1
+
+    for offset, (left_g, right_g) in enumerate(tree_edges):
+        g = 32 + offset
+        h = slot_winners[left_g]
+        a = slot_winners[right_g]
+        p = prob_matrix[h, a]
+        w = np.where(rng.random(n_simulations) < p, h, a)
+        slot_winners[g] = w
+        win_counts[w, sim_idx] += 1
+
+    return win_counts, slot_winners
 
 
 def simulate_season_success(
