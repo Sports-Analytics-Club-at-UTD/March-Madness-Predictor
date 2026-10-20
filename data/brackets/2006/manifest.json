@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "season": 2006,
+  "status": "complete",
+  "errors": [],
+  "tables": {
+    "team_seasons": 65,
+    "player_seasons": 926,
+    "tournament_games": 64,
+    "team_games": 2000
+  },
+  "statistics_scope": "regular season, before NCAA tournament",
+  "ratings_scope": "season-end; descriptive only",
+  "recovered_opening_game_ids": [
+    116963
+  ],
+  "tournament_games": 64,
+  "tournament_teams": 65,
+  "expected_games": 64,
+  "statistics_cutoff": "2006-03-15T00:29:59.999000+00:00",
+  "requests_this_run": 44,
+  "quota_remaining": "420"
+}

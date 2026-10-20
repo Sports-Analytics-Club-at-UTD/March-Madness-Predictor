@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "season": 2001,
+  "status": "incomplete",
+  "errors": [
+    "player_seasons: 65 tournament teams have no records",
+    "team_games: 65 tournament teams have no records"
+  ],
+  "tables": {
+    "team_seasons": 65,
+    "player_seasons": 0,
+    "tournament_games": 64,
+    "team_games": 0
+  },
+  "statistics_scope": "regular season, before NCAA tournament",
+  "ratings_scope": "season-end; descriptive only",
+  "tournament_games": 64,
+  "tournament_teams": 65,
+  "expected_games": 64,
+  "statistics_cutoff": "2001-03-12T23:59:59.999000+00:00",
+  "requests_this_run": 0,
+  "quota_remaining": null
+}

@@ -10,6 +10,13 @@ from torch.utils.data import DataLoader, TensorDataset
 import shap
 import optuna
 import umap.umap_ as umap
+
+# --- MATPLOTLIB BACKEND FIX ---
+# Forces non-interactive rendering to prevent Tkinter main loop thread crashes
+import matplotlib
+matplotlib.use('Agg')
+# ------------------------------
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 from mpl_toolkits.mplot3d import Axes3D
@@ -311,7 +318,9 @@ class TeamLSTM(nn.Module):
         out = out[:, -1, :] 
         out = self.dropout(self.relu(self.fc1(out)))
         out = self.fc2(out)
-        return out.squeeze()
+        # Squeeze ONLY the feature dimension (-1) to guarantee 
+        # the batch dimension remains intact even if batch size == 1.
+        return out.squeeze(-1)
 
 def prepare_tensors(X, y, weights):
     X_t = torch.tensor(X, dtype=torch.float32).unsqueeze(1).to(device)
@@ -444,9 +453,18 @@ def compute_shap(model, X_train_scaled, X_val_scaled, feature_names, out_dir):
     model.eval()
     
     def predict_fn(x):
+        # Force input to 2D matrix structure to accommodate 
+        # SHAP's occasional single-row 1D evaluation queries
+        if x.ndim == 1:
+            x = np.expand_dims(x, axis=0)
+            
         x_tensor = torch.tensor(x, dtype=torch.float32).unsqueeze(1).to(device)
         with torch.no_grad():
-            return model(x_tensor).cpu().numpy()
+            preds = model(x_tensor).cpu().numpy()
+            
+            # Guarantee array maintains minimum 1D structure 
+            # to prevent scalar index indexing errors upstream
+            return np.atleast_1d(preds)
             
     background = shap.kmeans(X_train_scaled, 25)
     explainer = shap.KernelExplainer(predict_fn, background)
@@ -470,9 +488,15 @@ def compute_shap(model, X_train_scaled, X_val_scaled, feature_names, out_dir):
     print(f"  [SHAP] Feature Rankings mapped to {fi_csv}")
 
 def main():
-    data_dir = "data"
-    output_base = "model_outputs"
+    # --- DYNAMIC PATH ROUTING ---
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    
+    data_dir = os.path.join(project_root, "data")
+    output_base = os.path.join(project_root, "model_outputs")
     lstm_base = os.path.join(output_base, "lstm")
+    # ----------------------------
+    
     os.makedirs(output_base, exist_ok=True)
     os.makedirs(lstm_base, exist_ok=True)
     
@@ -481,6 +505,10 @@ def main():
     print(f"         Root: {os.path.abspath(output_base)}")
     print(f"         Models: {os.path.abspath(lstm_base)}")
     
+    if not os.path.exists(data_dir):
+        print(f"\n[Fatal Error] Data directory not found at: {data_dir}")
+        return
+        
     existing_seasons = sorted([int(f) for f in os.listdir(data_dir) if os.path.isdir(os.path.join(data_dir, f)) and f.isdigit()])
     print("=" * 80)
     print("Expanding Window Walk-Forward Model (LSTM) with Deep Logging")
