@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "season": 2009,
+  "status": "complete",
+  "errors": [],
+  "tables": {
+    "team_seasons": 65,
+    "player_seasons": 905,
+    "tournament_games": 64,
+    "team_games": 2124
+  },
+  "statistics_scope": "regular season, before NCAA tournament",
+  "ratings_scope": "season-end; descriptive only",
+  "tournament_games": 64,
+  "tournament_teams": 65,
+  "expected_games": 64,
+  "statistics_cutoff": "2009-03-17T23:29:59.999000+00:00",
+  "requests_this_run": 55,
+  "quota_remaining": "409"
+}

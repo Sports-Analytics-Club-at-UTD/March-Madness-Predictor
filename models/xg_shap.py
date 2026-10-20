@@ -2,12 +2,22 @@ import os
 import time
 import requests
 import json
+import builtins
+import re
+from contextlib import contextmanager
 import numpy as np
 import pandas as pd
 import xgboost as xgb
 import shap
 import optuna
 import umap.umap_ as umap
+
+# --- MATPLOTLIB BACKEND FIX ---
+# Forces non-interactive rendering to prevent Tkinter / OS-level thread crashes
+import matplotlib
+matplotlib.use('Agg')
+# ------------------------------
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 from mpl_toolkits.mplot3d import Axes3D
@@ -20,6 +30,57 @@ import warnings
 
 warnings.filterwarnings('ignore')
 load_dotenv()
+
+# --- DIAGNOSTIC & BULLETPROOF SHAP COMPATIBILITY FIX ---
+@contextmanager
+def shap_safe_init():
+    """
+    Intercepts SHAP's execution at the lowest level. Since SHAP reads XGBoost's C++ 
+    dump directly, it bypasses Python object monkey-patches. However, it ultimately 
+    crashes on Python's built-in `float()` call. This context manager temporarily 
+    intercepts `float()` globally to catch the malformed array string, clean it, 
+    prevent the ValueError, and logs all telemetry.
+    """
+    print(f"  [Diagnostic] Runtime -> XGBoost: {xgb.__version__} | SHAP: {shap.__version__}")
+    
+    # 1. Intercept Built-in Float (The guaranteed fix)
+    original_float = builtins.float
+    def patched_float(x):
+        if isinstance(x, str) and x.startswith('[') and x.endswith(']'):
+            print(f"  [Diagnostic] INTERCEPTED CRASH: SHAP attempted float({x!r}).")
+            clean_val = x.strip('[]')
+            print(f"  [Diagnostic] -> Stripped brackets to '{clean_val}' to prevent ValueError.")
+            x = clean_val
+        return original_float(x)
+    
+    # 2. Telemetry on JSON Parsing
+    original_loads = json.loads
+    def patched_loads(s, *args, **kwargs):
+        if isinstance(s, str) and "base_score" in s:
+            match = re.search(r'"base_score":\s*"(\[[^\]]+\])"', s)
+            if match:
+                print(f"  [Diagnostic] json.loads() ingested model config containing: {match.group(0)}")
+        return original_loads(s, *args, **kwargs)
+        
+    # 3. Telemetry on C++ Dump Calls
+    original_save_config = xgb.Booster.save_config
+    def patched_save_config(self, *args, **kwargs):
+        print("  [Diagnostic] XGBoost C++ Engine triggered Booster.save_config().")
+        return original_save_config(self, *args, **kwargs)
+        
+    # Apply global patches
+    builtins.float = patched_float
+    json.loads = patched_loads
+    xgb.Booster.save_config = patched_save_config
+    
+    try:
+        yield
+    finally:
+        # Restore normal Python behavior instantly after initialization
+        builtins.float = original_float
+        json.loads = original_loads
+        xgb.Booster.save_config = original_save_config
+# -------------------------------------------------------
 
 API_KEY = os.getenv("CBBD_API_KEY")
 BASE_URL = "https://api.collegebasketballdata.com"
@@ -246,7 +307,8 @@ def optimize_xgboost(df_train, val_yr):
             'colsample_bytree': trial.suggest_float('colsample_bytree', 0.6, 1.0),
             'reg_alpha': trial.suggest_float('reg_alpha', 1e-3, 10.0, log=True),
             'reg_lambda': trial.suggest_float('reg_lambda', 1e-3, 10.0, log=True),
-            'random_state': 42
+            'random_state': 42,
+            'n_jobs': 1 # Enforce single threading for deep nested CV to prevent OS kill
         }
         
         kf = KFold(n_splits=3, shuffle=True, random_state=42)
@@ -312,9 +374,15 @@ def generate_3d_umap(df, out_dir):
     plt.close()
 
 def main():
-    data_dir = "data"
-    output_base = "model_outputs"
+    # --- DYNAMIC PATH ROUTING ---
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    
+    data_dir = os.path.join(project_root, "data")
+    output_base = os.path.join(project_root, "model_outputs")
     xgboost_base = os.path.join(output_base, "xgboost")
+    # ----------------------------
+    
     os.makedirs(output_base, exist_ok=True)
     os.makedirs(xgboost_base, exist_ok=True)
     
@@ -322,6 +390,10 @@ def main():
     print(f"         Root: {os.path.abspath(output_base)}")
     print(f"         Models: {os.path.abspath(xgboost_base)}")
     
+    if not os.path.exists(data_dir):
+        print(f"\n[Fatal Error] Data directory not found at: {data_dir}")
+        return
+        
     existing_seasons = sorted([int(f) for f in os.listdir(data_dir) if os.path.isdir(os.path.join(data_dir, f)) and f.isdigit()])
     print("=" * 80)
     print("Expanding Window Walk-Forward Model (Rank:Pairwise) with Deep Diagnostics")
@@ -443,26 +515,12 @@ def main():
             f.write(f"Optimal Iteration (Max Val NDCG): {int(np.argmax(evals_result['validation_1']['ndcg']) + 1)}\n")
             
         json_path = os.path.join(out_dir, "xgboost_model.json")
-        model.save_model(json_path)
-        
-        # --- AGGRESSIVE SHAP COMPATIBILITY PATCH FOR XGBOOST 2.1+ ---
-        import re
-        with open(json_path, 'r') as f:
-            model_data = json.load(f)
-            
-        base_score_str = model_data.get('learner', {}).get('learner_model_param', {}).get('base_score', '0.5')
-        
-        # Robust extraction of the float value, handling brackets and scientific notation
-        match = re.search(r'[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?', str(base_score_str))
-        clean_base_score = float(match.group()) if match else 0.5
-        
-        patched_booster = xgb.Booster()
-        patched_booster.load_model(json_path)
-        patched_booster.set_param({"base_score": clean_base_score})
+        model.save_model(json_path) 
         
         print("\n  [Module] SHAP Attribution Initialization...")
-        explainer = shap.TreeExplainer(patched_booster)
-        # --------------------------------------------------
+        # The ultimate context manager directly intercepts Python's float()
+        with shap_safe_init():
+            explainer = shap.TreeExplainer(model)
         
         print(f"  [SHAP] Processing {X_val.shape[0]} Validation Vectors...")
         shap_values = explainer.shap_values(X_val)
@@ -528,27 +586,13 @@ def main():
     
     all_group_weights = compute_recency_weights(pd.Series(qid_all.unique()), target_season=latest_season, half_life=3.0)
     master_model.fit(X_all, y_all, qid=qid_all, sample_weight=all_group_weights, verbose=False)
+    
     master_json_path = os.path.join(all_out, "xgboost_master_model.json")
-    master_model.save_model(master_json_path)
-    
-    # --- AGGRESSIVE SHAP COMPATIBILITY PATCH FOR XGBOOST 2.1+ ---
-    import re
-    with open(master_json_path, 'r') as f:
-        model_data = json.load(f)
-        
-    base_score_str = model_data.get('learner', {}).get('learner_model_param', {}).get('base_score', '0.5')
-    
-    # Robust extraction of the float value, handling brackets and scientific notation
-    match = re.search(r'[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?', str(base_score_str))
-    clean_base_score = float(match.group()) if match else 0.5
-    
-    patched_booster = xgb.Booster()
-    patched_booster.load_model(master_json_path)
-    patched_booster.set_param({"base_score": clean_base_score})
+    master_model.save_model(master_json_path) 
     
     print("\n  [Module] Global SHAP Initialization...")
-    explainer_all = shap.TreeExplainer(patched_booster)
-    # --------------------------------------------------
+    with shap_safe_init():
+        explainer_all = shap.TreeExplainer(master_model)
     
     shap_values_all = explainer_all.shap_values(X_all)
     
