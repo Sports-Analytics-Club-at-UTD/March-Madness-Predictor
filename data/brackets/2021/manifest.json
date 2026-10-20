@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "season": 2021,
+  "status": "incomplete",
+  "errors": [
+    "Tournament coverage incomplete: 67/67 games, 68 teams"
+  ],
+  "tables": {
+    "team_seasons": 68,
+    "player_seasons": 1095,
+    "tournament_games": 67,
+    "team_games": 2082
+  },
+  "statistics_scope": "regular season, before NCAA tournament",
+  "ratings_scope": "season-end; descriptive only",
+  "tournament_games": 67,
+  "tournament_teams": 68,
+  "expected_games": 67,
+  "statistics_cutoff": "2021-03-18T21:09:59.999000+00:00",
+  "requests_this_run": 55,
+  "quota_remaining": "409"
+}

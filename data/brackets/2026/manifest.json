@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "season": 2026,
+  "status": "complete",
+  "errors": [],
+  "tables": {
+    "team_seasons": 68,
+    "player_seasons": 1051,
+    "tournament_games": 67,
+    "team_games": 2263
+  },
+  "statistics_scope": "regular season, before NCAA tournament",
+  "ratings_scope": "season-end; descriptive only",
+  "tournament_games": 67,
+  "tournament_teams": 68,
+  "expected_games": 67,
+  "statistics_cutoff": "2026-03-17T22:39:59.999000+00:00",
+  "requests_this_run": 55,
+  "quota_remaining": "409"
+}

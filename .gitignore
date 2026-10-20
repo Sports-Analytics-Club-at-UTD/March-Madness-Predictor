@@ -26,6 +26,8 @@ dist-ssr
 *.csv
 *.png
 model_outputs/
+bracket_evaluations/
+ensemble_bracket_evaluations/
 __pycache__/
 *.py[cod]
 
