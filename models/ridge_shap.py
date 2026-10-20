@@ -17,6 +17,12 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, n
 from scipy.stats import spearmanr
 from dotenv import load_dotenv
 import warnings
+import sys
+from pathlib import Path
+
+# Support the existing `python models/ridge_shap.py` script entry point.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from ridge_bundle import save_ridge_bundle
 
 warnings.filterwarnings('ignore')
 load_dotenv()
@@ -349,6 +355,7 @@ def main():
     all_data_dict = {}
     master_df = pd.DataFrame()
     yearly_metrics = []
+    validation_records = []
     
     print("\n[Phase 1] Feature Extraction & Alignment")
     for season in existing_seasons:
@@ -406,7 +413,9 @@ def main():
         print(f"\n  [Memory] Stripping {len(drop_cols)} metadata/leakage columns prior to scaling...")
         X_train_raw = df_train.drop(columns=drop_cols, errors='ignore')
         y_train = df_train['target_wins']
-        X_val_raw = df_val.drop(columns=drop_cols, errors='ignore')
+        # Establish the fold's feature schema using training seasons only.
+        X_train_raw = X_train_raw.loc[:, (X_train_raw != 0).any(axis=0)]
+        X_val_raw = df_val.reindex(columns=X_train_raw.columns, fill_value=0)
         y_val = df_val['target_wins']
         feature_names = X_train_raw.columns.tolist()
         
@@ -426,6 +435,12 @@ def main():
         
         print("  [Evaluation] Running out-of-time inference on Validation set...")
         preds = model.predict(X_val)
+        validation_records.append(pd.DataFrame({
+            'team': df_val['team'].to_numpy(),
+            'season': val_yr,
+            'actual': y_val.to_numpy(),
+            'predicted': preds,
+        }))
             
         mae = mean_absolute_error(y_val, preds)
         mse = mean_squared_error(y_val, preds)
@@ -473,6 +488,14 @@ def main():
         joblib_path = os.path.join(out_dir, "ridge_model.joblib")
         joblib.dump(model, joblib_path)
         print(f"  [I/O] Serialized Joblib Model saved to {joblib_path}")
+        bundle_path = os.path.join(out_dir, "ridge_bundle.joblib")
+        save_ridge_bundle(
+            bundle_path, model=model, scaler=scaler, feature_names=feature_names,
+            training_seasons=train_years, validation_season=val_yr,
+            validation_actual_wins=y_val.to_numpy(), validation_predicted_wins=preds,
+            validation_teams=df_val['team'].tolist(),
+        )
+        print(f"  [I/O] Inference and residual bundle saved to {bundle_path}")
         
         compute_shap(model, X_train, X_val, feature_names, out_dir)
         
@@ -526,6 +549,21 @@ def main():
     master_joblib_path = os.path.join(all_out, "ridge_master_model.joblib")
     joblib.dump(final_master_model, master_joblib_path)
     print(f"  [I/O] Global Serialized Joblib Model saved to {master_joblib_path}")
+    # Calibration errors come from earlier out-of-time fits, never this
+    # final model's in-sample predictions or the random diagnostic split.
+    calibration = pd.concat(validation_records, ignore_index=True) if validation_records else pd.DataFrame(
+        columns=['team', 'season', 'actual', 'predicted']
+    )
+    master_bundle_path = os.path.join(all_out, "ridge_master_bundle.joblib")
+    save_ridge_bundle(
+        master_bundle_path, model=final_master_model, scaler=scaler_all,
+        feature_names=feature_names, training_seasons=available_seasons,
+        validation_season=None, validation_seasons=calibration['season'].to_numpy(),
+        validation_actual_wins=calibration['actual'].to_numpy(),
+        validation_predicted_wins=calibration['predicted'].to_numpy(),
+        validation_teams=calibration['team'].tolist(), residual_source="walk_forward",
+    )
+    print(f"  [I/O] Master inference and walk-forward residual bundle saved to {master_bundle_path}")
     
     compute_shap(final_master_model, X_tr_all, X_all, feature_names, all_out)
     

@@ -5,7 +5,20 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "joblib>=1.4",
+    "numpy>=2.1",
     "pandas>=3.0.6",
     "python-dotenv>=1.2.3",
     "requests>=2.34.2",
+    "scikit-learn>=1.6",
+]
+
+[project.optional-dependencies]
+training = [
+    "matplotlib",
+    "optuna",
+    "scipy",
+    "seaborn",
+    "shap",
+    "umap-learn",
 ]
