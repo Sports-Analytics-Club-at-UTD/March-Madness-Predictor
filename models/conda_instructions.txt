@@ -1,3 +1,42 @@
+# ==============================================================================
+# March Madness Predictor - Conda Environment Setup (`march_madness`)
+# ==============================================================================
+
+# 1. CREATE AND ACTIVATE CONDA ENVIRONMENT
 conda create -n march_madness python=3.11 -y
 conda activate march_madness
-pip install "numpy<2" pandas pyarrow bottleneck numexpr scikit-learn xgboost torch pytorch-tabnet shap optuna umap-learn matplotlib seaborn scipy python-dotenv requests joblib --upgrade
+
+# 2. INSTALL ALL CORE & ADVANCED MODELING DEPENDENCIES
+pip install "numpy<2" pandas pyarrow bottleneck numexpr scikit-learn xgboost lightgbm catboost torch pytorch-tabnet shap optuna umap-learn matplotlib seaborn scipy python-dotenv requests joblib plotly graphviz --upgrade
+
+# 3. VERIFY ENVIRONMENT INSTALLATION
+python -c "import lightgbm, catboost, shap, sklearn, torch, xgboost, optuna, umap, joblib; print('All dependencies successfully verified!')"
+
+# ==============================================================================
+# PIPELINE EXECUTION INSTRUCTIONS
+# ==============================================================================
+# Make sure your environment is activated before running:
+# conda activate march_madness
+
+# --- A. RUN FULL END-TO-END PIPELINE ---
+# Trains all models, runs combinatorial ensemble evaluation, and executes 10k Monte Carlo simulations:
+python run_pipeline.py --all --season 2025
+
+# --- B. RUN FAST EVALUATION & SIMULATION (SKIP TRAINING) ---
+# Uses existing model validation outputs, finds best ensembles, and optimizes brackets:
+python run_pipeline.py --stages combo_eval monte_carlo --season 2025 --shap-rank 1
+
+# --- C. RUN MONTE CARLO SIMULATION & BRACKET POOL OPTIMIZER ONLY ---
+# Runs 10,000 simulations using the Rank 1 ensemble, optimizes a 100-entry pool for Max-EV and Leverage:
+python run_pipeline.py --stages monte_carlo --season 2025 --shap-rank 1 --pool-size 100 --backtest
+
+# --- D. TRAIN SPECIFIC MODELS ONLY ---
+# Train only selected high-performance architectures (e.g. LightGBM, CatBoost, Lasso RF Meta):
+python run_pipeline.py --stages models --models lasso_rf_shap lightgbm_shap catboost_shap
+
+# --- E. LIST AVAILABLE MODELS & ENSEMBLES ---
+python run_pipeline.py --list-models
+python run_pipeline.py --list-ensembles
+
+# --- F. DRY RUN (INSPECT PLANNED COMMANDS WITHOUT RUNNING) ---
+python run_pipeline.py --all --season 2024 --dry-run
