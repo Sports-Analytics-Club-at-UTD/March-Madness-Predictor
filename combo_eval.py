@@ -30,7 +30,7 @@ def fetch_tournament_wins(season, data_dir):
         df_wins = pd.read_csv(cache_file)
         return dict(zip(df_wins['team'], df_wins['wins']))
         
-    print(f"    [API] Cache Miss. Initiating HTTP GET to /games endpoint for {season}...")
+    print(f"    [API] Cache miss. Querying /games endpoint for {season} total wins...")
     url = f"{BASE_URL}/games"
     params = {"season": season, "seasonType": "postseason", "tournament": "NCAA"}
     
@@ -39,7 +39,7 @@ def fetch_tournament_wins(season, data_dir):
         response.raise_for_status()
         games = response.json()
     except Exception as e:
-        print(f"    [ERROR] API Failure during tournament_wins fetch: {e}")
+        print(f"    [Error] Could not retrieve postseason games: {e}")
         return {}
 
     wins = {}
@@ -67,7 +67,6 @@ def fetch_bracket_games(year, data_dir):
             print(f"    [ERROR] Failed to read {csv_path}: {e}")
             
     if df.empty:
-        print(f"    [API] No local bracket found. Querying endpoint for {year} NCAA Tournament...")
         url = f"{BASE_URL}/games"
         params = {"season": year, "seasonType": "postseason", "tournament": "NCAA"}
         try:
@@ -78,12 +77,10 @@ def fetch_bracket_games(year, data_dir):
                 return pd.DataFrame()
             df = pd.DataFrame(games)
             df.to_csv(csv_path, index=False)
-        except Exception as e:
-            print(f"    [ERROR] Bracket API fetch failed: {e}")
+        except Exception:
             return pd.DataFrame()
 
     df.columns = df.columns.str.replace(r'[^\x00-\x7F]+', '', regex=True).str.strip()
-    
     col_map = {}
     for c in df.columns:
         clean_c = re.sub(r'[\s_\-]', '', str(c)).lower()
@@ -105,13 +102,12 @@ def build_team_features_for_scoring(data_dir, season):
     skip_cols = {'gameId', 'season', 'teamId', 'opponentId', 'teamSeed', 'opponentSeed', 
                  'totalMinutes', 'games', 'wins', 'losses', 'starts'}
     
-    for i, team_safe in enumerate(teams):
+    for team_safe in teams:
         team_dir = os.path.join(season_dir, team_safe)
         game_file = os.path.join(team_dir, f"{team_safe}_game_stats.csv")
         player_file = os.path.join(team_dir, f"{team_safe}_players_season_stats.csv")
         
-        if not os.path.exists(game_file) or not os.path.exists(player_file): 
-            continue
+        if not os.path.exists(game_file) or not os.path.exists(player_file): continue
             
         df_g = pd.read_csv(game_file)
         if df_g.empty: continue
@@ -355,6 +351,7 @@ def generate_top_ensemble_plot(df_results, metric_col, title, ylabel, out_path, 
     for rank_idx, row in enumerate(top_df.iterrows(), 1):
         idx, row_data = row
         short_name = f"Rank {rank_idx}: {row_data['Model_Count']}-Model Blend"
+        
         for y_data in row_data['Yearly_Data']:
             if metric_col in y_data:
                 plot_data.append({'Ensemble': short_name, 'Year': y_data['Year'], metric_col: y_data[metric_col]})
@@ -386,7 +383,6 @@ def generate_top_ensemble_plot(df_results, metric_col, title, ylabel, out_path, 
     plt.legend(title=f'Top {top_n} Meta-Architectures', bbox_to_anchor=(1.02, 1), loc='upper left')
     plt.tight_layout()
     plt.savefig(out_path, dpi=300, bbox_inches='tight', format='jpg')
-    print(f"  [I/O] Saved Plot: {out_path}")
     plt.close()
 
 def generate_top_10_plot(df_results, metric_col, title, ylabel, out_path, ascending=False):
@@ -414,23 +410,16 @@ def main(args=None):
     if use_directional:
         print("  [Directional Scoring Mode Active]: Inverting opponent stats and team turnovers/fouls.")
     print("=" * 80)
-    print(f"[SYSTEM] Project Root: {project_root}")
-    print(f"[SYSTEM] Loading Model Definitions from: {models_dir}")
-    print(f"[SYSTEM] Target Analytics Directory: {eval_dir}\n")
     
     model_paths = glob.glob(os.path.join(models_dir, "*", "Train_*_Val_*"))
-    print(f"[ENGINE] Detected {len(model_paths)} total historical training artifacts.")
     
     master_scores = {}
-    master_shap_dicts = {} 
     bracket_games = {}
     actual_team_wins = {}
     discovered_models = set()
     season_scaled_cache = {}
     
-    print("\n" + "-" * 50)
-    print("PHASE 1: BASELINE INGESTION & FEATURE MAPPING")
-    print("-" * 50)
+    print("\n[Phase 1] Ingesting SHAP Feature Importances & Baseline Realities...")
     for path in model_paths:
         parts = path.split(os.sep)
         model_name = parts[-2].replace('_', ' ').title()
@@ -452,14 +441,12 @@ def main(args=None):
         shap_df = pd.read_csv(shap_path)
         shap_dict = dict(zip(shap_df['feature'], shap_df['shap_importance']))
         
-        if model_name not in master_shap_dicts:
-            master_shap_dicts[model_name] = shap_dict 
-        else:
-            if year > 2020: master_shap_dicts[model_name] = shap_dict
-            
         if year not in master_scores:
             master_scores[year] = {}
+            # Cache the overall win realities for NDCG/Spearman/MARE
             actual_team_wins[year] = fetch_tournament_wins(year, data_dir)
+            
+            # Cache the actual bracket for Accuracy
             df_games = fetch_bracket_games(year, data_dir)
             if not df_games.empty and 'homeTeam' in df_games.columns and 'homeWinner' in df_games.columns:
                 df_games['homeTeam'] = df_games['homeTeam'].astype(str).str.strip()
@@ -516,9 +503,7 @@ def main(args=None):
 
     all_combinations = []
     for i in range(2, len(discovered_models) + 1):
-        combo_subset = list(itertools.combinations(discovered_models, i))
-        print(f"  [COMBINE] Generated {len(combo_subset):4} unique {i}-model combinations.")
-        all_combinations.extend(combo_subset)
+        all_combinations.extend(list(itertools.combinations(discovered_models, i)))
         
     print(f"\n[ENGINE] Total permutations scheduled for simulation: {len(all_combinations)}")
     print("\n" + "-" * 50)
@@ -552,6 +537,7 @@ def main(args=None):
             parsed_bracket = get_bracket_structure(df_games)
             if not parsed_bracket: continue
                 
+            # Metric 1: Head-to-Head Bracket Accuracy
             correct_this_year = 0
             total_this_year = 0
             h2h_confidences = []
@@ -576,8 +562,9 @@ def main(args=None):
                 if pred == actual: correct_this_year += 1
                 total_this_year += 1
                 
-            # 2. Ranking Fidelity
-            y_true, y_pred = [], []
+            # Metrics 2-4: Global Ranking Fidelity (NDCG, Spearman, MARE)
+            y_true = []
+            y_pred = []
             for team, true_wins in actual_team_wins[year].items():
                 missing = False
                 for m in combo:
@@ -591,10 +578,12 @@ def main(args=None):
             ndcg_val = 0.0
             spearman_corr = 0.0
             mare = 34.0
+            
             if len(y_true) > 1:
                 ndcg_val = ndcg_score([y_true], [y_pred])
                 spearman_corr, _ = spearmanr(y_true, y_pred)
                 if np.isnan(spearman_corr): spearman_corr = 0.0
+                
                 actual_rank = pd.Series(y_true).rank(method='average', ascending=False).values
                 pred_rank = pd.Series(y_pred).rank(method='average', ascending=False).values
                 mare = np.mean(np.abs(actual_rank - pred_rank))
@@ -614,6 +603,7 @@ def main(args=None):
             mean_game_conf = float(np.mean(h2h_confidences)) if h2h_confidences else blind_game_conf
                 
             if total_this_year > 0:
+                acc = correct_this_year / total_this_year
                 combo_correct += correct_this_year
                 combo_total += total_this_year
                 acc_val = correct_this_year / total_this_year
@@ -626,14 +616,17 @@ def main(args=None):
                     'Expected_Bracket_Points': expected_pts,
                     'NDCG': ndcg_val,
                     'Spearman': spearman_corr,
-                    'MARE': mare,
-                    'Blind_Error': blind_error
+                    'MARE': mare
                 })
                 
         if combo_total > 0:
+            global_acc = combo_correct / combo_total
+            global_ndcg = np.mean([y['NDCG'] for y in combo_yearly_acc])
+            global_spearman = np.mean([y['Spearman'] for y in combo_yearly_acc])
+            global_mare = np.mean([y['MARE'] for y in combo_yearly_acc])
+            
             ensemble_results.append({
                 'Ensemble_Name': combo_name,
-                'Models': combo,
                 'Model_Count': len(combo),
                 'Stacking_Weights': list(weights),
                 'Total_Games_Eval': combo_total,
@@ -653,7 +646,7 @@ def main(args=None):
     print("-" * 50)
     df_results = pd.DataFrame(ensemble_results)
     if df_results.empty:
-        print("[ERROR] Fatal Halt. DataFrame is empty. No evaluations completed.")
+        print("[Error] No evaluations completed. Cannot generate output.")
         return
 
     # Calculate multi-metric composite performance rank (Borda count across all core metrics)
