@@ -50,10 +50,12 @@ TREE_PROB_COLS = [f"tree_prob_ge_{k}_win{'s' if k != 1 else ''}" for k in THRESH
 def load_shap_recipe(ensemble_dir, shap_path=None):
     """Load the best ensemble's blended SHAP weights (Rank 1 by default)."""
     if shap_path is None:
-        matches = sorted(glob.glob(os.path.join(str(ensemble_dir), 'top_20_shap_weights', 'Rank_1_*_SHAP.csv')))
+        matches = sorted(glob.glob(os.path.join(str(ensemble_dir), 'top_25_shap_weights', 'Rank_1_*_SHAP.csv')))
+        if not matches:
+            matches = sorted(glob.glob(os.path.join(str(ensemble_dir), 'top_20_shap_weights', 'Rank_1_*_SHAP.csv')))
         if not matches:
             raise FileNotFoundError(
-                f"No Rank_1_*_SHAP.csv under {ensemble_dir}/top_20_shap_weights. Run combo_eval.py first.")
+                f"No Rank_1_*_SHAP.csv under {ensemble_dir}/top_25_shap_weights or top_20_shap_weights. Run combo_eval.py first.")
         shap_path = matches[0]
     df = pd.read_csv(shap_path)
     if not {'feature', 'shap_importance'}.issubset(df.columns):
@@ -63,7 +65,9 @@ def load_shap_recipe(ensemble_dir, shap_path=None):
         raise ValueError(f"{shap_path} contains no SHAP weights.")
 
     info = {'shap_weights_path': str(shap_path)}
-    metrics_csv = os.path.join(str(ensemble_dir), 'ALL_ENSEMBLE_COMBINATIONS_METRICS.csv')
+    top25_csv = os.path.join(str(ensemble_dir), 'TOP_25_BEST_PERFORMING_METRICS.csv')
+    all_csv = os.path.join(str(ensemble_dir), 'ALL_ENSEMBLE_COMBINATIONS_METRICS.csv')
+    metrics_csv = top25_csv if os.path.exists(top25_csv) else all_csv
     rank = re.search(r'Rank_(\d+)_', os.path.basename(str(shap_path)))
     if rank and os.path.exists(metrics_csv):
         metrics = pd.read_csv(metrics_csv)
@@ -74,8 +78,10 @@ def load_shap_recipe(ensemble_dir, shap_path=None):
             info['ensemble_name'] = str(row.get('Ensemble_Name'))
             info['ensemble_members'] = [m.strip() for m in str(row.get('Ensemble_Name', '')).split('+') if m.strip()]
             info['ensemble_metrics'] = {k: float(row[k]) for k in
-                                        ['Global_Accuracy', 'Global_Blind_Error', 'Global_NDCG',
-                                         'Global_Spearman', 'Global_MARE'] if k in row}
+                                        ['Global_Accuracy', 'Global_Per_Game_Confidence',
+                                         'Global_Per_Bracket_Confidence', 'Global_Expected_Points',
+                                         'Global_Blind_Error', 'Global_NDCG',
+                                         'Global_Spearman', 'Global_MARE', 'Composite_Rank_Score'] if k in row}
     return df, info
 
 
@@ -184,26 +190,36 @@ def tournament_field(season, data_dir, actual_wins=None):
     return None
 
 
-def _dot_zscore(X, X_scaled, shap_weights):
+def _dot_zscore(X, X_scaled, shap_weights, directional=False):
     used = [f for f in shap_weights if f in X.columns]
     if not used:
         return np.zeros(len(X), dtype=float), list(shap_weights)
     missing = [f for f in shap_weights if f not in X.columns]
-    weights = np.array([shap_weights[f] for f in used], dtype=float)
+    from combo_eval import get_feature_polarity
+    weights = np.array([shap_weights[f] * (get_feature_polarity(f) if directional else 1.0) for f in used], dtype=float)
     raw = X_scaled[:, [X.columns.get_loc(f) for f in used]] @ weights
     std = raw.std() if raw.std() > 0 else 1.0
     return (raw - raw.mean()) / std, missing
 
 
-def score_season(data_dir, season, shap_weights, member_shap_by_season=None):
+_SEASON_FEATURES_CACHE = {}
+
+
+def get_cached_season_features(data_dir, season):
+    if season not in _SEASON_FEATURES_CACHE:
+        from combo_eval import build_team_features_for_scoring
+        with contextlib.redirect_stdout(io.StringIO()):
+            _SEASON_FEATURES_CACHE[season] = build_team_features_for_scoring(str(data_dir), season)
+    return _SEASON_FEATURES_CACHE[season].copy()
+
+
+def score_season(data_dir, season, shap_weights, member_shap_by_season=None, directional=False):
     """Score every team in a season.
 
     When member_shap_by_season is available, computes each model's z-scored
     SHAP dot product and averages them (matching combo_eval Phase 2 & 3).
     """
-    from combo_eval import build_team_features_for_scoring
-    with contextlib.redirect_stdout(io.StringIO()):
-        feats = build_team_features_for_scoring(str(data_dir), season)
+    feats = get_cached_season_features(data_dir, season)
     if feats.empty:
         return pd.DataFrame(columns=['team', 'season', 'ensemble_score']), list(shap_weights)
     feats['team'] = feats['team'].astype(str).str.strip()
@@ -216,13 +232,13 @@ def score_season(data_dir, season, shap_weights, member_shap_by_season=None):
         missing_all = set()
         for model_name, season_dict in member_shap_by_season.items():
             w = season_dict.get(season) or season_dict[max(season_dict)]
-            z, missing = _dot_zscore(X, X_scaled, w)
+            z, missing = _dot_zscore(X, X_scaled, w, directional=directional)
             member_cols[f"score__{model_name}"] = z
             missing_all.update(missing)
         ensemble_z = np.mean(np.column_stack(list(member_cols.values())), axis=1)
         missing_list = sorted(missing_all)
     else:
-        ensemble_z, missing_list = _dot_zscore(X, X_scaled, shap_weights)
+        ensemble_z, missing_list = _dot_zscore(X, X_scaled, shap_weights, directional=directional)
 
     scores = pd.DataFrame({
         'team': feats['team'],
@@ -233,14 +249,14 @@ def score_season(data_dir, season, shap_weights, member_shap_by_season=None):
     return scores, missing_list
 
 
-def build_history(seasons, data_dir, wins_dirs, shap_weights, member_shap_by_season=None):
+def build_history(seasons, data_dir, wins_dirs, shap_weights, member_shap_by_season=None, directional=False):
     """Scored tournament teams with known results and seeds for every historical season."""
     frames = []
     for season in seasons:
         wins = load_actual_wins(season, wins_dirs)
         if not wins:
             continue
-        scores, _ = score_season(data_dir, season, shap_weights, member_shap_by_season)
+        scores, _ = score_season(data_dir, season, shap_weights, member_shap_by_season, directional=directional)
         scores = scores[scores['team'].isin(wins)].copy()
         scores['actual_wins'] = scores['team'].map(wins)
         df_games = load_bracket_games_df(season, data_dir)
@@ -338,7 +354,7 @@ def apply_isotonic_calibration(table, calibrators):
 # Pairwise Matchup Model & 63-Game Bracket-Tree Simulator
 # ---------------------------------------------------------------------------
 def build_matchup_training_data(seasons, data_dir, history, exclude_season):
-    """Build symmetric pairwise game dataset (delta_score, delta_seed) -> win {0, 1}."""
+    """Build symmetric pairwise game dataset with Four Factors & stylistic clash differentials."""
     score_lookup = {(int(r['season']), r['team']): float(r['ensemble_score'])
                     for _, r in history.iterrows()}
     X_rows, y_rows, season_labels = [], [], []
@@ -349,6 +365,9 @@ def build_matchup_training_data(seasons, data_dir, history, exclude_season):
         if df_games.empty or 'Actual_Winner' not in df_games.columns:
             continue
         seeds = extract_team_seeds(df_games)
+        feats_df = get_cached_season_features(data_dir, s)
+        feats_idx = feats_df.set_index('team') if not feats_df.empty and 'team' in feats_df.columns else pd.DataFrame()
+
         for _, g in df_games.iterrows():
             h, a, w = g['homeTeam'], g['awayTeam'], g['Actual_Winner']
             if (s, h) not in score_lookup or (s, a) not in score_lookup:
@@ -356,12 +375,45 @@ def build_matchup_training_data(seasons, data_dir, history, exclude_season):
             dz = score_lookup[(s, h)] - score_lookup[(s, a)]
             sh, sa = seeds.get(h, 8.5), seeds.get(a, 8.5)
             dseed = float(sa - sh)  # positive when home has better (lower) seed
+
+            # Stylistic clash features if available
+            d_net = 0.0
+            d_tov = 0.0
+            d_reb = 0.0
+            d_rot = 0.0
+            d_efg = 0.0
+            if not feats_idx.empty and h in feats_idx.index and a in feats_idx.index:
+                rh, ra = feats_idx.loc[h], feats_idx.loc[a]
+                d_net = float(rh.get('tempo_net_rating', 0.0) - ra.get('tempo_net_rating', 0.0)) / 10.0
+                tov_hf = rh.get('four_factors_def_tov', 18.0)
+                tov_ag = ra.get('four_factors_off_tov', 18.0)
+                tov_af = ra.get('four_factors_def_tov', 18.0)
+                tov_hg = rh.get('four_factors_off_tov', 18.0)
+                d_tov = float((tov_hf - tov_ag) - (tov_af - tov_hg)) / 10.0
+
+                reb_ho = rh.get('four_factors_off_orb', 30.0)
+                reb_ad = ra.get('four_factors_def_drb', 70.0)
+                reb_ao = ra.get('four_factors_off_orb', 30.0)
+                reb_hd = rh.get('four_factors_def_drb', 70.0)
+                d_reb = float((reb_ho - (100.0 - reb_ad)) - (reb_ao - (100.0 - reb_hd))) / 10.0
+
+                rot_h = rh.get('rotation_top7_minutes_ratio', 0.75)
+                rot_a = ra.get('rotation_top7_minutes_ratio', 0.75)
+                d_rot = float(rot_h - rot_a) * 10.0
+
+                efg_ho = rh.get('four_factors_off_efg', 50.0)
+                efg_ad = ra.get('four_factors_def_efg', 50.0)
+                efg_ao = ra.get('four_factors_off_efg', 50.0)
+                efg_hd = rh.get('four_factors_def_efg', 50.0)
+                d_efg = float((efg_ho - efg_ad) - (efg_ao - efg_hd)) / 10.0
+
+            feats_vector = [dz, dseed, d_net, d_tov, d_reb, d_rot, d_efg]
             h_won = 1 if w == h else 0
-            # Add both perspectives for exact antisymmetry (zero intercept bias)
-            X_rows.append([dz, dseed])
+            # Exact antisymmetry
+            X_rows.append(feats_vector)
             y_rows.append(h_won)
             season_labels.append(s)
-            X_rows.append([-dz, -dseed])
+            X_rows.append([-x for x in feats_vector])
             y_rows.append(1 - h_won)
             season_labels.append(s)
     return np.asarray(X_rows, dtype=float), np.asarray(y_rows, dtype=int), np.asarray(season_labels, dtype=int)
@@ -398,6 +450,11 @@ def fit_matchup_model(seasons, data_dir, history, target_season):
         'oof_accuracy': float(np.mean((orig_probs >= 0.5) == orig_true)),
         'coef_ensemble_score_diff': float(model.coef_[0][0]),
         'coef_seed_diff': float(model.coef_[0][1]),
+        'coef_net_rating_diff': float(model.coef_[0][2]) if model.coef_.shape[1] > 2 else 0.0,
+        'coef_tov_clash': float(model.coef_[0][3]) if model.coef_.shape[1] > 3 else 0.0,
+        'coef_reb_clash': float(model.coef_[0][4]) if model.coef_.shape[1] > 4 else 0.0,
+        'coef_rotation_diff': float(model.coef_[0][5]) if model.coef_.shape[1] > 5 else 0.0,
+        'coef_efg_clash': float(model.coef_[0][6]) if model.coef_.shape[1] > 6 else 0.0,
     }
     return model, diagnostics
 
@@ -449,18 +506,49 @@ def parse_bracket_tree(df_games):
     }
 
 
-def build_pairwise_prob_matrix(teams64, score_map, seeds, matchup_model):
-    """Compute (64, 64) matrix P[i, j] = P(team i beats team j)."""
+def build_pairwise_prob_matrix(teams64, score_map, seeds, matchup_model, season=None, data_dir=None):
+    """Compute (64, 64) matrix P[i, j] = P(team i beats team j) incorporating Four Factors & stylistic clashes."""
     n = len(teams64)
     z = np.array([score_map.get(t, 0.0) for t in teams64], dtype=float)
     s = np.array([seeds.get(t, 8.5) for t in teams64], dtype=float)
     dz = z[:, None] - z[None, :]
     dseed = s[None, :] - s[:, None]
-    if matchup_model is not None:
-        w_z, w_s = matchup_model.coef_[0]
-        logits = w_z * dz + w_s * dseed
+
+    if matchup_model is not None and getattr(matchup_model, "coef_", None) is not None:
+        n_features = matchup_model.coef_.shape[1]
+        if n_features > 2 and season is not None and data_dir is not None:
+            feats = get_cached_season_features(data_dir, season)
+            feats_idx = feats.set_index('team') if not feats.empty and 'team' in feats.columns else pd.DataFrame()
+            if not feats_idx.empty:
+                net_eff = np.array([float(feats_idx.loc[t, 'tempo_net_rating']) if t in feats_idx.index and 'tempo_net_rating' in feats_idx.columns else 0.0 for t in teams64]) / 10.0
+                def_tov = np.array([float(feats_idx.loc[t, 'four_factors_def_tov']) if t in feats_idx.index and 'four_factors_def_tov' in feats_idx.columns else 18.0 for t in teams64])
+                off_tov = np.array([float(feats_idx.loc[t, 'four_factors_off_tov']) if t in feats_idx.index and 'four_factors_off_tov' in feats_idx.columns else 18.0 for t in teams64])
+                off_orb = np.array([float(feats_idx.loc[t, 'four_factors_off_orb']) if t in feats_idx.index and 'four_factors_off_orb' in feats_idx.columns else 30.0 for t in teams64])
+                def_drb = np.array([float(feats_idx.loc[t, 'four_factors_def_drb']) if t in feats_idx.index and 'four_factors_def_drb' in feats_idx.columns else 70.0 for t in teams64])
+                rot_7 = np.array([float(feats_idx.loc[t, 'rotation_top7_minutes_ratio']) if t in feats_idx.index and 'rotation_top7_minutes_ratio' in feats_idx.columns else 0.75 for t in teams64]) * 10.0
+                off_efg = np.array([float(feats_idx.loc[t, 'four_factors_off_efg']) if t in feats_idx.index and 'four_factors_off_efg' in feats_idx.columns else 50.0 for t in teams64])
+                def_efg = np.array([float(feats_idx.loc[t, 'four_factors_def_efg']) if t in feats_idx.index and 'four_factors_def_efg' in feats_idx.columns else 50.0 for t in teams64])
+
+                d_net = net_eff[:, None] - net_eff[None, :]
+                d_tov = ((def_tov[:, None] - off_tov[None, :]) - (def_tov[None, :] - off_tov[:, None])) / 10.0
+                d_reb = ((off_orb[:, None] - (100.0 - def_drb[None, :])) - (off_orb[None, :] - (100.0 - def_drb[:, None]))) / 10.0
+                d_rot = rot_7[:, None] - rot_7[None, :]
+                d_efg = ((off_efg[:, None] - def_efg[None, :]) - (off_efg[None, :] - def_efg[:, None])) / 10.0
+
+                feature_matrices = [dz, dseed, d_net, d_tov, d_reb, d_rot, d_efg]
+                logits = np.zeros((n, n), dtype=float)
+                for k, w_k in enumerate(matchup_model.coef_[0]):
+                    if k < len(feature_matrices):
+                        logits += w_k * feature_matrices[k]
+            else:
+                w_z, w_s = matchup_model.coef_[0][:2]
+                logits = w_z * dz + w_s * dseed
+        else:
+            w_z, w_s = matchup_model.coef_[0][:2]
+            logits = w_z * dz + w_s * dseed
     else:
         logits = 0.85 * dz + 0.12 * dseed
+
     P = expit(logits)
     np.fill_diagonal(P, 0.5)
     return P
@@ -488,7 +576,7 @@ def run_bracket_tree_simulation(season, data_dir, scores_df, matchup_model, n_si
 
     teams64 = parsed['teams64']
     score_map = dict(zip(scores_df['team'], scores_df['ensemble_score']))
-    P_model = build_pairwise_prob_matrix(teams64, score_map, parsed['seeds'], matchup_model)
+    P_model = build_pairwise_prob_matrix(teams64, score_map, parsed['seeds'], matchup_model, season=season, data_dir=data_dir)
     win_counts, slot_winners = simulate_bracket_tree(
         parsed['round1_pairs'], parsed['tree_edges'], teams64, P_model,
         n_simulations=n_simulations, seed=seed,
@@ -621,8 +709,33 @@ def optimize_bracket_pool(parsed_tree, scores_df, pool_size=100, n_simulations=1
     top10_cutoff = np.percentile(opp_scores, 90, axis=1)
 
     actual_winners = np.asarray(parsed_tree['actual_slot_winners'], dtype=np.int32)
-    actual_ev_pts = float((( np.asarray(max_ev_picks) == actual_winners) * round_pts).sum())
-    actual_lev_pts = float(((np.asarray(leverage_picks) == actual_winners) * round_pts).sum())
+    valid_actuals = (actual_winners >= 0) & (actual_winners < n_teams)
+    has_actuals = bool(valid_actuals.any())
+    n_valid = int(valid_actuals.sum())
+
+    ev_arr_1d = np.asarray(max_ev_picks, dtype=np.int32)
+    lev_arr_1d = np.asarray(leverage_picks, dtype=np.int32)
+
+    actual_ev_pts = float(((ev_arr_1d == actual_winners) * round_pts * valid_actuals).sum()) if has_actuals else None
+    actual_lev_pts = float(((lev_arr_1d == actual_winners) * round_pts * valid_actuals).sum()) if has_actuals else None
+
+    ev_correct_count = int(((ev_arr_1d == actual_winners) & valid_actuals).sum()) if has_actuals else None
+    lev_correct_count = int(((lev_arr_1d == actual_winners) & valid_actuals).sum()) if has_actuals else None
+    ev_acc = float(ev_correct_count / n_valid) if has_actuals and n_valid > 0 else None
+    lev_acc = float(lev_correct_count / n_valid) if has_actuals and n_valid > 0 else None
+
+    # Regional winners (Elite 8 winners, games 56..59) advance to Final Four
+    max_ev_f4 = [teams64[max_ev_picks[g]] for g in range(56, 60)]
+    leverage_f4 = [teams64[leverage_picks[g]] for g in range(56, 60)]
+    actual_f4 = [teams64[actual_winners[g]] for g in range(56, 60) if 0 <= actual_winners[g] < n_teams]
+    actual_f4_set = set(actual_f4)
+
+    ev_f4_correct_count = len(set(max_ev_f4).intersection(actual_f4_set)) if actual_f4 else None
+    lev_f4_correct_count = len(set(leverage_f4).intersection(actual_f4_set)) if actual_f4 else None
+
+    champ_valid = bool(0 <= actual_winners[62] < n_teams) if len(actual_winners) > 62 else False
+    ev_champ_correct = bool(max_ev_picks[62] == actual_winners[62]) if champ_valid else None
+    lev_champ_correct = bool(leverage_picks[62] == actual_winners[62]) if champ_valid else None
 
     rows = []
     for g in range(63):
@@ -636,6 +749,8 @@ def optimize_bracket_pool(parsed_tree, scores_df, pool_size=100, n_simulations=1
         ev_t = max_ev_picks[g]
         lev_t = leverage_picks[g]
         act_t = actual_winners[g]
+        max_ev_p = float(slot_prob_model[g, ev_t])
+        lev_p = float(slot_prob_model[g, lev_t])
         rows.append({
             'game_slot': g + 1,
             'round_number': r_num,
@@ -643,11 +758,15 @@ def optimize_bracket_pool(parsed_tree, scores_df, pool_size=100, n_simulations=1
             'round_points': int(round_pts[g]),
             'matchup': matchup_label,
             'max_ev_pick': teams64[ev_t],
-            'max_ev_win_prob': float(slot_prob_model[g, ev_t]),
+            'max_ev_win_prob': max_ev_p,
+            'max_ev_game_confidence': max_ev_p,
+            'max_ev_confidence_tier': 'High (>75%)' if max_ev_p >= 0.75 else ('Moderate (60-75%)' if max_ev_p >= 0.60 else 'Lean/Tossup (50-60%)'),
             'max_ev_public_pct': float(slot_prob_public[g, ev_t]),
             'max_ev_expected_pts': float(ev_rewards[g, ev_t]),
             'leverage_pick': teams64[lev_t],
-            'leverage_win_prob': float(slot_prob_model[g, lev_t]),
+            'leverage_win_prob': lev_p,
+            'leverage_game_confidence': lev_p,
+            'leverage_confidence_tier': 'High (>75%)' if lev_p >= 0.75 else ('Moderate (60-75%)' if lev_p >= 0.60 else 'Lean/Tossup (50-60%)'),
             'leverage_public_pct': float(slot_prob_public[g, lev_t]),
             'leverage_ratio': float(leverage_ratio[g, lev_t]),
             'leverage_expected_pts': float(ev_rewards[g, lev_t]),
@@ -657,22 +776,203 @@ def optimize_bracket_pool(parsed_tree, scores_df, pool_size=100, n_simulations=1
         })
 
     bracket_df = pd.DataFrame(rows)
+    max_ev_conf_arr = np.maximum(slot_prob_model[np.arange(63), max_ev_picks], 1e-4)
+    lev_conf_arr = np.maximum(slot_prob_model[np.arange(63), leverage_picks], 1e-4)
     summary = {
         'pool_size': int(pool_size),
         'leverage_alpha': float(alpha),
         'max_ev_champion': teams64[max_ev_picks[62]],
+        'max_ev_final_four': max_ev_f4,
         'leverage_champion': teams64[leverage_picks[62]],
-        'actual_champion': teams64[actual_winners[62]] if 0 <= actual_winners[62] < n_teams else None,
+        'leverage_final_four': leverage_f4,
+        'actual_champion': teams64[actual_winners[62]] if champ_valid else None,
+        'actual_final_four': actual_f4,
         'max_ev_expected_points': float(ev_scores.mean()),
         'leverage_expected_points': float(lev_scores.mean()),
+        'max_ev_per_game_confidence': float(np.mean(max_ev_conf_arr)),
+        'max_ev_bracket_confidence': float(np.exp(np.mean(np.log(max_ev_conf_arr)))),
+        'leverage_per_game_confidence': float(np.mean(lev_conf_arr)),
+        'leverage_bracket_confidence': float(np.exp(np.mean(np.log(lev_conf_arr)))),
         'max_ev_pool_win_prob': float(np.mean(ev_scores >= max_opp)),
         'leverage_pool_win_prob': float(np.mean(lev_scores >= max_opp)),
         'max_ev_top10pct_prob': float(np.mean(ev_scores >= top10_cutoff)),
         'leverage_top10pct_prob': float(np.mean(lev_scores >= top10_cutoff)),
         'actual_max_ev_points': actual_ev_pts,
         'actual_leverage_points': actual_lev_pts,
+        'max_ev_accuracy': ev_acc,
+        'max_ev_correct_games': ev_correct_count,
+        'max_ev_champ_correct': ev_champ_correct,
+        'max_ev_f4_correct': ev_f4_correct_count,
+        'leverage_accuracy': lev_acc,
+        'leverage_correct_games': lev_correct_count,
+        'leverage_champ_correct': lev_champ_correct,
+        'leverage_f4_correct': lev_f4_correct_count,
     }
     return bracket_df, summary, slot_prob_model, slot_prob_public
+
+
+def optimize_bracket_portfolio(parsed_tree, scores_df, portfolio_size=3, pool_size=100, n_simulations=10000, seed=42):
+    """
+    Generate a coordinated portfolio of 3 complementary brackets:
+    1. Bracket 1: Chalk / Max-EV Anchor (pure expected points).
+    2. Bracket 2: Primary Pool Leverage (game-theoretic pool differentiation on under-owned champions).
+    3. Bracket 3: Regional Chaos Hedge (targets high-leverage Sweet 16 / Elite 8 value upsets).
+
+    Returns:
+    - portfolio_df: 63-game matchup table with picks from all 3 brackets + actuals.
+    - portfolio_summary: Comprehensive metrics for each bracket and joint portfolio pool win %.
+    """
+    teams64 = parsed_tree['teams64']
+    n_teams = len(teams64)
+    round1_pairs = parsed_tree['round1_pairs']
+    tree_edges = parsed_tree['tree_edges']
+    slot_winners = parsed_tree['slot_winners']
+    slot_rounds = np.asarray(parsed_tree['slot_rounds'], dtype=int)
+    round_pts = np.array([ROUND_POINTS[r] for r in slot_rounds], dtype=float)
+
+    # 1. Model slot win probability matrix
+    slot_prob_model = np.zeros((63, n_teams), dtype=float)
+    for g in range(63):
+        counts = np.bincount(slot_winners[g], minlength=n_teams)
+        slot_prob_model[g] = counts / slot_winners.shape[1]
+
+    # 2. Public slot win probability matrix via public tree simulation
+    score_map = dict(zip(scores_df['team'], scores_df['ensemble_score']))
+    P_pub = build_public_prob_matrix(teams64, score_map, parsed_tree['seeds'])
+    _, pub_slot_winners = simulate_bracket_tree(
+        round1_pairs, tree_edges, teams64, P_pub, n_simulations=max(2000, n_simulations // 2), seed=seed + 99
+    )
+    slot_prob_public = np.zeros((63, n_teams), dtype=float)
+    for g in range(63):
+        counts = np.bincount(pub_slot_winners[g], minlength=n_teams)
+        slot_prob_public[g] = counts / pub_slot_winners.shape[1]
+
+    # Bracket 1: Chalk / Max-EV Anchor
+    ev_rewards = round_pts[:, None] * slot_prob_model
+    chalk_picks = _exact_dp_optimal_bracket(round1_pairs, tree_edges, n_teams, ev_rewards)
+
+    # Bracket 2: Primary Pool Leverage
+    alpha = min(0.40, 0.08 * np.log(max(pool_size, 1)))
+    leverage_ratio = slot_prob_model / np.maximum(slot_prob_public, 0.01)
+    round_scale = np.array([0.25 if r <= 2 else (0.65 if r <= 4 else 1.0) for r in slot_rounds])[:, None]
+    lev_rewards = ev_rewards * np.power(leverage_ratio, alpha * round_scale)
+    leverage_picks = _exact_dp_optimal_bracket(round1_pairs, tree_edges, n_teams, lev_rewards)
+
+    # Bracket 3: Regional Chaos Hedge
+    chaos_alpha = min(0.60, 0.15 * np.log(max(pool_size, 1)))
+    chaos_scale = np.array([0.50 if r <= 2 else (1.20 if r <= 4 else 0.80) for r in slot_rounds])[:, None]
+    chaos_rewards = ev_rewards * np.power(leverage_ratio, chaos_alpha * chaos_scale)
+    chaos_picks = _exact_dp_optimal_bracket(round1_pairs, tree_edges, n_teams, chaos_rewards)
+
+    # Evaluate all 3 brackets across simulations
+    n_eval_sims = min(2000, slot_winners.shape[1])
+    n_opponents = max(1, min(pool_size - 1, 250))
+    opp_brackets = pub_slot_winners[:, :n_opponents]
+    true_outcomes = slot_winners[:, :n_eval_sims]
+
+    b1_arr = np.asarray(chalk_picks, dtype=np.int32)[:, None]
+    b2_arr = np.asarray(leverage_picks, dtype=np.int32)[:, None]
+    b3_arr = np.asarray(chaos_picks, dtype=np.int32)[:, None]
+
+    b1_scores = ((b1_arr == true_outcomes) * round_pts[:, None]).sum(axis=0)
+    b2_scores = ((b2_arr == true_outcomes) * round_pts[:, None]).sum(axis=0)
+    b3_scores = ((b3_arr == true_outcomes) * round_pts[:, None]).sum(axis=0)
+
+    opp_scores = np.zeros((n_eval_sims, n_opponents), dtype=float)
+    for g in range(63):
+        opp_scores += (true_outcomes[g, :, None] == opp_brackets[g, None, :]) * round_pts[g]
+    max_opp = opp_scores.max(axis=1)
+
+    b1_win = (b1_scores >= max_opp)
+    b2_win = (b2_scores >= max_opp)
+    b3_win = (b3_scores >= max_opp)
+    best_portfolio_score = np.maximum(b1_scores, np.maximum(b2_scores, b3_scores))
+    joint_win = (best_portfolio_score >= max_opp)
+
+    # Check actual winners if ground truth exists
+    actual_winners = np.asarray(parsed_tree['actual_slot_winners'], dtype=np.int32)
+    valid_actuals = (actual_winners >= 0) & (actual_winners < n_teams)
+    has_actuals = bool(valid_actuals.any())
+    n_valid = int(valid_actuals.sum())
+
+    b1_actual_pts = float(((np.asarray(chalk_picks) == actual_winners) * round_pts * valid_actuals).sum()) if has_actuals else None
+    b2_actual_pts = float(((np.asarray(leverage_picks) == actual_winners) * round_pts * valid_actuals).sum()) if has_actuals else None
+    b3_actual_pts = float(((np.asarray(chaos_picks) == actual_winners) * round_pts * valid_actuals).sum()) if has_actuals else None
+
+    b1_acc = float(((np.asarray(chalk_picks) == actual_winners) & valid_actuals).sum() / n_valid) if has_actuals and n_valid > 0 else None
+    b2_acc = float(((np.asarray(leverage_picks) == actual_winners) & valid_actuals).sum() / n_valid) if has_actuals and n_valid > 0 else None
+    b3_acc = float(((np.asarray(chaos_picks) == actual_winners) & valid_actuals).sum() / n_valid) if has_actuals and n_valid > 0 else None
+
+    champ_valid = bool(0 <= actual_winners[62] < n_teams) if len(actual_winners) > 62 else False
+    actual_f4 = [teams64[actual_winners[g]] for g in range(56, 60) if 0 <= actual_winners[g] < n_teams]
+    actual_f4_set = set(actual_f4)
+
+    rows = []
+    for g in range(63):
+        r_num = int(slot_rounds[g])
+        if g < 32:
+            h_idx, a_idx = round1_pairs[g]
+            matchup_label = f"R64: ({parsed_tree['seeds'].get(teams64[h_idx], '?')}) {teams64[h_idx]} vs ({parsed_tree['seeds'].get(teams64[a_idx], '?')}) {teams64[a_idx]}"
+        else:
+            lg, rg = tree_edges[g - 32]
+            matchup_label = f"{ROUND_LABELS[r_num]}: Winner(G{lg+1}) vs Winner(G{rg+1})"
+        
+        b1_t, b2_t, b3_t = chalk_picks[g], leverage_picks[g], chaos_picks[g]
+        act_t = actual_winners[g] if has_actuals else -1
+        
+        rows.append({
+            'game_slot': g + 1,
+            'round_number': r_num,
+            'round_name': ROUND_LABELS[r_num],
+            'round_points': int(round_pts[g]),
+            'matchup': matchup_label,
+            'chalk_pick': teams64[b1_t],
+            'chalk_win_prob': float(slot_prob_model[g, b1_t]),
+            'chalk_public_pct': float(slot_prob_public[g, b1_t]),
+            'leverage_pick': teams64[b2_t],
+            'leverage_win_prob': float(slot_prob_model[g, b2_t]),
+            'leverage_public_pct': float(slot_prob_public[g, b2_t]),
+            'chaos_hedge_pick': teams64[b3_t],
+            'chaos_hedge_win_prob': float(slot_prob_model[g, b3_t]),
+            'chaos_hedge_public_pct': float(slot_prob_public[g, b3_t]),
+            'actual_winner': teams64[act_t] if 0 <= act_t < n_teams else '',
+            'chalk_correct': bool(b1_t == act_t) if has_actuals else None,
+            'leverage_correct': bool(b2_t == act_t) if has_actuals else None,
+            'chaos_correct': bool(b3_t == act_t) if has_actuals else None,
+        })
+    portfolio_df = pd.DataFrame(rows)
+
+    summary = {
+        'pool_size': int(pool_size),
+        'chalk_champion': teams64[chalk_picks[62]],
+        'leverage_champion': teams64[leverage_picks[62]],
+        'chaos_champion': teams64[chaos_picks[62]],
+        'actual_champion': teams64[actual_winners[62]] if champ_valid else None,
+        'chalk_final_four': [teams64[chalk_picks[g]] for g in range(56, 60)],
+        'leverage_final_four': [teams64[leverage_picks[g]] for g in range(56, 60)],
+        'chaos_final_four': [teams64[chaos_picks[g]] for g in range(56, 60)],
+        'actual_final_four': actual_f4,
+        'chalk_expected_points': float(b1_scores.mean()),
+        'leverage_expected_points': float(b2_scores.mean()),
+        'chaos_expected_points': float(b3_scores.mean()),
+        'chalk_pool_win_prob': float(b1_win.mean()),
+        'leverage_pool_win_prob': float(b2_win.mean()),
+        'chaos_pool_win_prob': float(b3_win.mean()),
+        'joint_portfolio_win_prob': float(joint_win.mean()),
+        'portfolio_multiplier_over_chalk': float(joint_win.mean() / max(b1_win.mean(), 1e-4)),
+        'chalk_actual_points': b1_actual_pts,
+        'leverage_actual_points': b2_actual_pts,
+        'chaos_actual_points': b3_actual_pts,
+        'portfolio_actual_max_points': max([p for p in [b1_actual_pts, b2_actual_pts, b3_actual_pts] if p is not None], default=None),
+        'chalk_accuracy': b1_acc,
+        'leverage_accuracy': b2_acc,
+        'chaos_accuracy': b3_acc,
+        'portfolio_best_accuracy': max([a for a in [b1_acc, b2_acc, b3_acc] if a is not None], default=None),
+        'chalk_champ_correct': bool(chalk_picks[62] == actual_winners[62]) if champ_valid else None,
+        'leverage_champ_correct': bool(leverage_picks[62] == actual_winners[62]) if champ_valid else None,
+        'chaos_champ_correct': bool(chaos_picks[62] == actual_winners[62]) if champ_valid else None,
+    }
+    return portfolio_df, summary
 
 
 def add_ranks(table):
