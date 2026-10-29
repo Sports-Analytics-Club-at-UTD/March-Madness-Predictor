@@ -1,47 +1,50 @@
-# March Madness Predictor
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Vite + React frontend using React Router in declarative mode, Convex, Tailwind CSS, and shadcn/ui. Uses pnpm.
+## Getting Started
 
-## Development
-
-```bash
-pnpm install
-pnpm dev:all
-```
-
-`dev:all` syncs Convex functions and starts Vite at http://localhost:5173.
-You can also run `pnpm dev:convex` and `pnpm dev` in separate terminals.
-
-The first Convex run prompts you to select or create a project and writes
-`CONVEX_DEPLOYMENT`, `VITE_CONVEX_URL`, and `VITE_CONVEX_SITE_URL`
-to `.env.local`. This file is ignored by Git. This checkout is configured with
-a cloud development deployment; other developers should run `pnpm dev:convex`
-to configure their own deployment.
-
-## Backend
-
-Add tables to `convex/schema.ts` and query/mutation/action functions in `convex/`.
-Convex generates typed helpers in `convex/_generated/`; commit these generated files.
-The root render includes `ConvexProvider`, so components can use `useQuery` and
-`useMutation` from `convex/react` with the generated API from
-`convex/_generated/api`.
-
-The schema starts empty. No sample data or public write functions are installed.
-
-- [Convex dashboard](https://dashboard.convex.dev/t/abel-sam/march-madness-predictor-69042)
-- [Convex React guide](https://docs.convex.dev/client/react/quickstart-create-react-app)
-
-## Checks
+Install dependencies and configure your Convex development deployment:
 
 ```bash
-pnpm lint
-pnpm typecheck
-pnpm build
+npm install
+npm run convex:dev
 ```
 
-## Production
+On the first run, Convex prompts you to log in and select or create a project.
+It writes deployment settings, including `NEXT_PUBLIC_CONVEX_URL`, to `.env.local`
+and generates typed helpers in `convex/_generated/`. Keep this command running
+to sync backend changes. Add tables to `convex/schema.ts` and backend functions
+under `convex/`.
 
-Run `pnpm exec convex deploy` to deploy the backend. Configure the frontend host's
-`VITE_CONVEX_URL` with the production deployment URL before building Vite.
-Development and production deployments have separate data. Keep deployment keys
-in the hosting provider's secret settings.
+In a second terminal, run the Next.js development server:
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `src/app/page.tsx`. The page auto-updates as you edit the file.
+
+The root layout provides Convex to client components through
+`src/app/ConvexClientProvider.tsx`. Use `useQuery` and `useMutation` from
+`convex/react` with the generated API to access your backend.
+
+For production, run `npm run convex:deploy` and set `NEXT_PUBLIC_CONVEX_URL` in
+your hosting environment to the production deployment URL before building.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
