@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { ReactFlow, ViewportPortal } from "@xyflow/react";
+import { Background, BackgroundVariant, ReactFlow, ViewportPortal } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import type { Tournament } from "../../convex/tournamentModel";
 import { buildTournamentBracket } from "@/lib/tournament-bracket";
@@ -33,6 +33,7 @@ export function TournamentBracket({ tournament, showScores = false }: { tourname
       maxZoom={MAX_ZOOM}
       proOptions={{ hideAttribution: true }}
     >
+      <Background variant={BackgroundVariant.Dots} gap={32} size={1.5} color="var(--border)" />
       <ViewportPortal>
         {labels.map(label => (
           <div key={label.text} className={`pointer-events-none absolute w-96 text-base font-semibold text-muted-foreground ${label.align === "right" ? "text-right" : "text-left"}`} style={{ transform: `translate(${label.x}px, ${label.y}px)` }}>

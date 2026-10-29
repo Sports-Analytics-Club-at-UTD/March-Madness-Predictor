@@ -7,7 +7,67 @@ export const list = query({
   args: {},
   handler: async ctx => {
     const brackets = await ctx.db.query("brackets").collect();
+    brackets.sort((a, b) => Number(b.slug === "2026-results") - Number(a.slug === "2026-results"));
     return Promise.all(brackets.map(async bracket => ({ ...bracket, imageUrl: await ctx.storage.getUrl(bracket.logoStorageId) })));
+  },
+});
+
+// Publish the official results with the actual team assets already in storage.
+export const publish2026 = internalMutation({
+  args: {},
+  handler: async ctx => {
+    const aliases: Record<string, string> = {
+      "Miami (Ohio)": "Miami (OH)",
+      "Miami (FL)": "Miami",
+      "Cal Baptist": "California Baptist",
+      Penn: "Pennsylvania",
+      "Long Island": "Long Island University",
+      Hawaii: "Hawai'i",
+      "Queens (N.C.)": "Queens University",
+    };
+    const teams = await Promise.all(marchMadness2026.teams.map(async team => {
+      const name = (aliases[team.name] ?? team.name).toLowerCase();
+      const logo = await ctx.db.query("teamLogos")
+        .withIndex("by_name", q => q.eq("normalizedName", name)).unique();
+      if (!logo) throw new Error(`Import the real logo for ${team.name} before publishing.`);
+      const logoUrl = await ctx.storage.getUrl(logo.storageId);
+      if (!logoUrl) throw new Error(`Stored logo missing for ${team.name}.`);
+      return { ...team, logoUrl, storageId: logo.storageId };
+    }));
+    const tournament = {
+      ...marchMadness2026,
+      teams: teams.map(({ id, name, seed, logoUrl }) => ({ id, name, seed, logoUrl })),
+    };
+    validateTournament(tournament);
+    const bracket = await ctx.db.query("brackets").withIndex("by_slug", q => q.eq("slug", "2026-results")).unique();
+    const canonical = await ctx.db.query("tournaments").withIndex("by_slug", q => q.eq("slug", tournament.slug)).unique();
+    const existingId = canonical?._id ?? bracket?.tournamentId;
+    const tournamentId = existingId ?? await ctx.db.insert("tournaments", tournament);
+    if (existingId) await ctx.db.replace(existingId, tournament);
+    const champion = teams.find(team => team.id === tournament.winnerTeamId)!;
+    const record = {
+      slug: "2026-results",
+      title: "2026 NCAA March Madness",
+      description: "Official 2026 NCAA men's tournament results · Michigan national champions",
+      logoStorageId: champion.storageId,
+      tournamentId,
+    };
+    const bracketId = bracket?._id ?? await ctx.db.insert("brackets", record);
+    if (bracket) await ctx.db.patch(bracketId, record);
+
+    // Keep existing example predictions, but replace their placeholder images too.
+    for (const [slug, favorite] of [["ut-upheaval", "texas"], ["am-avenue", "texas-a-m"]]) {
+      const example = await ctx.db.query("brackets").withIndex("by_slug", q => q.eq("slug", slug)).unique();
+      if (!example) continue;
+      const prediction = await ctx.db.get("tournaments", example.tournamentId);
+      if (!prediction) continue;
+      const logoById = new Map(teams.map(team => [team.id, team.logoUrl]));
+      await ctx.db.patch(prediction._id, {
+        teams: prediction.teams.map(team => ({ ...team, logoUrl: logoById.get(team.id) ?? team.logoUrl })),
+      });
+      await ctx.db.patch(example._id, { logoStorageId: teams.find(team => team.id === favorite)!.storageId });
+    }
+    return { bracketId, tournamentId, teams: teams.length, games: tournament.games.length };
   },
 });
 

@@ -17,5 +17,5 @@ export default function MmpPage() {
   if (brackets === undefined || (selectedId && tournament === undefined)) return <TournamentBracketSkeleton />;
   if (!selectedId || tournament === null) return <p role="status" className="p-16 text-sm text-muted-foreground">Select a bracket from the sidebar.</p>;
   if (!tournament) return null;
-  return <TournamentBracket key={selectedId} tournament={tournament} />;
+  return <TournamentBracket key={selectedId} tournament={tournament} showScores={brackets.find(bracket => bracket._id === selectedId)?.slug === "2026-results"} />;
 }

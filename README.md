@@ -75,6 +75,46 @@ Run the bracket checks with:
 node --test tests/tournament-bracket.test.cjs
 ```
 
+## Team logos
+
+The official [`cbbd` TypeScript SDK](https://github.com/CFBD/cbbd-typescript)
+provides basketball data using the `CFBD_API_KEY` in `.env.local`. Keep that key
+server-side. To import the available standard 500px team logos:
+
+```bash
+pnpm exec convex dev --once
+pnpm logos:sync
+```
+
+The importer requires Node 22.18+ and uses the configured development Convex
+deployment. It skips unchanged logos and reports teams without a large logo
+and failed downloads; rerun it to retry failures. Images live in Convex file
+storage, with team name, display name, CBBD team ID, and original URL in
+`teamLogos`. Import functions are internal and cannot be called from the browser.
+
+Retrieve a stored logo with
+`api.teamLogos.getByTeamName({ teamName: "Texas" })` (or pass those arguments to
+`useQuery`). Name matching ignores case and surrounding whitespace; the result
+includes a `url` for rendering. For duplicate school names, name lookup returns
+the first match; use `api.teamLogos.getByTeamId` with the CBBD `teamId` to select
+an exact API record.
+
+After importing logos, publish the official 2026 tournament with:
+
+```bash
+pnpm exec convex run brackets:publish2026
+```
+
+This updates or creates the `2026-results` bracket and its tournament, links all
+68 teams to stored logos, and makes the official results the default sidebar
+selection with scores visible. The card uses Michigan's logo. Existing example
+predictions also receive real team logos without changing their picks. Reruns
+reuse the bracket and tournament records.
+
+```bash
+node --test tests/team-logos.test.mjs
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
