@@ -1,23 +1,21 @@
 "use client";
 
-import { ReactFlow } from "@xyflow/react";
-import "@xyflow/react/dist/style.css";
-import { MAX_ZOOM, MIN_ZOOM, MmpCanvasToolbar } from "@/components/mmp-canvas-toolbar";
+import { useQuery } from "convex/react";
+import dynamic from "next/dynamic";
+import { api } from "../../../../convex/_generated/api";
+import { TournamentBracketSkeleton } from "@/components/tournament-bracket-skeleton";
+import { useBracketWorkspace } from "@/components/bracket-workspace";
+
+const TournamentBracket = dynamic(
+  () => import("@/components/tournament-bracket").then(module => module.TournamentBracket),
+  { loading: () => <TournamentBracketSkeleton /> },
+);
 
 export default function MmpPage() {
-  return (
-    <ReactFlow
-      className="bg-background"
-      style={{ backgroundColor: "var(--background)" }}
-      aria-label="March Madness canvas"
-      panOnDrag
-      zoomOnScroll
-      zoomOnPinch
-      minZoom={MIN_ZOOM}
-      maxZoom={MAX_ZOOM}
-      proOptions={{ hideAttribution: true }}
-    >
-      <MmpCanvasToolbar />
-    </ReactFlow>
-  );
+  const { selectedId, brackets } = useBracketWorkspace();
+  const tournament = useQuery(api.brackets.get, selectedId ? { id: selectedId } : "skip");
+  if (brackets === undefined || (selectedId && tournament === undefined)) return <TournamentBracketSkeleton />;
+  if (!selectedId || tournament === null) return <p role="status" className="p-16 text-sm text-muted-foreground">Select a bracket from the sidebar.</p>;
+  if (!tournament) return null;
+  return <TournamentBracket key={selectedId} tournament={tournament} />;
 }

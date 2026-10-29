@@ -8,13 +8,23 @@
  * @module
  */
 
+import type * as brackets from "../brackets.js";
+import type * as data_marchMadness2026 from "../data/marchMadness2026.js";
+import type * as tournamentModel from "../tournamentModel.js";
+import type * as tournaments from "../tournaments.js";
+
 import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
 } from "convex/server";
 
-declare const fullApi: ApiFromModules<{}>;
+declare const fullApi: ApiFromModules<{
+  brackets: typeof brackets;
+  "data/marchMadness2026": typeof data_marchMadness2026;
+  tournamentModel: typeof tournamentModel;
+  tournaments: typeof tournaments;
+}>;
 
 /**
  * A utility for referencing Convex functions in your app's public API.
