@@ -105,7 +105,10 @@ export function buildTournamentBracket(tournament: Tournament, showScores = fals
     draggable: false,
     deletable: false,
     connectable: false,
+    // Locked nodes still need pointer events for the game preview.
+    style: { pointerEvents: "all" },
     data: {
+      tournamentSlug: tournament.slug,
       label: game.label,
       semifinal: semifinals.has(game.id),
       direction: directions.get(game.id)!,

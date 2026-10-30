@@ -48,6 +48,7 @@ test("both halves connect inward to the correct winner's row", () => {
     assert.equal(node.draggable, false);
     assert.equal(node.deletable, false);
     assert.equal(node.connectable, false);
+    assert.equal(node.style.pointerEvents, "all", "locked games must receive hover events");
     assert.ok(Number.isFinite(node.position.x) && Number.isFinite(node.position.y));
     assert.equal(edges.filter(edge => edge.source === node.id).length, node.id === "championship" || node.data.label === "First Four" || node.data.label.includes("Elite Eight") ? 0 : 1);
   }

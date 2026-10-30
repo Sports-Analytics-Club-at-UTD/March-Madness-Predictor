@@ -10,6 +10,8 @@
 
 import type * as brackets from "../brackets.js";
 import type * as data_marchMadness2026 from "../data/marchMadness2026.js";
+import type * as gameOdds from "../gameOdds.js";
+import type * as gameOddsModel from "../gameOddsModel.js";
 import type * as teamLogos from "../teamLogos.js";
 import type * as tournamentModel from "../tournamentModel.js";
 import type * as tournaments from "../tournaments.js";
@@ -23,6 +25,8 @@ import type {
 declare const fullApi: ApiFromModules<{
   brackets: typeof brackets;
   "data/marchMadness2026": typeof data_marchMadness2026;
+  gameOdds: typeof gameOdds;
+  gameOddsModel: typeof gameOddsModel;
   teamLogos: typeof teamLogos;
   tournamentModel: typeof tournamentModel;
   tournaments: typeof tournaments;

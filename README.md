@@ -115,6 +115,38 @@ reuse the bracket and tournament records.
 node --test tests/team-logos.test.mjs
 ```
 
+## Historical Kalshi odds
+
+Set the server-side `KALSHI_API_ID` and `KALSHI_PRIVATE_KEY` in `.env.local`.
+The private key value can be a PEM file path or a quoted PEM string with escaped
+newlines. Keep the key file outside version control. The official
+`kalshi-typescript` SDK is used only by the importer, with read-only API calls.
+
+```bash
+pnpm exec convex dev --once
+pnpm odds:sync
+```
+
+The importer matches the official 2026 games against the men's game-winner
+series using both team names and the round's scheduled dates. It rejects
+ambiguous matches, uses the historical endpoints for archived markets, and
+stores each team's first and last available hourly trade prices in Convex's
+`gameOdds` table. The championship uses the `KXMARMAD-26` tournament-winner
+markets, with history limited to after both finalists were known; the card
+labels this distinction. The percentages are historical implied probabilities
+from contract prices, rather than live quotes or settlement payouts.
+
+Hovering for one second opens the card and reads the cached Convex record. It
+makes no Kalshi API requests. Rerunning the importer skips already matched
+games, so a completed import makes no further Kalshi requests. Missing games
+can be retried by rerunning it. Prediction brackets have different tournament
+slugs and show `Couldn't find game` rather than borrowing real-game odds.
+Use `pnpm odds:sync --refresh` only when intentionally replacing cached snapshots.
+
+```bash
+node --test tests/kalshi-matching.test.mjs
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

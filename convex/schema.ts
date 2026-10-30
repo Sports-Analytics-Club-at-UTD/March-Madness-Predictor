@@ -1,8 +1,10 @@
 import { defineSchema, defineTable } from "convex/server";
 import { tournamentValidator } from "./tournamentModel";
+import { gameOddsValidator } from "./gameOddsModel";
 import { v } from "convex/values";
 
 export default defineSchema({
+  gameOdds: defineTable(gameOddsValidator).index("by_game", ["tournamentSlug", "gameId"]),
   teamLogos: defineTable({
     teamId: v.number(),
     teamName: v.string(),
