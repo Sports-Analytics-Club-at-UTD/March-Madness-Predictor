@@ -1,9 +1,13 @@
 import { defineSchema, defineTable } from "convex/server";
 import { tournamentValidator } from "./tournamentModel";
 import { gameOddsValidator } from "./gameOddsModel";
+import { kalshiChartValidator } from "./kalshiChartModel";
+import { cbbdSeasonValidator } from "./cbbdModel";
 import { v } from "convex/values";
 
 export default defineSchema({
+  cbbdSeasons: defineTable(cbbdSeasonValidator).index("by_season", ["season"]),
+  gameOddsCharts: defineTable(kalshiChartValidator).index("by_game", ["tournamentSlug", "gameId"]),
   gameOdds: defineTable(gameOddsValidator).index("by_game", ["tournamentSlug", "gameId"]),
   teamLogos: defineTable({
     teamId: v.number(),

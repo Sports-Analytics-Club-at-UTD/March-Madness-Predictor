@@ -1,11 +1,16 @@
 import { v } from "convex/values";
 import { internalMutation, internalQuery, query } from "./_generated/server";
 import { gameOddsValidator } from "./gameOddsModel";
+import { resolveGameReference } from "./resolveGameReference";
 
 export const get = query({
   args: { tournamentSlug: v.string(), gameId: v.string() },
-  handler: async (ctx, { tournamentSlug, gameId }) => ctx.db.query("gameOdds")
-    .withIndex("by_game", q => q.eq("tournamentSlug", tournamentSlug).eq("gameId", gameId)).unique(),
+  handler: async (ctx, args) => {
+    const source = await resolveGameReference(ctx, args);
+    if (!source) return null;
+    return ctx.db.query("gameOdds")
+      .withIndex("by_game", q => q.eq("tournamentSlug", source.tournamentSlug).eq("gameId", source.gameId)).unique();
+  },
 });
 
 export const listStored = internalQuery({

@@ -3,14 +3,14 @@
 import { useMemo } from "react";
 import { Background, BackgroundVariant, ReactFlow, ViewportPortal } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import type { Tournament } from "../../convex/tournamentModel";
+import type { ComparedTournament } from "../../convex/bracketComparison";
 import { buildTournamentBracket } from "@/lib/tournament-bracket";
 import { TournamentBracketNode } from "@/components/tournament-bracket-node";
 import { MAX_ZOOM, MIN_ZOOM, MmpCanvasToolbar } from "@/components/mmp-canvas-toolbar";
 
 const nodeTypes = { tournamentBracket: TournamentBracketNode };
 
-export function TournamentBracket({ tournament, showScores = false }: { tournament: Tournament; showScores?: boolean }) {
+export function TournamentBracket({ tournament, showScores = false }: { tournament: ComparedTournament; showScores?: boolean }) {
   const { nodes, edges, labels } = useMemo(() => buildTournamentBracket(tournament, showScores), [tournament, showScores]);
   return (
     <ReactFlow

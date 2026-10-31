@@ -6,8 +6,9 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { GameOddsPreview } from "@/components/game-odds-preview";
 import { TournamentBracketCard, type TournamentBracketCardProps } from "@/components/tournament-bracket-card";
+import type { GameComparison } from "../../convex/bracketComparison";
 
-export type TournamentBracketNodeType = Node<TournamentBracketCardProps & { tournamentSlug: string; label?: string; semifinal?: boolean; direction?: "left" | "right" | "final" }, "tournamentBracket">;
+export type TournamentBracketNodeType = Node<TournamentBracketCardProps & { tournamentSlug: string; bracketStatus?: GameComparison["status"]; label?: string; semifinal?: boolean; direction?: "left" | "right" | "final" }, "tournamentBracket">;
 const handleClass = "pointer-events-none! size-1! border-0! bg-transparent!";
 
 export function TournamentBracketNode({ id, data }: NodeProps<TournamentBracketNodeType>) {
@@ -17,16 +18,20 @@ export function TournamentBracketNode({ id, data }: NodeProps<TournamentBracketN
   const outputSide = data.direction === "right" ? Position.Left : Position.Right;
   return (
     <div className="relative">
-      {data.label && <p className="h-6 px-1 text-sm font-medium text-muted-foreground">{data.label}</p>}
+      {data.label && <p className="flex h-6 items-center justify-between gap-2 px-1 text-sm font-medium text-muted-foreground">
+        <span className="truncate">{data.label}</span>
+        {data.bracketStatus === "break" && <span className="shrink-0 text-xs font-semibold text-red-600 dark:text-red-400">Bracket breaks here</span>}
+        {data.bracketStatus === "hypothetical" && <span className="shrink-0 text-xs font-semibold text-amber-700 dark:text-amber-400">Hypothetical matchup</span>}
+      </p>}
       <Handle id="top" type="target" position={data.semifinal ? Position.Top : inputSide} isConnectable={false} className={handleClass} style={{ top: data.semifinal ? headerHeight : headerHeight + 88 }} />
       <Handle id="bottom" type="target" position={data.semifinal ? Position.Bottom : data.direction === "final" ? Position.Right : inputSide} isConnectable={false} className={handleClass} style={{ top: data.semifinal ? headerHeight + 176 : headerHeight + 88 }} />
       <PreviewCard.Root open={previewOpen} onOpenChange={setPreviewOpen}>
         <PreviewCard.Trigger
           render={<div />}
           tabIndex={0}
-          aria-label={`Preview odds for ${data.topTeam.name} vs ${data.bottomTeam.name}`}
+          aria-label={`Preview odds for ${data.topTeam.name} vs ${data.bottomTeam.name}${data.bracketStatus === "break" ? ". Bracket breaks here: predicted winner differs from the actual result" : data.bracketStatus === "hypothetical" ? ". Hypothetical matchup: no game market" : ""}`}
           delay={1000}
-          className="rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className={`rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring ${data.bracketStatus === "break" ? "ring-2 ring-red-500 outline-none" : data.bracketStatus === "hypothetical" ? "outline-2 outline-dashed outline-offset-2 outline-amber-500" : "outline-none"}`}
         >
           <TournamentBracketCard topTeam={data.topTeam} bottomTeam={data.bottomTeam} winner={data.winner} showScores={data.showScores} />
         </PreviewCard.Trigger>
@@ -35,9 +40,9 @@ export function TournamentBracketNode({ id, data }: NodeProps<TournamentBracketN
             <PreviewCard.Popup
               render={<Card />}
               aria-label={`Kalshi odds for ${data.topTeam.name} vs ${data.bottomTeam.name}`}
-              className="nodrag nopan nowheel min-h-48 w-96 max-w-[calc(100vw-2rem)] shadow-xl"
+              className="nodrag nopan nowheel min-h-48 w-[560px] max-w-[calc(100vw-2rem)] gap-0 overflow-hidden border-border bg-card py-0 text-card-foreground shadow-xl ring-1 ring-border"
             >
-              {previewOpen && <GameOddsPreview tournamentSlug={data.tournamentSlug} gameId={id} />}
+              {previewOpen && <GameOddsPreview tournamentSlug={data.tournamentSlug} gameId={id} hypothetical={data.bracketStatus === "hypothetical"} />}
             </PreviewCard.Popup>
           </PreviewCard.Positioner>
         </PreviewCard.Portal>

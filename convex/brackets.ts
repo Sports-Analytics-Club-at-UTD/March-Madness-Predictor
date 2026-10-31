@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import { internalMutation, internalQuery, query } from "./_generated/server";
 import { marchMadness2026 } from "./data/marchMadness2026";
 import { validateTournament, type Tournament } from "./tournamentModel";
+import { compareBracket } from "./bracketComparison";
 
 export const list = query({
   args: {},
@@ -76,7 +77,13 @@ export const get = query({
   handler: async (ctx, { id }) => {
     const bracket = await ctx.db.get("brackets", id);
     if (!bracket) return null;
-    return ctx.db.get("tournaments", bracket.tournamentId);
+    const tournament = await ctx.db.get("tournaments", bracket.tournamentId);
+    if (!tournament) return null;
+    const referenceSlug = `march-madness-men-${tournament.season}`;
+    const reference = tournament.slug === referenceSlug ? tournament
+      : await ctx.db.query("tournaments").withIndex("by_slug", q => q.eq("slug", referenceSlug)).unique();
+    const results = await ctx.db.query("cbbdSeasons").withIndex("by_season", q => q.eq("season", tournament.season)).unique();
+    return { ...tournament, gameComparisons: compareBracket(tournament, reference, results?.games ?? []) };
   },
 });
 

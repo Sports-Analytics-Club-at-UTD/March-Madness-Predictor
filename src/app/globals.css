@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-geist-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -102,7 +102,7 @@
   --border: #464646;
   --input: #737373;
   --ring: #f47c02;
-  --chart-1: #247a61;
+  --chart-1: #46967d;
   --chart-2: #f47c02;
   --chart-3: #eaeaed;
   --chart-4: #46967d;
@@ -129,16 +129,12 @@
   }
 }
 
-html[data-theme-reveal]::view-transition-old(root),
-html[data-theme-reveal]::view-transition-new(root) {
+::view-transition-old(root),
+::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
 }
 
-html[data-theme-reveal]::view-transition-new(root) {
-  z-index: 1;
-}
-
-html[data-theme-reveal]::view-transition-old(root) {
-  z-index: 0;
+::view-transition-new(root) {
+  z-index: 9999;
 }

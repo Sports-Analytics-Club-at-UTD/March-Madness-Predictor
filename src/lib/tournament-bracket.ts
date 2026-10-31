@@ -1,8 +1,8 @@
 import { MarkerType, type Edge } from "@xyflow/react";
-import type { Tournament } from "../../convex/tournamentModel";
+import type { ComparedTournament } from "../../convex/bracketComparison";
 import type { TournamentBracketNodeType } from "@/components/tournament-bracket-node";
 
-export function buildTournamentBracket(tournament: Tournament, showScores = false) {
+export function buildTournamentBracket(tournament: ComparedTournament, showScores = false) {
   const teams = new Map(tournament.teams.map(team => [team.id, team]));
   const games = new Map(tournament.games.map(game => [game.id, game]));
   const sorted = [...tournament.games].sort((a, b) => a.round - b.round || a.order - b.order);
@@ -109,6 +109,7 @@ export function buildTournamentBracket(tournament: Tournament, showScores = fals
     style: { pointerEvents: "all" },
     data: {
       tournamentSlug: tournament.slug,
+      bracketStatus: tournament.gameComparisons?.[game.id]?.status,
       label: game.label,
       semifinal: semifinals.has(game.id),
       direction: directions.get(game.id)!,
