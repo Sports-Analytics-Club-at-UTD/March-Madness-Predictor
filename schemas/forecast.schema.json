@@ -1,0 +1,1331 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "Artifact": {
+      "additionalProperties": false,
+      "properties": {
+        "uri": {
+          "minLength": 1,
+          "title": "Uri",
+          "type": "string"
+        },
+        "media_type": {
+          "minLength": 1,
+          "title": "Media Type",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sha256"
+        }
+      },
+      "required": [
+        "uri",
+        "media_type"
+      ],
+      "title": "Artifact",
+      "type": "object"
+    },
+    "Bracket": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Id",
+          "type": "string"
+        },
+        "run_id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "tournament_id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Tournament Id",
+          "type": "string"
+        },
+        "strategy": {
+          "minLength": 1,
+          "title": "Strategy",
+          "type": "string"
+        },
+        "picks": {
+          "items": {
+            "$ref": "#/$defs/Pick"
+          },
+          "minItems": 1,
+          "title": "Picks",
+          "type": "array"
+        },
+        "summary": {
+          "$ref": "#/$defs/BracketSummary"
+        }
+      },
+      "required": [
+        "id",
+        "run_id",
+        "tournament_id",
+        "strategy",
+        "picks",
+        "summary"
+      ],
+      "title": "Bracket",
+      "type": "object"
+    },
+    "BracketSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "champion_team_id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Champion Team Id",
+          "type": "string"
+        },
+        "expected_points": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Points"
+        },
+        "pool_win_probability": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pool Win Probability"
+        },
+        "top_10_percent_probability": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Top 10 Percent Probability"
+        },
+        "actual_points": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actual Points"
+        },
+        "pool_size": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pool Size"
+        },
+        "extensions": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Extensions",
+          "type": "object"
+        }
+      },
+      "required": [
+        "champion_team_id"
+      ],
+      "title": "BracketSummary",
+      "type": "object"
+    },
+    "ExcludedMarketRow": {
+      "additionalProperties": false,
+      "properties": {
+        "row_number": {
+          "exclusiveMinimum": 0,
+          "title": "Row Number",
+          "type": "integer"
+        },
+        "event_ticker": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Event Ticker"
+        },
+        "reason": {
+          "enum": [
+            "other_competition",
+            "missing_start_time",
+            "other_season"
+          ],
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "row_number",
+        "reason"
+      ],
+      "title": "ExcludedMarketRow",
+      "type": "object"
+    },
+    "Game": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Id",
+          "type": "string"
+        },
+        "slot": {
+          "exclusiveMinimum": 0,
+          "title": "Slot",
+          "type": "integer"
+        },
+        "round_number": {
+          "exclusiveMinimum": 0,
+          "title": "Round Number",
+          "type": "integer"
+        },
+        "round_points": {
+          "minimum": 0,
+          "title": "Round Points",
+          "type": "number"
+        },
+        "participants": {
+          "items": {
+            "$ref": "#/$defs/Participant"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Participants",
+          "type": "array"
+        },
+        "scheduled_start_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scheduled Start Utc"
+        },
+        "actual_winner_team_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actual Winner Team Id"
+        }
+      },
+      "required": [
+        "id",
+        "slot",
+        "round_number",
+        "round_points",
+        "participants"
+      ],
+      "title": "Game",
+      "type": "object"
+    },
+    "Interval": {
+      "additionalProperties": false,
+      "description": "Intervals retain their statistical interpretation and target quantity.",
+      "properties": {
+        "kind": {
+          "enum": [
+            "empirical_prediction",
+            "confidence",
+            "credible"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "target": {
+          "minLength": 1,
+          "title": "Target",
+          "type": "string"
+        },
+        "level": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Level",
+          "type": "number"
+        },
+        "lower": {
+          "title": "Lower",
+          "type": "number"
+        },
+        "upper": {
+          "title": "Upper",
+          "type": "number"
+        },
+        "method": {
+          "minLength": 1,
+          "title": "Method",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "target",
+        "level",
+        "lower",
+        "upper",
+        "method"
+      ],
+      "title": "Interval",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "MarketDataset": {
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "const": "kalshi",
+          "default": "kalshi",
+          "title": "Provider",
+          "type": "string"
+        },
+        "market_type": {
+          "const": "game_winner",
+          "default": "game_winner",
+          "title": "Market Type",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/Artifact"
+        },
+        "imported_at": {
+          "format": "date-time",
+          "title": "Imported At",
+          "type": "string"
+        },
+        "season_start_utc": {
+          "format": "date-time",
+          "title": "Season Start Utc",
+          "type": "string"
+        },
+        "season_end_exclusive_utc": {
+          "format": "date-time",
+          "title": "Season End Exclusive Utc",
+          "type": "string"
+        },
+        "import_summary": {
+          "$ref": "#/$defs/MarketImportSummary"
+        },
+        "snapshots": {
+          "items": {
+            "$ref": "#/$defs/MarketSnapshot"
+          },
+          "title": "Snapshots",
+          "type": "array"
+        }
+      },
+      "required": [
+        "source",
+        "imported_at",
+        "season_start_utc",
+        "season_end_exclusive_utc",
+        "import_summary",
+        "snapshots"
+      ],
+      "title": "MarketDataset",
+      "type": "object"
+    },
+    "MarketImportSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "rows_read": {
+          "minimum": 0,
+          "title": "Rows Read",
+          "type": "integer"
+        },
+        "included": {
+          "minimum": 0,
+          "title": "Included",
+          "type": "integer"
+        },
+        "excluded": {
+          "items": {
+            "$ref": "#/$defs/ExcludedMarketRow"
+          },
+          "title": "Excluded",
+          "type": "array"
+        },
+        "unmatched_outcomes": {
+          "minimum": 0,
+          "title": "Unmatched Outcomes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "rows_read",
+        "included",
+        "unmatched_outcomes"
+      ],
+      "title": "MarketImportSummary",
+      "type": "object"
+    },
+    "MarketOutcome": {
+      "additionalProperties": false,
+      "properties": {
+        "team_name": {
+          "minLength": 1,
+          "title": "Team Name",
+          "type": "string"
+        },
+        "team_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Team Id"
+        },
+        "team_mapping": {
+          "enum": [
+            "exact_name",
+            "alias",
+            "unmatched"
+          ],
+          "title": "Team Mapping",
+          "type": "string"
+        },
+        "market_ticker": {
+          "minLength": 1,
+          "title": "Market Ticker",
+          "type": "string"
+        },
+        "win_probability": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Win Probability"
+        },
+        "midpoint_probability": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Midpoint Probability"
+        },
+        "bid_probability": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bid Probability"
+        },
+        "ask_probability": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ask Probability"
+        },
+        "last_trade_probability": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Trade Probability"
+        },
+        "probability_basis": {
+          "minLength": 1,
+          "title": "Probability Basis",
+          "type": "string"
+        },
+        "quote_asof_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quote Asof Utc"
+        },
+        "seconds_before_start": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seconds Before Start"
+        },
+        "data_status": {
+          "minLength": 1,
+          "title": "Data Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "team_name",
+        "team_mapping",
+        "market_ticker",
+        "probability_basis",
+        "data_status"
+      ],
+      "title": "MarketOutcome",
+      "type": "object"
+    },
+    "MarketSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Id",
+          "type": "string"
+        },
+        "event_ticker": {
+          "minLength": 1,
+          "title": "Event Ticker",
+          "type": "string"
+        },
+        "provider_game_id": {
+          "minLength": 1,
+          "title": "Provider Game Id",
+          "type": "string"
+        },
+        "game_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Game Id"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "competition": {
+          "minLength": 1,
+          "title": "Competition",
+          "type": "string"
+        },
+        "scheduled_start_utc": {
+          "format": "date-time",
+          "title": "Scheduled Start Utc",
+          "type": "string"
+        },
+        "requested_snapshot_utc": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Requested Snapshot Utc"
+        },
+        "game_status": {
+          "minLength": 1,
+          "title": "Game Status",
+          "type": "string"
+        },
+        "markets_for_same_game": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Markets For Same Game"
+        },
+        "timing_basis": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timing Basis"
+        },
+        "timing_source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timing Source Url"
+        },
+        "price_basis": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Price Basis"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "exception_source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exception Source Url"
+        },
+        "outcomes": {
+          "items": {
+            "$ref": "#/$defs/MarketOutcome"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Outcomes",
+          "type": "array"
+        },
+        "source_fields": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Source Fields",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "event_ticker",
+        "provider_game_id",
+        "competition",
+        "scheduled_start_utc",
+        "game_status",
+        "outcomes"
+      ],
+      "title": "MarketSnapshot",
+      "type": "object"
+    },
+    "Participant": {
+      "additionalProperties": false,
+      "properties": {
+        "team_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Team Id"
+        },
+        "source_game_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_.:-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Game Id"
+        }
+      },
+      "title": "Participant",
+      "type": "object"
+    },
+    "Pick": {
+      "additionalProperties": false,
+      "properties": {
+        "game_id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Game Id",
+          "type": "string"
+        },
+        "winner_team_id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Winner Team Id",
+          "type": "string"
+        },
+        "confidence": {
+          "$ref": "#/$defs/PickConfidence"
+        },
+        "public_pick_probability": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Public Pick Probability"
+        },
+        "expected_points": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Points"
+        },
+        "leverage_ratio": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Leverage Ratio"
+        },
+        "actual_correct": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actual Correct"
+        }
+      },
+      "required": [
+        "game_id",
+        "winner_team_id",
+        "confidence"
+      ],
+      "title": "Pick",
+      "type": "object"
+    },
+    "PickConfidence": {
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Value",
+          "type": "number"
+        },
+        "meaning": {
+          "const": "probability_team_wins_slot",
+          "default": "probability_team_wins_slot",
+          "title": "Meaning",
+          "type": "string"
+        },
+        "method": {
+          "minLength": 1,
+          "title": "Method",
+          "type": "string"
+        },
+        "intervals": {
+          "items": {
+            "$ref": "#/$defs/Interval"
+          },
+          "title": "Intervals",
+          "type": "array"
+        }
+      },
+      "required": [
+        "value",
+        "method"
+      ],
+      "title": "PickConfidence",
+      "type": "object"
+    },
+    "PosteriorSummary": {
+      "additionalProperties": false,
+      "description": "Optional interface for a future Bayesian producer; no posterior is inferred here.",
+      "properties": {
+        "target": {
+          "minLength": 1,
+          "title": "Target",
+          "type": "string"
+        },
+        "mean": {
+          "title": "Mean",
+          "type": "number"
+        },
+        "median": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Median"
+        },
+        "std": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Std"
+        },
+        "intervals": {
+          "items": {
+            "$ref": "#/$defs/Interval"
+          },
+          "title": "Intervals",
+          "type": "array"
+        },
+        "diagnostics": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Diagnostics",
+          "type": "object"
+        }
+      },
+      "required": [
+        "target",
+        "mean"
+      ],
+      "title": "PosteriorSummary",
+      "type": "object"
+    },
+    "PredictionRun": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Id",
+          "type": "string"
+        },
+        "tournament_id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Tournament Id",
+          "type": "string"
+        },
+        "method": {
+          "description": "Current producers: ridge_residual_bootstrap and shap_ensemble. Future producers may use other names.",
+          "minLength": 1,
+          "title": "Method",
+          "type": "string"
+        },
+        "model_name": {
+          "minLength": 1,
+          "title": "Model Name",
+          "type": "string"
+        },
+        "model_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Version"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "n_simulations": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "N Simulations"
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seed"
+        },
+        "source_metadata": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Source Metadata",
+          "type": "object"
+        },
+        "artifacts": {
+          "items": {
+            "$ref": "#/$defs/Artifact"
+          },
+          "title": "Artifacts",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "tournament_id",
+        "method",
+        "model_name",
+        "generated_at"
+      ],
+      "title": "PredictionRun",
+      "type": "object"
+    },
+    "Team": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Team",
+      "type": "object"
+    },
+    "TeamPrediction": {
+      "additionalProperties": false,
+      "properties": {
+        "run_id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "team_id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Team Id",
+          "type": "string"
+        },
+        "statistics": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Statistics",
+          "type": "object"
+        },
+        "probabilities": {
+          "$ref": "#/$defs/TeamProbabilities"
+        },
+        "intervals": {
+          "items": {
+            "$ref": "#/$defs/Interval"
+          },
+          "title": "Intervals",
+          "type": "array"
+        },
+        "posterior": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PosteriorSummary"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "run_id",
+        "team_id"
+      ],
+      "title": "TeamPrediction",
+      "type": "object"
+    },
+    "TeamProbabilities": {
+      "additionalProperties": false,
+      "properties": {
+        "success_score_threshold": {
+          "items": {
+            "$ref": "#/$defs/ThresholdProbability"
+          },
+          "title": "Success Score Threshold",
+          "type": "array"
+        },
+        "calibrated_success_score_threshold": {
+          "items": {
+            "$ref": "#/$defs/ThresholdProbability"
+          },
+          "title": "Calibrated Success Score Threshold",
+          "type": "array"
+        },
+        "bracket_tree": {
+          "items": {
+            "$ref": "#/$defs/ThresholdProbability"
+          },
+          "title": "Bracket Tree",
+          "type": "array"
+        }
+      },
+      "title": "TeamProbabilities",
+      "type": "object"
+    },
+    "ThresholdProbability": {
+      "additionalProperties": false,
+      "properties": {
+        "minimum_wins": {
+          "exclusiveMinimum": 0,
+          "title": "Minimum Wins",
+          "type": "integer"
+        },
+        "probability": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Probability"
+        }
+      },
+      "required": [
+        "minimum_wins",
+        "probability"
+      ],
+      "title": "ThresholdProbability",
+      "type": "object"
+    },
+    "Tournament": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_.:-]+$",
+          "title": "Id",
+          "type": "string"
+        },
+        "season": {
+          "maximum": 2200,
+          "minimum": 1900,
+          "title": "Season",
+          "type": "integer"
+        },
+        "competition": {
+          "minLength": 1,
+          "title": "Competition",
+          "type": "string"
+        },
+        "format": {
+          "const": "single_elimination",
+          "default": "single_elimination",
+          "title": "Format",
+          "type": "string"
+        },
+        "topology_status": {
+          "enum": [
+            "available",
+            "unavailable"
+          ],
+          "title": "Topology Status",
+          "type": "string"
+        },
+        "bracket_team_count": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bracket Team Count"
+        },
+        "includes_first_four": {
+          "default": false,
+          "title": "Includes First Four",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "season",
+        "competition",
+        "topology_status"
+      ],
+      "title": "Tournament",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One tournament, any number of prediction runs/strategies, optional market data.",
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "tournament": {
+      "$ref": "#/$defs/Tournament"
+    },
+    "teams": {
+      "items": {
+        "$ref": "#/$defs/Team"
+      },
+      "title": "Teams",
+      "type": "array"
+    },
+    "games": {
+      "items": {
+        "$ref": "#/$defs/Game"
+      },
+      "title": "Games",
+      "type": "array"
+    },
+    "prediction_runs": {
+      "items": {
+        "$ref": "#/$defs/PredictionRun"
+      },
+      "title": "Prediction Runs",
+      "type": "array"
+    },
+    "team_predictions": {
+      "items": {
+        "$ref": "#/$defs/TeamPrediction"
+      },
+      "title": "Team Predictions",
+      "type": "array"
+    },
+    "brackets": {
+      "items": {
+        "$ref": "#/$defs/Bracket"
+      },
+      "title": "Brackets",
+      "type": "array"
+    },
+    "market_data": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MarketDataset"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "tournament",
+    "teams"
+  ],
+  "title": "ForecastDocument",
+  "type": "object"
+}

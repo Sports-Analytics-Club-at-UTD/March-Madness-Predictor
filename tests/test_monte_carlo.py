@@ -172,6 +172,13 @@ class MonteCarloTests(unittest.TestCase):
         self.assertEqual(table["team"].tolist(), ["A"])
         self.assertEqual(metadata["season"], 2026)
         self.assertEqual(metadata["validation_season"], 2025)
+        from backend_data.models import ForecastDocument
+        json_exports = list(output.glob("forecast_2026_*.json"))
+        self.assertEqual(len(json_exports), 1)
+        forecast = ForecastDocument.model_validate_json(json_exports[0].read_text())
+        self.assertEqual(forecast.prediction_runs[0].method, "ridge_residual_bootstrap")
+        self.assertEqual(forecast.teams[0].name, "A")
+        self.assertEqual(forecast.brackets, [])
         self.assertIn(
             "The bundle's held-out residual pool calibrates these outputs; it is not an independent probability-validation set.",
             metadata["assumptions"],
