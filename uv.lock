@@ -38,6 +38,9 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+bayesian = [
+    { name = "scipy" },
+]
 training = [
     { name = "matplotlib" },
     { name = "optuna" },
@@ -57,12 +60,13 @@ requires-dist = [
     { name = "python-dotenv", specifier = ">=1.2.3" },
     { name = "requests", specifier = ">=2.34.2" },
     { name = "scikit-learn", specifier = ">=1.6" },
+    { name = "scipy", marker = "extra == 'bayesian'", specifier = ">=1.14" },
     { name = "scipy", marker = "extra == 'training'" },
     { name = "seaborn", marker = "extra == 'training'" },
     { name = "shap", marker = "extra == 'training'" },
     { name = "umap-learn", marker = "extra == 'training'" },
 ]
-provides-extras = ["training"]
+provides-extras = ["bayesian", "training"]
 
 [[package]]
 name = "certifi"
