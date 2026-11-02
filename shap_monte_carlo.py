@@ -1217,7 +1217,19 @@ def plot_calibration_scatter(history, target, slope, intercept, path):
 
 def plot_residual_pool(residuals, path):
     fig, ax = plt.subplots(figsize=(11, 6))
-    sns.histplot(residuals, bins=40, kde=True, color='#4c72b0', ax=ax)
+    try:
+        sns.histplot(residuals, bins=40, kde=True, color='#4c72b0', ax=ax)
+    except Exception:
+        # Fallback for environments with seaborn < 0.13 where pandas >= 2.2 / numpy >= 2.0
+        # triggers OptionError: 'mode.use_inf_as_na' or ValueError on read-only arrays
+        ax.hist(residuals, bins=40, density=True, color='#4c72b0', alpha=0.6, edgecolor='white')
+        try:
+            from scipy.stats import gaussian_kde
+            kde = gaussian_kde(residuals)
+            xs = np.linspace(min(residuals), max(residuals), 200)
+            ax.plot(xs, kde(xs), color='#4c72b0', lw=2)
+        except Exception:
+            pass
     for q, ls in [(5, ':'), (50, '-'), (95, ':')]:
         v = np.percentile(residuals, q)
         ax.axvline(v, color='#d62728', ls=ls, label=f'P{q} = {v:.2f}')

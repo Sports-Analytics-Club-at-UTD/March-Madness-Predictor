@@ -63,16 +63,19 @@ def print_banner(title: str, subtitle: str = ""):
 
 
 def resolve_python_executable(root_dir: Path, custom_python: str = None) -> str:
-    """Detects active conda/virtualenv, march_madness conda env, or .venv before sys.executable."""
+    """Detects project .venv, active virtualenv, or conda environment before sys.executable."""
     if custom_python:
         return custom_python
+    # Project-local virtual environment (.venv) takes priority if present
+    venv_win = root_dir / ".venv" / "Scripts" / "python.exe"
+    if venv_win.exists():
+        return str(venv_win)
+    venv_unix = root_dir / ".venv" / "bin" / "python"
+    if venv_unix.exists():
+        return str(venv_unix)
     # Active conda or virtual environment
     if sys.prefix != sys.base_prefix:
         return sys.executable
-    if "CONDA_PREFIX" in os.environ:
-        c_py = Path(os.environ["CONDA_PREFIX"]) / "python.exe"
-        if c_py.exists():
-            return str(c_py)
     # Check standard march_madness conda environment paths
     home = Path.home()
     for conda_dir in [
@@ -83,12 +86,10 @@ def resolve_python_executable(root_dir: Path, custom_python: str = None) -> str:
         cand = conda_dir / "python.exe"
         if cand.exists():
             return str(cand)
-    venv_win = root_dir / ".venv" / "Scripts" / "python.exe"
-    if venv_win.exists():
-        return str(venv_win)
-    venv_unix = root_dir / ".venv" / "bin" / "python"
-    if venv_unix.exists():
-        return str(venv_unix)
+    if "CONDA_PREFIX" in os.environ:
+        c_py = Path(os.environ["CONDA_PREFIX"]) / "python.exe"
+        if c_py.exists():
+            return str(c_py)
     return sys.executable
 
 
@@ -379,6 +380,88 @@ def run_stage_monte_carlo(args, root_dir: Path, py_exe: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Stage 4: Kaggle Machine Learning Mania Competition & Brier Evaluation
+# ---------------------------------------------------------------------------
+def run_stage_kaggle(args, root_dir: Path, py_exe: str) -> dict:
+    t0 = time.time()
+    kaggle_script = root_dir / "kaggle_mania_brackets.py"
+    kaggle_dir = root_dir / getattr(args, "kaggle_dir", Path("data/kaggle/march-machine-learning-mania-2026"))
+    kaggle_out_dir = root_dir / getattr(args, "kaggle_output_dir", Path("model_outputs/kaggle_mania"))
+    seasons = [str(s) for s in getattr(args, "kaggle_seasons", [2026, 2027])]
+    gender = getattr(args, "kaggle_gender", "M")
+
+    print_banner(
+        "Stage 4: Kaggle ML Mania Competition & Brier Score Evaluation",
+        f"Script: {kaggle_script.name} | Seasons: {' '.join(seasons)} | Division: {gender}",
+    )
+
+    if not kaggle_script.exists():
+        print(f"{Colors.RED}[Error] kaggle_mania_brackets.py not found at {kaggle_script}{Colors.END}")
+        return {"status": "FAILED", "elapsed": time.time() - t0, "artifacts": []}
+
+    cmd = [
+        py_exe, str(kaggle_script),
+        "--kaggle-dir", str(kaggle_dir),
+        "--output-dir", str(kaggle_out_dir),
+        "--seasons", *seasons,
+        "--gender", str(gender),
+        "--n-sims", str(getattr(args, "kaggle_sims", 5000)),
+        "--seed", str(args.seed),
+    ]
+
+    if getattr(args, "no_brier_plots", False):
+        cmd.append("--no-plots")
+
+    print(f"Executing Kaggle Mania 25-Bracket Portfolio and Brier Calibration...")
+    print(f"Command: {' '.join(cmd)}")
+
+    if args.dry_run:
+        return {"status": "DRY_RUN", "elapsed": 0.0, "artifacts": []}
+
+    try:
+        subprocess.run(cmd, cwd=str(root_dir), check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"{Colors.RED}[X] kaggle_mania_brackets.py failed with return code {e.returncode}{Colors.END}")
+        return {"status": "FAILED", "elapsed": time.time() - t0, "artifacts": []}
+
+    artifacts = [
+        str(kaggle_out_dir / "brier_evaluation_summary.json"),
+        str(kaggle_out_dir / "brier_model_comparison.csv"),
+        str(kaggle_out_dir / "brier_by_season.csv"),
+        str(kaggle_out_dir / "brier_by_round.csv"),
+        str(kaggle_out_dir / "brier_by_mismatch.csv"),
+        str(kaggle_out_dir / "brier_by_season.jpg"),
+        str(kaggle_out_dir / "brier_by_round.jpg"),
+        str(kaggle_out_dir / "brier_reliability_calibration.jpg"),
+        str(kaggle_out_dir / "brier_model_comparison.jpg"),
+    ]
+    for s in seasons:
+        s_dir = kaggle_out_dir / f"kaggle_mania_{s}"
+        artifacts.append(str(s_dir / f"kaggle_submission_{s}.csv"))
+        artifacts.append(str(s_dir / f"brackets_portfolio_summary_{s}.csv"))
+
+    artifacts = [a for a in artifacts if Path(a).exists()]
+
+    summary_json = kaggle_out_dir / "brier_evaluation_summary.json"
+    if summary_json.exists():
+        try:
+            import json
+            with open(summary_json, "r", encoding="utf-8") as f:
+                b_info = json.load(f)
+            print(f"\n{Colors.GREEN}[OK] Kaggle Brier Score Evaluation Highlights:{Colors.END}")
+            print(f"    - Out-Of-Fold Brier Score:   {b_info.get('cv_brier_score', 0):.5f}")
+            print(f"    - Seed Baseline Brier:        {b_info.get('brier_seed_baseline', 0):.5f}")
+            print(f"    - 50/50 Uninformed Baseline:  {b_info.get('brier_5050_baseline', 0):.5f}")
+            print(f"    - Brier Error Improvement:    {b_info.get('improvement_vs_5050_pct', 0):.1f}% vs 50/50 Baseline")
+            print(f"    - Expected Calibration Error: {b_info.get('expected_calibration_error', 0):.5f}")
+            print(f"    - Straight-Up Pick Accuracy:  {b_info.get('accuracy', 0):.2%}")
+        except Exception:
+            pass
+
+    return {"status": "SUCCESS", "elapsed": time.time() - t0, "artifacts": artifacts}
+
+
+# ---------------------------------------------------------------------------
 # CLI Argument Parsing & Runner Setup
 # ---------------------------------------------------------------------------
 def parse_arguments():
@@ -394,8 +477,8 @@ def parse_arguments():
     )
     stage_group.add_argument(
         "--stages", nargs="+",
-        choices=["models", "combo_eval", "combo-eval", "monte_carlo", "monte-carlo"],
-        help="Explicitly specify which stage(s) to run (e.g. --stages combo_eval monte_carlo).",
+        choices=["models", "combo_eval", "combo-eval", "monte_carlo", "monte-carlo", "kaggle", "kaggle-mania", "kaggle_mania"],
+        help="Explicitly specify which stage(s) to run (e.g. --stages combo_eval monte_carlo kaggle).",
     )
     stage_group.add_argument(
         "--run-models", action="store_true",
@@ -408,6 +491,10 @@ def parse_arguments():
     stage_group.add_argument(
         "--run-monte-carlo", action="store_true",
         help="Run Stage 3: Monte Carlo simulation, bracket tree simulation, and pool optimization.",
+    )
+    stage_group.add_argument(
+        "--run-kaggle", action="store_true",
+        help="Run Stage 4: Kaggle ML Mania bracket portfolio and Brier score evaluation.",
     )
 
     models_group = parser.add_argument_group("Stage 1: Models Options")
@@ -492,6 +579,32 @@ def parse_arguments():
         help="Output directory for Monte Carlo tables and optimal brackets. Default: model_outputs/monte_carlo.",
     )
 
+    kaggle_group = parser.add_argument_group("Stage 4: Kaggle ML Mania Options")
+    kaggle_group.add_argument(
+        "--kaggle-dir", type=Path, default=Path("data/kaggle/march-machine-learning-mania-2026"),
+        help="Path to Kaggle March Machine Learning Mania dataset folder. Default: data/kaggle/march-machine-learning-mania-2026.",
+    )
+    kaggle_group.add_argument(
+        "--kaggle-seasons", nargs="+", default=[2026, 2027],
+        help="Tournament season(s) for Kaggle bracket portfolio & submission. Default: 2026 2027.",
+    )
+    kaggle_group.add_argument(
+        "--kaggle-gender", default="M", choices=["M", "W"],
+        help="Tournament gender division: 'M' or 'W'. Default: M.",
+    )
+    kaggle_group.add_argument(
+        "--kaggle-output-dir", type=Path, default=Path("model_outputs/kaggle_mania"),
+        help="Output directory for Kaggle brackets, submissions, and Brier metrics. Default: model_outputs/kaggle_mania.",
+    )
+    kaggle_group.add_argument(
+        "--kaggle-sims", type=int, default=5000,
+        help="Number of simulations for crowd leverage. Default: 5000.",
+    )
+    kaggle_group.add_argument(
+        "--no-brier-plots", action="store_true",
+        help="Disable generating Brier score diagnostic plots in Stage 4.",
+    )
+
     gen_group = parser.add_argument_group("General & Execution Controls")
     gen_group.add_argument(
         "--python", dest="python_exe", type=str, default=None,
@@ -549,23 +662,29 @@ def main():
 
     active_stages = set()
     if args.all:
-        active_stages = {"models", "combo_eval", "monte_carlo"}
+        active_stages = {"models", "combo_eval", "monte_carlo", "kaggle"}
     else:
         if args.stages:
             for s in args.stages:
                 norm = s.lower().replace("-", "_")
-                active_stages.add(norm)
+                if norm in ("kaggle", "kaggle_mania"):
+                    active_stages.add("kaggle")
+                else:
+                    active_stages.add(norm)
         if args.run_models:
             active_stages.add("models")
         if args.run_combo_eval:
             active_stages.add("combo_eval")
         if args.run_monte_carlo:
             active_stages.add("monte_carlo")
+        if args.run_kaggle:
+            active_stages.add("kaggle")
 
     if not active_stages:
         print(f"{Colors.YELLOW}[Info] No execution stages selected.{Colors.END}")
         print("Usage quickstart:")
         print("  python run_pipeline.py --all --season 2024")
+        print("  python run_pipeline.py --stages kaggle")
         print("  python run_pipeline.py --stages models --skip-model-training")
         print("  python run_pipeline.py --stages combo_eval")
         print("  python run_pipeline.py --stages monte_carlo --season 2024 --shap-rank 1")
@@ -606,6 +725,15 @@ def main():
             sys.exit(1)
     else:
         stage_results["monte_carlo"] = {"status": "SKIPPED", "elapsed": 0.0, "artifacts": []}
+
+    # 4. Kaggle Competition Stage
+    if "kaggle" in active_stages:
+        stage_results["kaggle"] = run_stage_kaggle(args, root_dir, py_exe)
+        if stage_results["kaggle"]["status"] == "FAILED" and args.fail_fast:
+            print(f"\n{Colors.RED}[Pipeline Terminated] Stage 'kaggle' failed and --fail-fast was specified.{Colors.END}")
+            sys.exit(1)
+    else:
+        stage_results["kaggle"] = {"status": "SKIPPED", "elapsed": 0.0, "artifacts": []}
 
     total_elapsed = time.time() - pipeline_start
     print_banner("Pipeline Execution Summary", f"Total Duration: {total_elapsed:.1f}s")
