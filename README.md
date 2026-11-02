@@ -92,3 +92,19 @@ Bayesian producer. No API server or Bayesian model is introduced.
 uv run python -m backend_data schema
 uv run python -m backend_data validate examples/forecast.example.json
 ```
+
+## Convex demo importer
+
+Import complete forecast brackets into the existing `site` demo without adding
+an HTTP server. See [setup and import instructions](docs/convex-import.md).
+The site-side internal query/mutation is in `integrations/convex/forecastImports.ts`.
+Try conversion entirely offline:
+
+```bash
+uv run python -m backend_data.convex examples/forecast.example.json \
+  --roster examples/convex-roster.example.json --dry-run \
+  --output /tmp/convex-preview.json
+```
+
+Ridge forecasts with team scores only need bracket topology and picks before
+they can populate the bracket demo. This importer does not invent those picks.

@@ -1,0 +1,10 @@
+{
+  "season": 2026,
+  "logoStorageId": "synthetic-offline-storage-id",
+  "teams": [
+    { "id": "site-example-0", "name": "Example Team 0", "seed": 1, "logoUrl": "/favicon.ico" },
+    { "id": "site-example-1", "name": "Example Team 1", "seed": 4, "logoUrl": "/favicon.ico" },
+    { "id": "site-example-2", "name": "Example Team 2", "seed": 2, "logoUrl": "/favicon.ico" },
+    { "id": "site-example-3", "name": "Example Team 3", "seed": 3, "logoUrl": "/favicon.ico" }
+  ]
+}
