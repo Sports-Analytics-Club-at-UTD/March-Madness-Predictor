@@ -41,6 +41,11 @@ def main():
     parser.add_argument("--pool-size", type=int, default=100,
                         help="SHAP mode: number of entries in bracket pool for EV/leverage optimizer.")
     parser.add_argument("--no-plots", action="store_true", help="SHAP mode: skip visualizations.")
+    parser.add_argument("--directional", action="store_true", help="SHAP mode: apply directional polarity to feature weights.")
+    parser.add_argument("--top-25", "--all-top-25", dest="top_25", action="store_true",
+                        help="SHAP mode: simulate and optimize brackets for all 25 top performing ensembles.")
+    parser.add_argument("--portfolio", action="store_true",
+                        help="SHAP mode: generate coordinated 3-bracket portfolio (Chalk, Leverage, Chaos Hedge) and evaluate joint pool win %%.")
     args = parser.parse_args()
     if args.bundle is None:
         run_shap(args, parser)
@@ -153,83 +158,176 @@ def _simulate_shap_season(history, scores, season, field, actual_wins, args,
     return smc.add_ranks(table), samples, calib, parsed_tree
 
 
-def run_shap(args, parser):
-    import shap_monte_carlo as smc
-
+def _optimize_recipe_bracket(args, parser, smc, recipe_path, all_seasons, wins_dirs, field, actual_wins, rank_label=""):
     try:
-        df_shap, info = smc.load_shap_recipe(args.ensemble_dir, args.shap_weights)
+        df_shap, info = smc.load_shap_recipe(args.ensemble_dir, recipe_path)
     except (FileNotFoundError, ValueError) as e:
         parser.error(str(e))
     weights = dict(zip(df_shap["feature"], df_shap["shap_importance"]))
     label = info.get("ensemble_name", Path(info["shap_weights_path"]).stem)
     member_shap = smc.load_member_shap_by_season(args.training_output_dir, info.get("ensemble_members", []))
-    print(f"[SHAP] Baseline source: {info['shap_weights_path']}")
-    print(f"[SHAP] Ensemble: {label} ({'per-model z-score blend' if member_shap else 'blended SHAP weights'})")
+    print(f"\n[SHAP] Processing {rank_label}: {label}")
 
-    all_seasons = smc.discover_seasons(args.data_dir)
-    wins_dirs = [args.data_dir, args.training_output_dir]
-    print("[SHAP] Scoring historical seasons for calibration...")
-    history = smc.build_history(all_seasons, args.data_dir, wins_dirs, weights, member_shap)
+    history = smc.build_history(all_seasons, args.data_dir, wins_dirs, weights, member_shap, directional=args.directional)
     if history.empty or history[history["season"] != args.season].empty:
         parser.error("No other seasons with cached tournament_wins found for calibration.")
 
+    scores, missing = smc.score_season(args.data_dir, args.season, weights, member_shap, directional=args.directional)
+    unscored = sorted(field - set(scores["team"]))
+    table, samples, calib, parsed_tree = _simulate_shap_season(
+        history, scores, args.season, field, actual_wins, args,
+        all_seasons=all_seasons, expected_teams=args.expected_teams,
+    )
+
+    bracket_df, pool_summary = None, None
+    out_dir = args.output_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    if parsed_tree is not None:
+        bracket_df, pool_summary, _, _ = smc.optimize_bracket_pool(
+            parsed_tree, scores, pool_size=args.pool_size,
+            n_simulations=args.n_simulations, seed=args.seed,
+        )
+        if rank_label:
+            bracket_path = out_dir / f"optimal_bracket_{args.season}_{rank_label.lower().replace(' ', '_')}.csv"
+            bracket_df.to_csv(bracket_path, index=False)
+            print(f"       Saved bracket to {bracket_path}")
+        if not rank_label or rank_label == "Rank 1":
+            default_bracket_path = out_dir / f"optimal_bracket_{args.season}.csv"
+            bracket_df.to_csv(default_bracket_path, index=False)
+
+        print(f"       Max-EV Chalk Champion:     {pool_summary['max_ev_champion']} "
+              f"(Exp Pts: {pool_summary['max_ev_expected_points']:.1f}, "
+              f"Game Conf: {pool_summary.get('max_ev_per_game_confidence', 0.5):.1%}, "
+              f"Bracket Conf: {pool_summary.get('max_ev_bracket_confidence', 0.5):.1%}, "
+              f"Pool Win%: {pool_summary['max_ev_pool_win_prob']:.1%})")
+        print(f"       Leverage Optimal Champion: {pool_summary['leverage_champion']} "
+              f"(Exp Pts: {pool_summary['leverage_expected_points']:.1f}, "
+              f"Game Conf: {pool_summary.get('leverage_per_game_confidence', 0.5):.1%}, "
+              f"Bracket Conf: {pool_summary.get('leverage_bracket_confidence', 0.5):.1%}, "
+              f"Pool Win%: {pool_summary['leverage_pool_win_prob']:.1%})")
+        if pool_summary.get('max_ev_accuracy') is not None:
+            print(f"       Max-EV Closeness to Actual:     {pool_summary['max_ev_correct_games']}/63 games ({pool_summary['max_ev_accuracy']:.1%}), "
+                  f"Points: {pool_summary['actual_max_ev_points']:.0f}/1920, "
+                  f"Champ Hit: {pool_summary.get('max_ev_champ_correct')}, "
+                  f"F4 Hit: {pool_summary.get('max_ev_f4_correct')}/4")
+            print(f"       Leverage Closeness to Actual:   {pool_summary['leverage_correct_games']}/63 games ({pool_summary['leverage_accuracy']:.1%}), "
+                  f"Points: {pool_summary['actual_leverage_points']:.0f}/1920, "
+                  f"Champ Hit: {pool_summary.get('leverage_champ_correct')}, "
+                  f"F4 Hit: {pool_summary.get('leverage_f4_correct')}/4")
+
+        if args.portfolio and (not rank_label or rank_label == "Rank 1"):
+            port_df, port_summary = smc.optimize_bracket_portfolio(
+                parsed_tree, scores, portfolio_size=3, pool_size=args.pool_size,
+                n_simulations=args.n_simulations, seed=args.seed,
+            )
+            port_path = out_dir / f"OPTIMAL_BRACKET_PORTFOLIO_{args.season}.csv"
+            port_df.to_csv(port_path, index=False)
+            print(f"\n       [PORTFOLIO] Coordinated 3-Bracket Portfolio for Season {args.season}:")
+            print(f"       -> Bracket 1 (Chalk):       {port_summary['chalk_champion']} (Pool Win%: {port_summary['chalk_pool_win_prob']:.1%})")
+            print(f"       -> Bracket 2 (Leverage):    {port_summary['leverage_champion']} (Pool Win%: {port_summary['leverage_pool_win_prob']:.1%})")
+            print(f"       -> Bracket 3 (Chaos Hedge): {port_summary['chaos_champion']} (Pool Win%: {port_summary['chaos_pool_win_prob']:.1%})")
+            print(f"       -> JOINT PORTFOLIO POOL WIN%: {port_summary['joint_portfolio_win_prob']:.1%} ({port_summary['portfolio_multiplier_over_chalk']:.2f}x advantage over single chalk!)")
+            if port_summary.get('portfolio_actual_max_points') is not None:
+                print(f"       -> Best Actual Points in Portfolio: {port_summary['portfolio_actual_max_points']:.0f}/1920 (Best Accuracy: {port_summary['portfolio_best_accuracy']:.1%})")
+            print(f"       Saved coordinated portfolio to {port_path}")
+
+    return {
+        "label": label, "table": table, "samples": samples, "calib": calib,
+        "bracket_df": bracket_df, "pool_summary": pool_summary, "df_shap": df_shap,
+        "history": history, "info": info, "weights": weights, "member_shap": member_shap,
+        "missing": missing, "unscored": unscored,
+    }
+
+
+def run_shap(args, parser):
+    import shap_monte_carlo as smc
+    all_seasons = smc.discover_seasons(args.data_dir)
+    wins_dirs = [args.data_dir, args.training_output_dir]
     actual_wins = smc.load_actual_wins(args.season, wins_dirs)
     field = smc.tournament_field(args.season, args.data_dir, actual_wins)
     if not field:
         parser.error(f"No tournament field for {args.season}: need tournament_wins cache or "
                      f"{args.data_dir}/{args.season}/tournament_games.csv.")
-    scores, missing = smc.score_season(args.data_dir, args.season, weights, member_shap)
-    unscored = sorted(field - set(scores["team"]))
-    if unscored:
-        print(f"[SHAP][WARNING] {len(unscored)} field teams have no feature data: {unscored}")
-    expected = args.expected_teams
-
-    table, samples, calib, parsed_tree = _simulate_shap_season(
-        history, scores, args.season, field, actual_wins, args,
-        all_seasons=all_seasons, expected_teams=expected,
-    )
-
-    # Simulate historical seasons for out-of-fold Isotonic probability calibration & backtest
-    print("[SHAP] Running out-of-fold historical simulations for Isotonic calibration & backtest...")
-    hist_tables_by_season = {}
-    for s in sorted(history["season"].unique()):
-        s_hist = history[history["season"] == s]
-        wins = dict(zip(s_hist["team"], s_hist["actual_wins"]))
-        t_s, _, _, _ = _simulate_shap_season(
-            history, s_hist[["team", "season", "ensemble_score"]],
-            int(s), set(wins), wins, args, all_seasons=all_seasons,
-        )
-        hist_tables_by_season[int(s)] = t_s
-
-    oof_for_target = pd.concat(
-        [t for s, t in hist_tables_by_season.items() if s != args.season], ignore_index=True
-    )
-    iso_calibrators = smc.fit_isotonic_calibrators(oof_for_target)
-    table = smc.apply_isotonic_calibration(table, iso_calibrators)
-    table = table.rename(columns={"baseline_prediction": "shap_baseline_prediction"})
 
     out_dir = args.output_dir
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    if args.top_25:
+        from run_pipeline import discover_top_ensembles
+        top_ranks = discover_top_ensembles(args.ensemble_dir)
+        if not top_ranks:
+            parser.error(f"No top ensemble recipes discovered in {args.ensemble_dir}")
+        print(f"================================================================================")
+        print(f"[SHAP] Optimizing Full Portfolio of {len(top_ranks)} Top Brackets for Season {args.season}")
+        print(f"================================================================================")
+        portfolio_rows = []
+        for rank_num, recipe_file in top_ranks:
+            res = _optimize_recipe_bracket(
+                args, parser, smc, recipe_file, all_seasons, wins_dirs, field, actual_wins,
+                rank_label=f"Rank {rank_num}"
+            )
+            ps = res["pool_summary"]
+            if ps:
+                portfolio_rows.append({
+                    "Rank": rank_num,
+                    "Ensemble_Name": res["label"],
+                    "Max_EV_Champion": ps["max_ev_champion"],
+                    "Max_EV_Final_Four": ", ".join(ps.get("max_ev_final_four", [])),
+                    "Max_EV_Expected_Points": ps["max_ev_expected_points"],
+                    "Max_EV_Game_Confidence": ps.get("max_ev_per_game_confidence", 0.5),
+                    "Max_EV_Bracket_Confidence": ps.get("max_ev_bracket_confidence", 0.5),
+                    "Max_EV_Pool_Win_Pct": ps["max_ev_pool_win_prob"],
+                    "Max_EV_Accuracy": ps.get("max_ev_accuracy"),
+                    "Max_EV_Actual_Points": ps.get("actual_max_ev_points"),
+                    "Max_EV_Champ_Correct": ps.get("max_ev_champ_correct"),
+                    "Max_EV_F4_Correct": ps.get("max_ev_f4_correct"),
+                    "Leverage_Champion": ps["leverage_champion"],
+                    "Leverage_Final_Four": ", ".join(ps.get("leverage_final_four", [])),
+                    "Leverage_Expected_Points": ps["leverage_expected_points"],
+                    "Leverage_Game_Confidence": ps.get("leverage_per_game_confidence", 0.5),
+                    "Leverage_Bracket_Confidence": ps.get("leverage_bracket_confidence", 0.5),
+                    "Leverage_Pool_Win_Pct": ps["leverage_pool_win_prob"],
+                    "Leverage_Accuracy": ps.get("leverage_accuracy"),
+                    "Leverage_Actual_Points": ps.get("actual_leverage_points"),
+                    "Leverage_Champ_Correct": ps.get("leverage_champ_correct"),
+                    "Leverage_F4_Correct": ps.get("leverage_f4_correct"),
+                    "Actual_Champion": ps.get("actual_champion"),
+                    "Actual_Final_Four": ", ".join(ps.get("actual_final_four", [])),
+                })
+        df_portfolio = pd.DataFrame(portfolio_rows)
+        portfolio_csv = out_dir / f"TOP_25_OPTIMAL_BRACKETS_{args.season}.csv"
+        try:
+            df_portfolio.to_csv(portfolio_csv, index=False)
+        except PermissionError:
+            portfolio_csv = out_dir / f"TOP_25_OPTIMAL_BRACKETS_{args.season}_WITH_ACCURACY.csv"
+            df_portfolio.to_csv(portfolio_csv, index=False)
+            print(f"       [Warning] Could not overwrite base file (locked by another process). Saved to {portfolio_csv.name}")
+        print(f"\n[SHAP] Successfully generated and exported Top 25 Bracket Portfolio to:")
+        print(f"       -> {portfolio_csv}")
+        return
+
+    # Single recipe execution
+    res = _optimize_recipe_bracket(
+        args, parser, smc, args.shap_weights, all_seasons, wins_dirs, field, actual_wins,
+        rank_label=""
+    )
+    table = res["table"]
+    samples = res["samples"]
+    calib = res["calib"]
+    bracket_df = res["bracket_df"]
+    pool_summary = res["pool_summary"]
+    df_shap = res["df_shap"]
+    history = res["history"]
+    label = res["label"]
+    info = res.get("info", {})
+    weights = res.get("weights", {})
+    member_shap = res.get("member_shap", None)
+    missing = res.get("missing", [])
+    unscored = res.get("unscored", [])
+
     path = out_dir / f"team_success_scores_shap_{args.season}.csv"
     table.to_csv(path, index=False)
-
-    # Run Expected Value (EV) & Game-Theory Leverage Bracket Pool Optimizer
-    bracket_df, pool_summary = None, None
-    if parsed_tree is not None:
-        print(f"[SHAP] Optimizing 63-game bracket for {args.pool_size}-entry pool...")
-        bracket_df, pool_summary, _, _ = smc.optimize_bracket_pool(
-            parsed_tree, scores, pool_size=args.pool_size,
-            n_simulations=args.n_simulations, seed=args.seed,
-        )
-        bracket_path = out_dir / f"optimal_bracket_{args.season}.csv"
-        bracket_df.to_csv(bracket_path, index=False)
-        print(f"[SHAP] Saved 63-game optimized bracket to {bracket_path}")
-        print(f"       Max-EV Chalk Champion:     {pool_summary['max_ev_champion']} "
-              f"(Exp Pts: {pool_summary['max_ev_expected_points']:.1f}, Pool Win%: {pool_summary['max_ev_pool_win_prob']:.1%}, "
-              f"Actual Pts: {pool_summary['actual_max_ev_points']:.0f})")
-        print(f"       Leverage Optimal Champion: {pool_summary['leverage_champion']} "
-              f"(Exp Pts: {pool_summary['leverage_expected_points']:.1f}, Pool Win%: {pool_summary['leverage_pool_win_prob']:.1%}, "
-              f"Actual Pts: {pool_summary['actual_leverage_points']:.0f})")
 
     plot_root = out_dir / "shap_plots"
     if not args.no_plots:
@@ -248,6 +346,16 @@ def run_shap(args, parser):
 
     backtest_summary = None
     if args.backtest:
+        print("[SHAP] Running out-of-fold historical simulations for backtest...")
+        hist_tables_by_season = {}
+        for s in sorted(history["season"].unique()):
+            s_hist = history[history["season"] == s]
+            wins = dict(zip(s_hist["team"], s_hist["actual_wins"]))
+            t_s, _, _, _ = _simulate_shap_season(
+                history, s_hist[["team", "season", "ensemble_score"]],
+                int(s), set(wins), wins, args, all_seasons=all_seasons,
+            )
+            hist_tables_by_season[int(s)] = t_s
         print("[SHAP] Aggregating leave-one-season-out backtest metrics...")
         cal_tables, metrics = [], []
         for s in sorted(hist_tables_by_season):

@@ -28,6 +28,8 @@ dist-ssr
 model_outputs/
 bracket_evaluations/
 ensemble_bracket_evaluations/
+data/
+catboost_info/
 __pycache__/
 *.py[cod]
 

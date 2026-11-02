@@ -53,9 +53,12 @@ def parse_training_logs(outputs_dir):
         return pd.DataFrame()
         
     for model_name in os.listdir(outputs_dir):
-        # Exclude metadata folders and forcefully exclude FT Transformer artifacts
+        # Exclude metadata folders, non-model outputs, and retired architectures
         if not os.path.isdir(os.path.join(outputs_dir, model_name)): continue
-        if model_name.lower() in ["tournament_wins", "bracket_evaluations", "ft_transformer", "ft"]:
+        if model_name.lower() in [
+            "tournament_wins", "bracket_evaluations", "monte_carlo", 
+            "ft_transformer", "ft", "elo_baseline", "tabnet", "lstm", "logistic_regression"
+        ]:
             continue
             
         model_dir = os.path.join(outputs_dir, model_name)
