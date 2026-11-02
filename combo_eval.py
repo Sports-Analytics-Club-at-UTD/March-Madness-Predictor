@@ -22,6 +22,7 @@ BASE_URL = "https://api.collegebasketballdata.com"
 HEADERS = {"Authorization": f"Bearer {API_KEY}"} if API_KEY else {}
 
 def fetch_tournament_wins(season, data_dir):
+    """Fetches postseason NCAA tournament wins and caches them to determine global ranking fidelity."""
     cache_dir = os.path.join(data_dir, "tournament_wins")
     os.makedirs(cache_dir, exist_ok=True)
     cache_file = os.path.join(cache_dir, f"tournament_wins_{season}.csv")
@@ -55,6 +56,7 @@ def fetch_tournament_wins(season, data_dir):
     return wins
 
 def fetch_bracket_games(year, data_dir):
+    """Loads bracket matchups, fuzzy-matches columns, and normalizes teams."""
     year_dir = os.path.join(data_dir, str(year))
     os.makedirs(year_dir, exist_ok=True)
     csv_path = os.path.join(year_dir, "tournament_games.csv")
@@ -96,6 +98,7 @@ def fetch_bracket_games(year, data_dir):
     return df
 
 def build_team_features_for_scoring(data_dir, season):
+    """Rebuilds the raw statistical feature matrix for a given season."""
     season_dir = os.path.join(data_dir, str(season))
     if not os.path.exists(season_dir): 
         return pd.DataFrame()
@@ -390,6 +393,7 @@ def generate_top_ensemble_plot(df_results, metric_col, title, ylabel, out_path, 
     plt.close()
 
 def generate_top_10_plot(df_results, metric_col, title, ylabel, out_path, ascending=False):
+    """Generic plotting function to generate the top 10 time series for any metric."""
     generate_top_ensemble_plot(df_results, metric_col, title, ylabel, out_path, top_n=10, ascending=ascending)
 
 def main(args=None):
