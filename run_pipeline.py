@@ -283,6 +283,10 @@ def run_stage_monte_carlo(args, root_dir: Path, py_exe: str) -> dict:
             "--data-dir", str(data_dir),
             "--output-dir", str(mc_out_dir),
         ]
+        for flag, value in (("--kalshi-csv", args.kalshi_csv), ("--kalshi-mapping", args.kalshi_mapping)):
+            if value:
+                resolved = value if value.is_absolute() else root_dir / value
+                cmd.extend([flag, str(resolved)])
 
         if args.bundle:
             cmd.extend(["--bundle", str(args.bundle)])
@@ -303,9 +307,13 @@ def run_stage_monte_carlo(args, root_dir: Path, py_exe: str) -> dict:
         if args.dry_run:
             continue
 
+        previous_json = set(mc_out_dir.glob(f"forecast_{season}_*.json"))
         try:
             subprocess.run(cmd, cwd=str(root_dir), check=True)
             print(f"{Colors.GREEN}[OK] Simulation completed for Season {season}{Colors.END}")
+            total_artifacts.extend(str(p) for p in sorted(
+                set(mc_out_dir.glob(f"forecast_{season}_*.json")) - previous_json
+            ))
 
             if not args.bundle:
                 total_artifacts.append(str(mc_out_dir / f"team_success_scores_shap_{season}.csv"))
@@ -395,6 +403,14 @@ def parse_arguments():
         help="Path to Ridge inference bundle (.joblib). Switches Monte Carlo from SHAP mode to Ridge mode.",
     )
     mc_group.add_argument(
+        "--kalshi-csv", type=Path,
+        help="Optional historical Kalshi CSV for the backend JSON export.",
+    )
+    mc_group.add_argument(
+        "--kalshi-mapping", type=Path,
+        help="Reviewed aliases and game mappings JSON (requires --kalshi-csv).",
+    )
+    mc_group.add_argument(
         "--n-simulations", type=int, default=10000,
         help="Number of Monte Carlo simulation trials per team / tournament. Default: 10000.",
     )
@@ -453,7 +469,10 @@ def parse_arguments():
         help="List discovered top-20 ensemble recipes and exit.",
     )
 
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.kalshi_mapping and not args.kalshi_csv:
+        parser.error("--kalshi-mapping requires --kalshi-csv")
+    return args
 
 
 # ---------------------------------------------------------------------------

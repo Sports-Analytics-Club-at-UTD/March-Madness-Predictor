@@ -17,6 +17,8 @@ import numpy as np
 import pandas as pd
 
 from monte_carlo import simulate_season_success, simulate_season_from_scores
+from backend_data.export import export_forecast
+from backend_data.kalshi import source_artifact
 
 
 def main():
@@ -41,7 +43,11 @@ def main():
     parser.add_argument("--pool-size", type=int, default=100,
                         help="SHAP mode: number of entries in bracket pool for EV/leverage optimizer.")
     parser.add_argument("--no-plots", action="store_true", help="SHAP mode: skip visualizations.")
+    parser.add_argument("--kalshi-csv", type=Path, help="Optional historical Kalshi CSV included in validated JSON.")
+    parser.add_argument("--kalshi-mapping", type=Path, help="Reviewed team aliases and event-to-game mappings JSON.")
     args = parser.parse_args()
+    if args.kalshi_mapping and not args.kalshi_csv:
+        parser.error("--kalshi-mapping requires --kalshi-csv")
     if args.bundle is None:
         run_shap(args, parser)
         return
@@ -101,11 +107,30 @@ def main():
     if bundle["residual_source"] == "held_out_season" and bundle["validation_season"] == args.season:
         metadata["validation_checks"].append("Matching saved baseline prediction for every team")
     path.with_suffix(".metadata.json").write_text(json.dumps(metadata, indent=2) + "\n")
+    export_backend_results(args, table, metadata, "ridge")
     print(f"Saved {len(table)} teams to {path}")
     print("Validation passed. Results are tournament-success scores / threshold frequencies.")
     if metadata["missing_features_zero_filled"]:
         print(f"Zero-filled absent features: {metadata['missing_features_zero_filled']}")
     print(table[["team", "ridge_baseline_prediction", "simulated_mean"]].head(10).to_string(index=False))
+
+
+def export_backend_results(args, table, metadata, mode, bracket_df=None, parsed_tree=None):
+    mapping_path = getattr(args, "kalshi_mapping", None)
+    mapping = json.loads(mapping_path.read_text(encoding="utf-8")) if mapping_path else None
+    stem = f"team_success_scores{'_shap' if mode == 'shap' else ''}_{metadata['season']}"
+    artifacts = [source_artifact(args.output_dir / f"{stem}.csv", "text/csv"),
+                 source_artifact(args.output_dir / f"{stem}.metadata.json", "application/json")]
+    if bracket_df is not None:
+        artifacts.append(source_artifact(args.output_dir / f"optimal_bracket_{metadata['season']}.csv", "text/csv"))
+    if mapping_path:
+        artifacts.append(source_artifact(mapping_path, "application/json"))
+    path = export_forecast(
+        table, metadata, mode, args.output_dir, bracket_df=bracket_df, parsed_tree=parsed_tree,
+        kalshi_csv=getattr(args, "kalshi_csv", None), kalshi_mapping=mapping,
+        source_artifacts=artifacts,
+    )
+    print(f"Saved validated backend JSON to {path}")
 
 
 def _simulate_shap_season(history, scores, season, field, actual_wins, args,
@@ -297,6 +322,7 @@ def run_shap(args, parser):
         ],
     }
     path.with_suffix(".metadata.json").write_text(json.dumps(metadata, indent=2, default=str) + "\n")
+    export_backend_results(args, table, metadata, "shap", bracket_df, parsed_tree)
     print(f"Saved {len(table)} teams to {path}")
     display_cols = [c for c in ["team", "seed", "ensemble_score", "simulated_mean", "tree_expected_wins",
                                 "probability_ge_6_wins", "calibrated_prob_ge_6_wins", "tree_prob_ge_6_wins"]

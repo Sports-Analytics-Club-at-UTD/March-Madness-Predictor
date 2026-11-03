@@ -69,3 +69,26 @@ Results are sorted by `simulated_mean` descending and saved to
 Each team gets an independent seeded random stream, assigned in alphabetical
 order. This reproduces a fixed roster regardless of its input row order;
 individual sample draws differ from the single-team smoke test with seed 42.
+
+## Backend JSON exports
+
+Both Monte Carlo modes now also write validated, versioned
+`model_outputs/monte_carlo/forecast_{season}_{uuid}.json` files. SHAP exports
+include both bracket strategies and structured game connections when topology
+is available. CSV exports remain available for analysis.
+
+Pass `--kalshi-csv kalshi_result.csv` to `run_pipeline.py` or
+`run_monte_carlo.py` to include historical quotes filtered by competition and
+season. Optional `--kalshi-mapping PATH` supplies reviewed team aliases and
+event-to-game links; unresolved links remain null.
+
+See [the JSON contract and usage guide](docs/backend-json.md),
+[generated JSON Schema](schemas/forecast.schema.json), and
+[synthetic example](examples/forecast.example.json). The models are independent
+of FastAPI and include optional uncertainty/posterior structures for a future
+Bayesian producer. No API server or Bayesian model is introduced.
+
+```bash
+uv run python -m backend_data schema
+uv run python -m backend_data validate examples/forecast.example.json
+```
