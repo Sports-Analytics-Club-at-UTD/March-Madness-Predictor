@@ -1,0 +1,169 @@
+{
+  "models": [
+    [
+      {
+        "M": [
+          "seed",
+          "quality",
+          "elo",
+          "mstr_med",
+          "mstr_POM",
+          "net_eff"
+        ],
+        "W": [
+          "seed",
+          "quality",
+          "elo",
+          "net_eff"
+        ],
+        "model": "logit",
+        "C": 0.1,
+        "q_clip_M": 60,
+        "q_clip_W": 60
+      },
+      1
+    ],
+    [
+      {
+        "M": [
+          "seed",
+          "quality",
+          "elo",
+          "mstr_med",
+          "mstr_POM",
+          "net_eff",
+          "margin",
+          "off_eff",
+          "def_eff",
+          "efg",
+          "opp_efg",
+          "tov",
+          "opp_tov",
+          "orb",
+          "drb",
+          "ftr",
+          "opp_ftr",
+          "win",
+          "poss",
+          "late_margin"
+        ],
+        "W": [
+          "seed",
+          "quality",
+          "elo",
+          "net_eff",
+          "margin",
+          "off_eff",
+          "def_eff",
+          "efg",
+          "opp_efg",
+          "tov",
+          "opp_tov",
+          "orb",
+          "drb",
+          "ftr",
+          "opp_ftr",
+          "win",
+          "poss",
+          "late_margin"
+        ],
+        "model": "xgb_spline",
+        "q_clip_M": 60,
+        "q_clip_W": 60,
+        "xgb": {
+          "max_depth": 2
+        }
+      },
+      1
+    ]
+  ],
+  "q_clip_M": 60,
+  "q_clip_W": 60,
+  "market_w": {
+    "M": 0.85,
+    "W": 0.5
+  },
+  "mkt_sharpen": 1.2,
+  "men_models": [
+    [
+      {
+        "M": [
+          "seed",
+          "q_pool",
+          "elo",
+          "mstr_med",
+          "mstr_worst",
+          "net_eff",
+          "conf_quality"
+        ],
+        "W": [
+          "seed",
+          "quality",
+          "elo",
+          "net_eff"
+        ],
+        "model": "logit",
+        "C": 0.1,
+        "q_clip_M": 60,
+        "q_clip_W": 60,
+        "mens_features": true
+      },
+      1
+    ],
+    [
+      {
+        "M": [
+          "seed",
+          "q_pool",
+          "elo",
+          "mstr_med",
+          "mstr_worst",
+          "net_eff",
+          "conf_quality",
+          "margin",
+          "off_eff",
+          "def_eff",
+          "efg",
+          "opp_efg",
+          "tov",
+          "opp_tov",
+          "orb",
+          "drb",
+          "ftr",
+          "opp_ftr",
+          "win",
+          "poss",
+          "late_margin"
+        ],
+        "W": [
+          "seed",
+          "quality",
+          "elo",
+          "net_eff",
+          "margin",
+          "off_eff",
+          "def_eff",
+          "efg",
+          "opp_efg",
+          "tov",
+          "opp_tov",
+          "orb",
+          "drb",
+          "ftr",
+          "opp_ftr",
+          "win",
+          "poss",
+          "late_margin"
+        ],
+        "model": "xgb_spline",
+        "q_clip_M": 60,
+        "q_clip_W": 60,
+        "xgb": {
+          "max_depth": 2
+        },
+        "mens_features": true
+      },
+      1
+    ]
+  ]
+}

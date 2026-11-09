@@ -54,6 +54,9 @@ def _logit(x):
 
 def fit_predict(cfg: dict, g: str, year: int, table: pd.DataFrame) -> np.ndarray:
     """cfg may list sub-models in cfg["models"] = [(subcfg, weight), ...]; blended in log-odds."""
+    if g == "M" and "men_models" in cfg:
+        cfg = {**cfg, "models": cfg["men_models"]}
+    cfg = {k: v for k, v in cfg.items() if k != "men_models"}
     if "models" in cfg:
         base = {k: v for k, v in cfg.items() if k != "models"}
         parts = [(fit_predict({**base, **sub, "market_w": {}, "sharpen": {}, "clip_p": (0, 1), "models_inner": True}, g, year, table), w)
@@ -62,6 +65,9 @@ def fit_predict(cfg: dict, g: str, year: int, table: pd.DataFrame) -> np.ndarray
         p = 1 / (1 + np.exp(-sum(w * _logit(pp) for pp, w in parts) / tot))
         return _post(cfg, g, year, p)
     feats = cfg[g]
+    if g == "M" and cfg.get("mens_features"):
+        from .mens_features import extra_table
+        table = table.merge(extra_table(), on=["Season", "TeamID"], how="left")
     tr = F.tourney_games(g)
     start = 2003 if g == "M" else 2010
     tr = tr[(tr.Season < year) & (tr.Season >= cfg.get("start_" + g, start))]
