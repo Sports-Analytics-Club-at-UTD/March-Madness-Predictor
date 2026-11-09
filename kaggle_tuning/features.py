@@ -147,11 +147,11 @@ def massey() -> pd.DataFrame:
 
 
 @lru_cache(maxsize=None)
-def team_table(g: str, q_alpha: float = 1.0, q_recency: float = 0.0, q_clip: float = 30.0) -> pd.DataFrame:
+def team_table(g: str, q_alpha: float = 1.0, q_recency: float = 0.0, q_clip: float = 30.0, elo_k: float = 20.0) -> pd.DataFrame:
     t = box_features(g)
     t = t.merge(ridge_quality(g, q_alpha, q_recency, q_clip), on=["Season", "TeamID"], how="left")
     t = t.merge(ridge_quality(g, q_alpha, 1.5, q_clip).rename(columns={"quality": "quality_rec"}), on=["Season", "TeamID"], how="left")
-    t = t.merge(elo(g), on=["Season", "TeamID"], how="left")
+    t = t.merge(elo(g, k=elo_k), on=["Season", "TeamID"], how="left")
     t = t.merge(seeds(g), on=["Season", "TeamID"], how="left")
     if g == "M":
         t = t.merge(massey(), on=["Season", "TeamID"], how="left")

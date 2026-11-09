@@ -54,6 +54,18 @@ def _logit(x):
 
 def fit_predict(cfg: dict, g: str, year: int, table: pd.DataFrame) -> np.ndarray:
     """cfg may list sub-models in cfg["models"] = [(subcfg, weight), ...]; blended in log-odds."""
+    if g in cfg.get("by_gender", {}):
+        override = cfg["by_gender"][g]
+        cfg = {**cfg, **override}
+        cfg.pop("by_gender")
+        if "model" in override:
+            cfg.pop("models", None)
+    if g == "W" and any(k in cfg for k in ("women_q_alpha", "women_q_recency", "women_q_clip", "women_elo_k")):
+        table = F.team_table(g, cfg.get("women_q_alpha", 1.0), cfg.get("women_q_recency", 0.0),
+                             cfg.get("women_q_clip", 60), cfg.get("women_elo_k", 20.0))
+    if g == "W" and (cfg.get("model") == "women_original" or cfg.get("women_calibration")):
+        from .women import predict
+        return _post(cfg, g, year, predict(cfg, year, table))
     if "models" in cfg:
         base = {k: v for k, v in cfg.items() if k != "models"}
         parts = [(fit_predict({**base, **sub, "market_w": {}, "sharpen": {}, "clip_p": (0, 1), "models_inner": True}, g, year, table), w)
