@@ -19,7 +19,7 @@ def one(name, cfg):
 
 def main():
     confs = runpy.run_path(sys.argv[1])["CONFIGS"]
-    out = Parallel(n_jobs=min(11, len(confs)), verbose=0)(delayed(one)(n, c) for n, c in confs.items())
+    out = Parallel(n_jobs=min(int(__import__("os").environ.get("GRID_JOBS", 11)), len(confs)), verbose=0)(delayed(one)(n, c) for n, c in confs.items())
     print(f"{'config':34s} {'hist':>7s} {'hM':>7s} {'hW':>7s} {'v21-24':>7s} {'2025':>7s} {'M25':>7s} {'W25':>7s} {'2026':>7s} {'M26':>7s} {'W26':>7s} {'mean':>7s}")
     for n, r, dt in sorted(out, key=lambda x: (x[1][2025]['brier'] + x[1][2026]['brier'])):
         a, b = r[2025], r[2026]
