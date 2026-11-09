@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kaggle Mania Gains</title>
+<style>
+:root{color-scheme:light;--surface:#fcfcfb;--card:#ffffff;--border:#e6e5e0;--text:#0b0b0b;--text2:#52514e;--muted:#8a8984;--grid:#ecebe7;
+--s1:#2a78d6;--s2:#eb6834;--ref:#008300;--og:#8a8984}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){color-scheme:dark;--surface:#1a1a19;--card:#222221;--border:#363634;--text:#f0efec;--text2:#c3c2b7;--muted:#8f8e88;--grid:#2e2e2c;--s1:#3987e5;--s2:#d95926;--ref:#2f9e2f;--og:#8f8e88}}
+:root[data-theme="dark"]{color-scheme:dark;--surface:#1a1a19;--card:#222221;--border:#363634;--text:#f0efec;--text2:#c3c2b7;--muted:#8f8e88;--grid:#2e2e2c;--s1:#3987e5;--s2:#d95926;--ref:#2f9e2f;--og:#8f8e88}
+*{box-sizing:border-box}body{margin:0;background:var(--surface);color:var(--text);font:14px/1.45 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:980px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:0 0 2px}.sub{color:var(--text2);margin:0 0 18px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.tile,.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.tile .k{color:var(--text2);font-size:12px}.tile .v{font-size:26px;font-weight:650;font-variant-numeric:tabular-nums}.tile .d{color:var(--text2);font-size:12px}
+.card{margin-bottom:16px}.card p.note{color:var(--text2);margin:2px 0 10px;font-size:13px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--text2);margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}.sw{width:10px;height:10px;border-radius:50%;display:inline-block}
+svg{display:block;width:100%;height:auto;overflow:visible}svg text{fill:var(--text2);font-size:11px}
+.grid line{stroke:var(--grid)}.tip{position:fixed;pointer-events:none;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 4px 14px rgba(0,0,0,.12);display:none;z-index:9;max-width:280px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:12.5px}th,td{padding:6px 8px;border-bottom:1px solid var(--border);text-align:right}th:first-child,td:first-child{text-align:left}th{color:var(--text2);font-weight:600}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:720px){.two{grid-template-columns:1fr}}
+ol.steps{margin:6px 0 0;padding-left:20px;color:var(--text2)}ol.steps li{margin:4px 0}ol.steps b{color:var(--text)}
+</style></head><body><main>
+<h1>Original pipeline → top 100: what moved the score</h1>
+<p class="sub">Brier score on the 126 scored tournament games (63 men's + 63 women's), lower is better. Every model is trained only on seasons before the target year; ranks are against the real Kaggle leaderboards.</p>
+<div class="tiles" id="tiles"></div>
+<div class="card"><h2>Leaderboard rank at each step</h2><p class="note">Log scale. The green line is the top-100 cutoff (bronze/silver boundary region).</p>
+<div class="legend"><span><i class="sw" style="background:var(--s1)"></i>2025</span><span><i class="sw" style="background:var(--s2)"></i>2026</span><span><i class="sw" style="background:var(--ref);border-radius:0;height:2px"></i>Top 100</span></div>
+<svg id="rank" viewBox="0 0 940 330"></svg></div>
+<div class="two">
+<div class="card"><h2>2025 Brier by step</h2><p class="note">Dashed: top-100 cutoff (0.1108). Gray dot: market odds alone.</p><svg id="b2025" viewBox="0 0 460 290"></svg></div>
+<div class="card"><h2>2026 Brier by step</h2><p class="note">Dashed: top-100 cutoff (0.1243). Gray dot: market odds alone.</p><svg id="b2026" viewBox="0 0 460 290"></svg></div>
+</div>
+<div class="card"><h2>Men's vs women's: original pipeline → final</h2><p class="note">Most of the gain is on the men's side, where the betting market beats every box-score model. The original pipeline's women's predictions were already good.</p>
+<div class="legend"><span><i class="sw" style="background:var(--og)"></i>Original pipeline</span><span><i class="sw" style="background:var(--s1)"></i>Final</span></div>
+<svg id="gender" viewBox="0 0 940 200"></svg></div>
+<div class="card"><h2>What changed</h2><ol class="steps" id="steps"></ol></div>
+<div class="card"><h2>Table view</h2><table id="tbl"></table></div>
+</main><div class="tip" id="tip"></div>
+<script>
+const D=__DATA__;
+const S=D.steps, Y=["2025","2026"], C={"2025":"var(--s1)","2026":"var(--s2)"};
+const SHORT=["Seed only","Original","New ratings","+ XGBoost","+ Market 50/50","Final"];
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const tip=document.getElementById("tip");
+function hover(node,html){const show=e=>{tip.innerHTML=html;tip.style.display="block";const x=Math.min(e.clientX+14,innerWidth-290);tip.style.left=x+"px";tip.style.top=(e.clientY+14)+"px"};
+node.addEventListener("pointermove",show);node.addEventListener("pointerleave",()=>tip.style.display="none")}
+const og=S[1],fin=S[S.length-1];
+document.getElementById("tiles").innerHTML=Y.map(y=>`<div class="tile"><div class="k">${y} rank</div><div class="v">#${og[y].rank} → #${fin[y].rank}</div><div class="d">Brier ${og[y].brier.toFixed(4)} → ${fin[y].brier.toFixed(4)} · ${D.lb[y].n.toLocaleString()} teams</div></div>`).join("")+
+`<div class="tile"><div class="k">Top-100 cutoffs</div><div class="v" style="font-size:20px">0.1108 / 0.1243</div><div class="d">2025 / 2026 · both now beaten</div></div>`;
+// rank chart
+(function(){const svg=document.getElementById("rank"),W=940,H=330,m={l:56,r:24,t:14,b:44};const iw=W-m.l-m.r,ih=H-m.t-m.b;
+const ly=v=>m.t+ih*(Math.log10(v)-Math.log10(30))/(Math.log10(2000)-Math.log10(30));const x=i=>m.l+iw*(i+.5)/S.length;
+const g=el("g",{class:"grid"},svg);[30,50,100,200,500,1000,2000].forEach(v=>{el("line",{x1:m.l,x2:W-m.r,y1:ly(v),y2:ly(v)},g);el("text",{x:m.l-8,y:ly(v)+4,"text-anchor":"end"},svg).textContent=v});
+el("line",{x1:m.l,x2:W-m.r,y1:ly(100),y2:ly(100),stroke:"var(--ref)","stroke-width":2,"stroke-dasharray":"5 4"},svg);
+S.forEach((s,i)=>{el("text",{x:x(i),y:H-18,"text-anchor":"middle"},svg).textContent=SHORT[i]});
+Y.forEach(y=>{const pts=S.map((s,i)=>[x(i),ly(s[y].rank)]);el("polyline",{points:pts.map(p=>p.join(",")).join(" "),fill:"none",stroke:C[y],"stroke-width":2},svg);
+pts.forEach((p,i)=>{const c=el("circle",{cx:p[0],cy:p[1],r:5,fill:C[y],stroke:"var(--card)","stroke-width":2},svg);
+const h=el("circle",{cx:p[0],cy:p[1],r:14,fill:"transparent"},svg);hover(h,`<b>${S[i].name}</b><br>${y}: rank #${S[i][y].rank} · Brier ${S[i][y].brier.toFixed(5)}`);});
+const last=pts[pts.length-1];el("text",{x:last[0]+10,y:last[1]+4,style:"fill:var(--text);font-weight:600"},svg).textContent="#"+fin[y].rank;
+const first=pts[1];el("text",{x:first[0]+10,y:first[1]-6,style:"fill:var(--text)"},svg).textContent="#"+og[y].rank;});})();
+// brier dot charts
+function brier(y){const svg=document.getElementById("b"+y),W=460,H=290,m={l:118,r:20,t:8,b:30};const iw=W-m.l-m.r,ih=H-m.t-m.b;
+const vals=S.map(s=>s[y].brier).concat([D.market[y].brier,D.lb[y].top100]);const lo=Math.floor((Math.min(...vals)-.003)*200)/200,hi=Math.ceil((Math.max(...vals)+.002)*200)/200;
+const x=v=>m.l+iw*(v-lo)/(hi-lo),yy=i=>m.t+ih*(i+.5)/S.length;const g=el("g",{class:"grid"},svg);
+for(let v=lo;v<=hi+1e-9;v+=.005){el("line",{x1:x(v),x2:x(v),y1:m.t,y2:H-m.b},g);el("text",{x:x(v),y:H-m.b+16,"text-anchor":"middle"},svg).textContent=v.toFixed(3)}
+el("line",{x1:x(D.lb[y].top100),x2:x(D.lb[y].top100),y1:m.t,y2:H-m.b,stroke:"var(--ref)","stroke-width":2,"stroke-dasharray":"5 4"},svg);
+S.forEach((s,i)=>{el("text",{x:m.l-10,y:yy(i)+4,"text-anchor":"end"},svg).textContent=SHORT[i];
+el("line",{x1:x(hi),x2:x(s[y].brier),y1:yy(i),y2:yy(i),stroke:C[y],"stroke-width":2,opacity:.35},svg);
+el("circle",{cx:x(s[y].brier),cy:yy(i),r:6,fill:i==1?"var(--og)":C[y],stroke:"var(--card)","stroke-width":2},svg);
+const h=el("rect",{x:m.l,y:yy(i)-ih/S.length/2,width:iw,height:ih/S.length,fill:"transparent"},svg);hover(h,`<b>${s.name}</b><br>${y} Brier ${s[y].brier.toFixed(5)} (rank #${s[y].rank})<br>Men ${s[y].M.toFixed(4)} · Women ${s[y].W.toFixed(4)}`)});
+const mk=D.market[y];const mc=el("circle",{cx:x(mk.brier),cy:yy(4)-12,r:4,fill:"var(--muted)"},svg);const mh=el("circle",{cx:x(mk.brier),cy:yy(4)-12,r:10,fill:"transparent"},svg);hover(mh,`<b>Market odds alone</b><br>${y} Brier ${mk.brier.toFixed(5)} (rank #${mk.rank})`);}
+brier("2025");brier("2026");
+// gender chart: 4 rows (2025 M, 2025 W, 2026 M, 2026 W)
+(function(){const svg=document.getElementById("gender"),W=940,H=200,m={l:110,r:30,t:6,b:28};const iw=W-m.l-m.r,ih=H-m.t-m.b;
+const rows=[["2025","M","2025 men's"],["2025","W","2025 women's"],["2026","M","2026 men's"],["2026","W","2026 women's"]];
+const lo=.085,hi=.165;const x=v=>m.l+iw*(v-lo)/(hi-lo),yy=i=>m.t+ih*(i+.5)/rows.length;const g=el("g",{class:"grid"},svg);
+for(let v=lo;v<=hi+1e-9;v+=.01){el("line",{x1:x(v),x2:x(v),y1:m.t,y2:H-m.b},g);el("text",{x:x(v),y:H-m.b+16,"text-anchor":"middle"},svg).textContent=v.toFixed(2)}
+rows.forEach(([y,gd,lab],i)=>{const a=og[y][gd],b=fin[y][gd];el("text",{x:m.l-10,y:yy(i)+4,"text-anchor":"end"},svg).textContent=lab;
+el("line",{x1:x(a),x2:x(b),y1:yy(i),y2:yy(i),stroke:"var(--muted)","stroke-width":2},svg);
+el("circle",{cx:x(a),cy:yy(i),r:6,fill:"var(--og)",stroke:"var(--card)","stroke-width":2},svg);el("circle",{cx:x(b),cy:yy(i),r:6,fill:"var(--s1)",stroke:"var(--card)","stroke-width":2},svg);
+const d=b-a;el("text",{x:Math.max(x(a),x(b))+12,y:yy(i)+4,style:"fill:var(--text)"},svg).textContent=(d<0?"−":"+")+Math.abs(d).toFixed(4);
+const h=el("rect",{x:m.l,y:yy(i)-ih/8,width:iw,height:ih/4,fill:"transparent"},svg);hover(h,`<b>${lab}</b><br>Original ${a.toFixed(4)} → Final ${b.toFixed(4)}`)});})();
+const NOTES=[
+["Seed-only baseline","logistic regression on seed difference. Reference floor."],
+["Original pipeline","week-5-51's kaggle_mania_brackets.py run unchanged, men's and women's run separately and merged, on data cut off before each target year."],
+["New ratings + logistic","rebuilt features: ridge-regression adjusted-margin team rating (uncapped margins), margin-aware Elo, seed, possession-based net efficiency, Massey ordinals (men). L2 logistic regression, First Four games removed from training."],
+["+ XGBoost ensemble","raddar-style XGBoost on point margin (depth 2) with leave-one-season-out spline calibration, averaged with the logistic model in log-odds."],
+["+ Market blend","log-odds blend with pre-deadline betting-odds probabilities (goto_conversion, published 2025-03-18 and 2026-03-17)."],
+["Final","market weight 85% for men / 50% for women (the model only adds value on the women's side), and the market's [0.025, 0.975] clip undone with a ×1.2 log-odds stretch."]];
+document.getElementById("steps").innerHTML=NOTES.map(n=>`<li><b>${n[0]}</b> — ${n[1]}</li>`).join("");
+const rowsT=S.concat([D.market]);document.getElementById("tbl").innerHTML="<tr><th>Step</th><th>2025 Brier</th><th>M</th><th>W</th><th>Rank</th><th>2026 Brier</th><th>M</th><th>W</th><th>Rank</th></tr>"+
+rowsT.map(s=>`<tr><td>${s.name}</td>${Y.map(y=>`<td>${s[y].brier.toFixed(5)}</td><td>${s[y].M.toFixed(4)}</td><td>${s[y].W.toFixed(4)}</td><td>#${s[y].rank}</td>`).join("")}</tr>`).join("");
+</script></body></html>
