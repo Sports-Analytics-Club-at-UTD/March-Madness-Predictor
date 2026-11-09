@@ -35,6 +35,7 @@ from sklearn.metrics import brier_score_loss, log_loss
 from sklearn.preprocessing import StandardScaler
 
 from monte_carlo import simulate_bracket_tree
+from matchup_probability import matchup_probability
 
 THRESHOLDS = list(range(1, 7))
 ROUND_LABELS = {1: 'R32', 2: 'Sweet 16', 3: 'Elite 8', 4: 'Final 4', 5: 'Title Game', 6: 'Champion'}
@@ -456,12 +457,7 @@ def build_pairwise_prob_matrix(teams64, score_map, seeds, matchup_model):
     s = np.array([seeds.get(t, 8.5) for t in teams64], dtype=float)
     dz = z[:, None] - z[None, :]
     dseed = s[None, :] - s[:, None]
-    if matchup_model is not None:
-        w_z, w_s = matchup_model.coef_[0]
-        logits = w_z * dz + w_s * dseed
-    else:
-        logits = 0.85 * dz + 0.12 * dseed
-    P = expit(logits)
+    P = matchup_probability(dz, dseed, matchup_model)
     np.fill_diagonal(P, 0.5)
     return P
 

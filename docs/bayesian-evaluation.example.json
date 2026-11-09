@@ -1,0 +1,8 @@
+{
+  "seasons": [
+    {"season": 2023, "cutoff": "2023-03-14T00:00:00Z", "until": "2023-05-01T00:00:00Z", "expected_games": 67},
+    {"season": 2024, "cutoff": "2024-03-19T00:00:00Z", "until": "2024-05-01T00:00:00Z", "expected_games": 67},
+    {"season": 2025, "cutoff": "2025-03-18T00:00:00Z", "until": "2025-05-01T00:00:00Z", "expected_games": 67}
+  ],
+  "evaluation_seasons": [2024, 2025]
+}

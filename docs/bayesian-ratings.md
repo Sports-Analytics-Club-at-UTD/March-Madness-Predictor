@@ -116,6 +116,10 @@ binary outcome of the game.
 
 ## Held-out evaluation
 
+For multi-season coverage audits, saved game predictions, seed/matchup baseline
+comparisons and calibration, use the [historical evaluation runner](bayesian-evaluation.md).
+The command below remains available for a single saved fit's basic metrics.
+
 The `evaluate` command requires a directory containing NCAA tournament games in
 the **same team-game CSV format**, with `tournament=NCAA`. Supply it separately
 from training caches if appropriate:

@@ -22,6 +22,17 @@ The input caches may cover only part of opponents' schedules; fitting success
 does not establish predictive improvement. This version is independent of the
 pending forecast JSON and Convex branches.
 
+Historical evaluation now audits coverage, fits before explicit tournament
+cutoffs, saves held-out game probabilities and calibration, and compares against
+earlier-trained baselines. See [evaluation instructions](docs/bayesian-evaluation.md)
+and [the 2024–2025 pilot findings](docs/bayesian-evaluation-pilot.md).
+
+```bash
+uv run --extra bayesian python run_bayesian_evaluation.py \
+  --config docs/bayesian-evaluation.example.json \
+  --output-dir model_outputs/bayesian_evaluation/pilot-1 --fetch-results
+```
+
 ## Ridge forecasts
 
 Ridge predicts a continuous NCAA tournament-win score for each team.
