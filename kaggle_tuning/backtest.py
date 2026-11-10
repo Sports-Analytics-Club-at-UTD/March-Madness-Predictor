@@ -84,6 +84,11 @@ def fit_predict(cfg: dict, g: str, year: int, table: pd.DataFrame) -> np.ndarray
         from .vilnius import predict
         p = predict(cfg, g, year)
         return p if cfg.get("models_inner") else _post(cfg, g, year, p)
+    if g == "M" and cfg.get("model") == "mens_allyears":
+        from .mens_allyears import predict, predict_margin
+        opts = cfg.get("mens_allyears", {})
+        p = predict_margin(opts, year) if opts.get("margin") else predict(cfg, year)
+        return p if cfg.get("models_inner") else _post(cfg, g, year, p)
     feats = cfg[g]
     if g == "M" and cfg.get("mens_features"):
         from .mens_features import extra_table
@@ -135,6 +140,10 @@ def fit_predict(cfg: dict, g: str, year: int, table: pd.DataFrame) -> np.ndarray
 
 
 def _post(cfg, g, year, p):
+    # Optional calibration of the model component before blending market odds.
+    model_a = cfg.get("model_sharpen", {}).get(g, 1.0)
+    if model_a != 1.0:
+        p = 1 / (1 + np.exp(-model_a * _logit(p)))
     w = cfg.get("market_w", {}).get(g, 0.0)
     if w and year in MK.PATHS:
         mk = test_pairs(g, year)[["T1", "T2"]].merge(MK.market(year), on=["T1", "T2"], how="left").mkt.values
