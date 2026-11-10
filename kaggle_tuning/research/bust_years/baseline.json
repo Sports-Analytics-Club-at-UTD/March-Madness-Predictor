@@ -1,0 +1,713 @@
+{
+  "allyears_EXT": {
+    "config": {
+      "models": [
+        [
+          {
+            "M": [
+              "seed",
+              "quality",
+              "elo",
+              "mstr_med",
+              "mstr_POM",
+              "net_eff"
+            ],
+            "W": [
+              "seed",
+              "quality",
+              "elo",
+              "net_eff"
+            ],
+            "model": "logit",
+            "C": 0.1,
+            "q_clip_M": 60,
+            "q_clip_W": 60
+          },
+          1
+        ],
+        [
+          {
+            "M": [
+              "seed",
+              "quality",
+              "elo",
+              "mstr_med",
+              "mstr_POM",
+              "net_eff",
+              "margin",
+              "off_eff",
+              "def_eff",
+              "efg",
+              "opp_efg",
+              "tov",
+              "opp_tov",
+              "orb",
+              "drb",
+              "ftr",
+              "opp_ftr",
+              "win",
+              "poss",
+              "late_margin"
+            ],
+            "W": [
+              "seed",
+              "quality",
+              "elo",
+              "net_eff",
+              "margin",
+              "off_eff",
+              "def_eff",
+              "efg",
+              "opp_efg",
+              "tov",
+              "opp_tov",
+              "orb",
+              "drb",
+              "ftr",
+              "opp_ftr",
+              "win",
+              "poss",
+              "late_margin"
+            ],
+            "model": "xgb_spline",
+            "q_clip_M": 60,
+            "q_clip_W": 60,
+            "xgb": {
+              "max_depth": 2
+            }
+          },
+          1
+        ]
+      ],
+      "q_clip_M": 60,
+      "q_clip_W": 60,
+      "market_w": {
+        "M": 0.85,
+        "W": 0.5
+      },
+      "mkt_sharpen": 1.2,
+      "by_gender": {
+        "W": {
+          "models": [
+            [
+              {
+                "M": [
+                  "seed",
+                  "quality",
+                  "elo",
+                  "mstr_med",
+                  "mstr_POM",
+                  "net_eff"
+                ],
+                "W": [
+                  "seed",
+                  "quality",
+                  "elo",
+                  "net_eff"
+                ],
+                "model": "logit",
+                "C": 0.1,
+                "q_clip_M": 60,
+                "q_clip_W": 60,
+                "women_q_alpha": 0.1
+              },
+              0.4
+            ],
+            [
+              {
+                "M": [
+                  "seed",
+                  "quality",
+                  "elo",
+                  "mstr_med",
+                  "mstr_POM",
+                  "net_eff",
+                  "margin",
+                  "off_eff",
+                  "def_eff",
+                  "efg",
+                  "opp_efg",
+                  "tov",
+                  "opp_tov",
+                  "orb",
+                  "drb",
+                  "ftr",
+                  "opp_ftr",
+                  "win",
+                  "poss",
+                  "late_margin"
+                ],
+                "W": [
+                  "seed",
+                  "quality",
+                  "elo",
+                  "net_eff",
+                  "margin",
+                  "off_eff",
+                  "def_eff",
+                  "efg",
+                  "opp_efg",
+                  "tov",
+                  "opp_tov",
+                  "orb",
+                  "drb",
+                  "ftr",
+                  "opp_ftr",
+                  "win",
+                  "poss",
+                  "late_margin"
+                ],
+                "model": "xgb_spline",
+                "q_clip_M": 60,
+                "q_clip_W": 60,
+                "xgb": {
+                  "max_depth": 2
+                }
+              },
+              0.1
+            ],
+            [
+              {
+                "model": "women_original",
+                "original_lgb_weight": 0
+              },
+              0.3
+            ],
+            [
+              {
+                "model": "vilnius",
+                "vilnius": {}
+              },
+              0.2
+            ]
+          ]
+        }
+      },
+      "sharpen": {
+        "W": 1.1
+      },
+      "men_models": [
+        [
+          {
+            "M": [
+              "seed",
+              "q_pool",
+              "elo",
+              "mstr_med",
+              "mstr_worst",
+              "net_eff",
+              "conf_quality",
+              "margin",
+              "off_eff",
+              "def_eff",
+              "efg",
+              "opp_efg",
+              "tov",
+              "opp_tov",
+              "orb",
+              "drb",
+              "ftr",
+              "opp_ftr",
+              "win",
+              "poss",
+              "late_margin"
+            ],
+            "W": [
+              "seed",
+              "quality",
+              "elo",
+              "net_eff",
+              "margin",
+              "off_eff",
+              "def_eff",
+              "efg",
+              "opp_efg",
+              "tov",
+              "opp_tov",
+              "orb",
+              "drb",
+              "ftr",
+              "opp_ftr",
+              "win",
+              "poss",
+              "late_margin"
+            ],
+            "model": "xgb_spline",
+            "q_clip_M": 60,
+            "q_clip_W": 60,
+            "xgb": {
+              "max_depth": 2
+            },
+            "mens_features": true
+          },
+          1
+        ],
+        [
+          {
+            "model": "mens_allyears",
+            "mens_allyears": {
+              "margin": true,
+              "alpha": 1,
+              "features": [
+                "seed",
+                "q_pool",
+                "elo",
+                "mstr_med",
+                "mstr_worst",
+                "net_eff",
+                "conf_quality"
+              ]
+            }
+          },
+          1
+        ]
+      ],
+      "model_sharpen": {
+        "M": 0.9
+      },
+      "women_model_temperature": {
+        "start": 2014,
+        "penalty": 0.01
+      },
+      "ext_blend": {
+        "M": [
+          "538",
+          "torvik_adjem",
+          "futures"
+        ],
+        "W": [
+          "538"
+        ]
+      }
+    },
+    "all_years": [
+      {
+        "year": 2021,
+        "M": [
+          0.58826059230097,
+          47,
+          707
+        ],
+        "W": [
+          0.418920156990581,
+          21,
+          451
+        ],
+        "metric": "log loss"
+      },
+      {
+        "year": 2022,
+        "M": [
+          0.6201060485674477,
+          184,
+          930
+        ],
+        "W": [
+          0.4405440431346423,
+          132,
+          651
+        ],
+        "metric": "log loss"
+      },
+      {
+        "year": 2023,
+        "all": [
+          0.18423785191539144,
+          161,
+          1033
+        ],
+        "metric": "Brier"
+      },
+      {
+        "year": 2024,
+        "all": [
+          0.05733839766669713,
+          19,
+          821
+        ],
+        "metric": "bracket Brier"
+      },
+      {
+        "year": 2025,
+        "all": [
+          0.10795913887723362,
+          10,
+          1727
+        ],
+        "metric": "Brier"
+      },
+      {
+        "year": 2026,
+        "all": [
+          0.12121753936910129,
+          31,
+          3462
+        ],
+        "metric": "Brier"
+      }
+    ],
+    "historical_model_brier": {
+      "2015": 0.1349709563766805,
+      "2016": 0.17136633677147103,
+      "2017": 0.15494920567399484,
+      "2018": 0.17689374835153648,
+      "2019": 0.1368773884419105,
+      "2021": 0.17268484292768435,
+      "2022": 0.1822069095495826,
+      "2023": 0.1853473487307276,
+      "2024": 0.14703426814147763
+    },
+    "hist": 0.16248122277389618,
+    "2015_2019": 0.15501152712311866
+  },
+  "combined_BEST": {
+    "config": {
+      "models": [
+        [
+          {
+            "M": [
+              "seed",
+              "quality",
+              "elo",
+              "mstr_med",
+              "mstr_POM",
+              "net_eff"
+            ],
+            "W": [
+              "seed",
+              "quality",
+              "elo",
+              "net_eff"
+            ],
+            "model": "logit",
+            "C": 0.1,
+            "q_clip_M": 60,
+            "q_clip_W": 60
+          },
+          1
+        ],
+        [
+          {
+            "M": [
+              "seed",
+              "quality",
+              "elo",
+              "mstr_med",
+              "mstr_POM",
+              "net_eff",
+              "margin",
+              "off_eff",
+              "def_eff",
+              "efg",
+              "opp_efg",
+              "tov",
+              "opp_tov",
+              "orb",
+              "drb",
+              "ftr",
+              "opp_ftr",
+              "win",
+              "poss",
+              "late_margin"
+            ],
+            "W": [
+              "seed",
+              "quality",
+              "elo",
+              "net_eff",
+              "margin",
+              "off_eff",
+              "def_eff",
+              "efg",
+              "opp_efg",
+              "tov",
+              "opp_tov",
+              "orb",
+              "drb",
+              "ftr",
+              "opp_ftr",
+              "win",
+              "poss",
+              "late_margin"
+            ],
+            "model": "xgb_spline",
+            "q_clip_M": 60,
+            "q_clip_W": 60,
+            "xgb": {
+              "max_depth": 2
+            }
+          },
+          1
+        ]
+      ],
+      "q_clip_M": 60,
+      "q_clip_W": 60,
+      "market_w": {
+        "M": 0.85,
+        "W": 0.5
+      },
+      "mkt_sharpen": 1.2,
+      "by_gender": {
+        "W": {
+          "models": [
+            [
+              {
+                "M": [
+                  "seed",
+                  "quality",
+                  "elo",
+                  "mstr_med",
+                  "mstr_POM",
+                  "net_eff"
+                ],
+                "W": [
+                  "seed",
+                  "quality",
+                  "elo",
+                  "net_eff"
+                ],
+                "model": "logit",
+                "C": 0.1,
+                "q_clip_M": 60,
+                "q_clip_W": 60,
+                "women_q_alpha": 0.1
+              },
+              0.4
+            ],
+            [
+              {
+                "M": [
+                  "seed",
+                  "quality",
+                  "elo",
+                  "mstr_med",
+                  "mstr_POM",
+                  "net_eff",
+                  "margin",
+                  "off_eff",
+                  "def_eff",
+                  "efg",
+                  "opp_efg",
+                  "tov",
+                  "opp_tov",
+                  "orb",
+                  "drb",
+                  "ftr",
+                  "opp_ftr",
+                  "win",
+                  "poss",
+                  "late_margin"
+                ],
+                "W": [
+                  "seed",
+                  "quality",
+                  "elo",
+                  "net_eff",
+                  "margin",
+                  "off_eff",
+                  "def_eff",
+                  "efg",
+                  "opp_efg",
+                  "tov",
+                  "opp_tov",
+                  "orb",
+                  "drb",
+                  "ftr",
+                  "opp_ftr",
+                  "win",
+                  "poss",
+                  "late_margin"
+                ],
+                "model": "xgb_spline",
+                "q_clip_M": 60,
+                "q_clip_W": 60,
+                "xgb": {
+                  "max_depth": 2
+                }
+              },
+              0.1
+            ],
+            [
+              {
+                "model": "women_original",
+                "original_lgb_weight": 0
+              },
+              0.3
+            ],
+            [
+              {
+                "model": "vilnius",
+                "vilnius": {}
+              },
+              0.2
+            ]
+          ]
+        }
+      },
+      "sharpen": {
+        "W": 1.1
+      },
+      "men_models": [
+        [
+          {
+            "M": [
+              "seed",
+              "q_pool",
+              "elo",
+              "mstr_med",
+              "mstr_worst",
+              "net_eff",
+              "conf_quality"
+            ],
+            "W": [
+              "seed",
+              "quality",
+              "elo",
+              "net_eff"
+            ],
+            "model": "logit",
+            "C": 0.1,
+            "q_clip_M": 60,
+            "q_clip_W": 60,
+            "mens_features": true
+          },
+          1
+        ],
+        [
+          {
+            "M": [
+              "seed",
+              "q_pool",
+              "elo",
+              "mstr_med",
+              "mstr_worst",
+              "net_eff",
+              "conf_quality",
+              "margin",
+              "off_eff",
+              "def_eff",
+              "efg",
+              "opp_efg",
+              "tov",
+              "opp_tov",
+              "orb",
+              "drb",
+              "ftr",
+              "opp_ftr",
+              "win",
+              "poss",
+              "late_margin"
+            ],
+            "W": [
+              "seed",
+              "quality",
+              "elo",
+              "net_eff",
+              "margin",
+              "off_eff",
+              "def_eff",
+              "efg",
+              "opp_efg",
+              "tov",
+              "opp_tov",
+              "orb",
+              "drb",
+              "ftr",
+              "opp_ftr",
+              "win",
+              "poss",
+              "late_margin"
+            ],
+            "model": "xgb_spline",
+            "q_clip_M": 60,
+            "q_clip_W": 60,
+            "xgb": {
+              "max_depth": 2
+            },
+            "mens_features": true
+          },
+          1
+        ]
+      ]
+    },
+    "all_years": [
+      {
+        "year": 2021,
+        "M": [
+          0.5963875442794451,
+          81,
+          707
+        ],
+        "W": [
+          0.4314001149162945,
+          35,
+          451
+        ],
+        "metric": "log loss"
+      },
+      {
+        "year": 2022,
+        "M": [
+          0.6491152861350765,
+          418,
+          930
+        ],
+        "W": [
+          0.4365580325661002,
+          103,
+          651
+        ],
+        "metric": "log loss"
+      },
+      {
+        "year": 2023,
+        "all": [
+          0.18649364713811506,
+          237,
+          1033
+        ],
+        "metric": "Brier"
+      },
+      {
+        "year": 2024,
+        "all": [
+          0.05773548059738135,
+          25,
+          821
+        ],
+        "metric": "bracket Brier"
+      },
+      {
+        "year": 2025,
+        "all": [
+          0.1079653574553479,
+          10,
+          1727
+        ],
+        "metric": "Brier"
+      },
+      {
+        "year": 2026,
+        "all": [
+          0.12121941928713545,
+          31,
+          3462
+        ],
+        "metric": "Brier"
+      }
+    ],
+    "historical_model_brier": {
+      "2015": 0.13384212231884157,
+      "2016": 0.1712430958107069,
+      "2017": 0.15450621952704824,
+      "2018": 0.17949482876867387,
+      "2019": 0.13691371311865,
+      "2021": 0.17464234289170538,
+      "2022": 0.1849465021632139,
+      "2023": 0.18649364713811506,
+      "2024": 0.14732887279413281
+    },
+    "hist": 0.16326792717012084,
+    "2015_2019": 0.1551999959087841
+  }
+}
