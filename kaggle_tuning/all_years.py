@@ -12,6 +12,7 @@
 from __future__ import annotations
 
 import glob
+import os
 import runpy
 import sys
 
@@ -159,8 +160,8 @@ def main():
     years = [2021, 2022, 2023, 2024, 2025, 2026]
     need = sorted(set(years) | ({2016, 2017, 2018, 2019} if "ext_blend" in cfg else set()))
     model_cfg = {**cfg, "market_w": {}}
-    P = dict(zip(need, Parallel(n_jobs=6)(delayed(all_pair_predictions)(cfg, y) for y in need)))
-    H = dict(zip(need, Parallel(n_jobs=6)(delayed(all_pair_predictions)(model_cfg, y) for y in need if y < 2025))) \
+    P = dict(zip(need, Parallel(n_jobs=int(os.environ.get("GRID_JOBS", 6)))(delayed(all_pair_predictions)(cfg, y) for y in need)))
+    H = dict(zip(need, Parallel(n_jobs=int(os.environ.get("GRID_JOBS", 6)))(delayed(all_pair_predictions)(model_cfg, y) for y in need if y < 2025))) \
         if "ext_blend" in cfg else {}
     out = [score_year(cfg, y, P[y], {s: h for s, h in H.items() if s < y}) for y in years]
     print("* 2020: no tournament (COVID)")

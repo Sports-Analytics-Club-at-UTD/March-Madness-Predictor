@@ -1,0 +1,89 @@
+EXT
+* 2020: no tournament (COVID)
+* 2021: men's rank #47 of 707, 0.58826; women's rank #21 of 451, 0.41892 (log loss)
+* 2022: men's rank #184 of 930, 0.62011; women's rank #132 of 651, 0.44054 (log loss)
+* 2023: rank #161 of 1033, 0.18424 (Brier)
+* 2024: rank #19 of 821, 0.05734 (bracket Brier)
+* 2025: rank #10 of 1727, 0.10796 (Brier)
+* 2026: rank #31 of 3462, 0.12122 (Brier)
+
+CANDIDATE_EXT
+* 2020: no tournament (COVID)
+* 2021: men's rank #47 of 707, 0.58826; women's rank #21 of 451, 0.41892 (log loss)
+* 2022: men's rank #184 of 930, 0.62011; women's rank #132 of 651, 0.44054 (log loss)
+* 2023: rank #161 of 1033, 0.18424 (Brier)
+* 2024: rank #25 of 821, 0.05771 (bracket Brier)
+* 2025: rank #5 of 1727, 0.10740 (Brier)
+* 2026: rank #30 of 3462, 0.12089 (Brier)
+
+COMBINED
+* 2020: no tournament (COVID)
+* 2021: men's rank #81 of 707, 0.59639; women's rank #35 of 451, 0.43140 (log loss)
+* 2022: men's rank #418 of 930, 0.64912; women's rank #103 of 651, 0.43656 (log loss)
+* 2023: rank #237 of 1033, 0.18649 (Brier)
+* 2024: rank #25 of 821, 0.05774 (bracket Brier)
+* 2025: rank #10 of 1727, 0.10797 (Brier)
+* 2026: rank #31 of 3462, 0.12122 (Brier)
+
+l1_all_1.0
+* 2020: no tournament (COVID)
+* 2021: men's rank #81 of 707, 0.59657; women's rank #22 of 451, 0.42098 (log loss)
+* 2022: men's rank #430 of 930, 0.65256; women's rank #82 of 651, 0.43370 (log loss)
+* 2023: rank #541 of 1033, 0.20130 (Brier)
+* 2024: rank #65 of 821, 0.05977 (bracket Brier)
+* 2025: rank #84 of 1727, 0.10923 (Brier)
+* 2026: rank #29 of 3462, 0.12083 (Brier)
+
+l2_all_1.0
+* 2020: no tournament (COVID)
+* 2021: men's rank #31 of 707, 0.58015; women's rank #38 of 451, 0.43282 (log loss)
+* 2022: men's rank #455 of 930, 0.65652; women's rank #150 of 651, 0.44359 (log loss)
+* 2023: rank #522 of 1033, 0.19955 (Brier)
+* 2024: rank #175 of 821, 0.06176 (bracket Brier)
+* 2025: rank #10 of 1727, 0.10795 (Brier)
+* 2026: rank #9 of 3462, 0.11925 (Brier)
+
+en25_all_1.0
+* 2020: no tournament (COVID)
+* 2021: men's rank #54 of 707, 0.59022; women's rank #21 of 451, 0.42000 (log loss)
+* 2022: men's rank #279 of 930, 0.63253; women's rank #117 of 651, 0.43869 (log loss)
+* 2023: rank #510 of 1033, 0.19795 (Brier)
+* 2024: rank #135 of 821, 0.06092 (bracket Brier)
+* 2025: rank #13 of 1727, 0.10811 (Brier)
+* 2026: rank #17 of 3462, 0.11984 (Brier)
+
+en50_all_1.0
+* 2020: no tournament (COVID)
+* 2021: men's rank #78 of 707, 0.59540; women's rank #21 of 451, 0.42002 (log loss)
+* 2022: men's rank #493 of 930, 0.65858; women's rank #81 of 651, 0.43345 (log loss)
+* 2023: rank #521 of 1033, 0.19948 (Brier)
+* 2024: rank #84 of 821, 0.06030 (bracket Brier)
+* 2025: rank #13 of 1727, 0.10841 (Brier)
+* 2026: rank #21 of 3462, 0.12023 (Brier)
+
+en75_all_1.0
+* 2020: no tournament (COVID)
+* 2021: men's rank #78 of 707, 0.59573; women's rank #22 of 451, 0.42200 (log loss)
+* 2022: men's rank #455 of 930, 0.65651; women's rank #68 of 651, 0.43110 (log loss)
+* 2023: rank #530 of 1033, 0.20027 (Brier)
+* 2024: rank #73 of 821, 0.06000 (bracket Brier)
+* 2025: rank #13 of 1727, 0.10896 (Brier)
+* 2026: rank #23 of 3462, 0.12046 (Brier)
+
+lasso_margin_all_1.0
+* 2020: no tournament (COVID)
+* 2021: men's rank #93 of 707, 0.59876; women's rank #48 of 451, 0.43749 (log loss)
+* 2022: men's rank #393 of 930, 0.64601; women's rank #11 of 651, 0.41093 (log loss)
+* 2023: rank #369 of 1033, 0.19062 (Brier)
+* 2024: rank #42 of 821, 0.05894 (bracket Brier)
+* 2025: rank #7 of 1727, 0.10757 (Brier)
+* 2026: rank #32 of 3462, 0.12140 (Brier)
+
+ridge_margin_all_1.0
+* 2020: no tournament (COVID)
+* 2021: men's rank #61 of 707, 0.59263; women's rank #66 of 451, 0.44595 (log loss)
+* 2022: men's rank #401 of 930, 0.64709; women's rank #18 of 651, 0.41574 (log loss)
+* 2023: rank #348 of 1033, 0.18994 (Brier)
+* 2024: rank #62 of 821, 0.05968 (bracket Brier)
+* 2025: rank #5 of 1727, 0.10733 (Brier)
+* 2026: rank #30 of 3462, 0.12089 (Brier)

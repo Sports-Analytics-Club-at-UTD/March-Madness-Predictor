@@ -1,0 +1,406 @@
+Penalized matchup research
+
+Reproduce: MANIA_DATA=/Users/spro/code/March-Madness-Predictor/data/kaggle/mirror26 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 GRID_JOBS=4 uv run python -m kaggle_tuning.research.penalized_eval
+
+61 men / 48 women differences: every existing box/efficiency/late feature, all 28 own/opponent box averages, quality, quality_rec, elo, seeds; men include all 13 existing mstr columns. No raw-value expansion.
+Training tournament years: 2003+ men, 2010+ women, strictly before each target. LOSO CV refits StandardScaler per fold. Both orientations held out together. C grid .001/.01/.1/1/10 minimizes equal-season log loss. Lasso alpha .01/.1/1/10 and ridge 1/10/100/1000/10000 minimize equal-season margin MSE. Normal-CDF sigma is fitted to pre-target OOF margins by log loss, bounded 3..30. Existing market blend, sharpening, and walk-forward women temperature retained.
+
+Model-only Brier (standalone includes existing post-calibration):
+model                 2015-19 M   2015-19 W    hist M       hist W
+BEST                   0.17227519   0.13774786   0.18603088   0.13898792
+l1                     0.17340200   0.13979797   0.18926773   0.14294006
+l2                     0.17501711   0.14562972   0.18938956   0.14759309
+en25                   0.17518910   0.14397917   0.18888757   0.14549620
+en50                   0.17640852   0.14235847   0.19108512   0.14413170
+en75                   0.17390886   0.14047306   0.18960102   0.14311943
+lasso_margin           0.17181413   0.13862122   0.18757984   0.14048260
+ridge_margin           0.17400908   0.14198927   0.18875094   0.14251686
+
+hist = 2015-2019 and 2021-2024, nine tournaments (2020 cancelled).
+
+Every nominal model tested at .25/.5/1.0 weight: add by scaling existing members proportionally; or replace that fraction of logit members; or replace that fraction of tree members. Men BEST has no logistic member: logit replacement is a no-op for men. Women logit replacement includes both logit and women_original. 63 nominal combinations; full scores in penalized_results.json.
+
+Best diagnostic: lasso_margin_logit_0.5 + external forecasts, CANDIDATE_EXT. Men unchanged; women .2 narrow logit/.1 xgb/.15 original logit/.2 vilnius/.35 lasso margin. It improves 2025/26 but worsens 2024. Keep EXT for the every-year objective. Candidate was identified retrospectively: exploratory, not an independent validation.
+
+COMBINED
+{
+  "real": {
+    "2021": {
+      "year": 2021,
+      "M": [
+        0.5963875442794451,
+        81,
+        707
+      ],
+      "W": [
+        0.4314001149162945,
+        35,
+        451
+      ],
+      "metric": "log loss"
+    },
+    "2022": {
+      "year": 2022,
+      "M": [
+        0.6491152861350765,
+        418,
+        930
+      ],
+      "W": [
+        0.4365580325661002,
+        103,
+        651
+      ],
+      "metric": "log loss"
+    },
+    "2023": {
+      "year": 2023,
+      "all": [
+        0.18649364713811506,
+        237,
+        1033
+      ],
+      "metric": "Brier"
+    },
+    "2024": {
+      "year": 2024,
+      "all": [
+        0.05773548059738135,
+        25,
+        821
+      ],
+      "metric": "bracket Brier"
+    },
+    "2025": {
+      "year": 2025,
+      "all": [
+        0.1079653574553479,
+        10,
+        1727
+      ],
+      "metric": "Brier"
+    },
+    "2026": {
+      "year": 2026,
+      "all": [
+        0.12121941928713545,
+        31,
+        3462
+      ],
+      "metric": "Brier"
+    }
+  },
+  "brier": {
+    "2015": {
+      "M": 0.15695243403973028,
+      "W": 0.11073181059795292
+    },
+    "2016": {
+      "M": 0.1811093749235046,
+      "W": 0.1613768166979092
+    },
+    "2017": {
+      "M": 0.1704560229662798,
+      "W": 0.13855641608781655
+    },
+    "2018": {
+      "M": 0.20166935832622118,
+      "W": 0.15732029921112659
+    },
+    "2019": {
+      "M": 0.15114860165494406,
+      "W": 0.12267882458235597
+    },
+    "2021": {
+      "M": 0.20798869487225877,
+      "W": 0.14182529808544644
+    },
+    "2022": {
+      "M": 0.2236057934383103,
+      "W": 0.14628721088811752
+    },
+    "2023": {
+      "M": 0.20391617056745717,
+      "W": 0.1690711237087729
+    },
+    "2024": {
+      "M": 0.18629009843167985,
+      "W": 0.10836764715658576
+    }
+  },
+  "hist": {
+    "M": 0.18701517213559843,
+    "W": 0.13957949411289822
+  },
+  "early": {
+    "M": 0.172267158382136,
+    "W": 0.13813283343543226
+  }
+}
+
+EXT
+{
+  "real": {
+    "2021": {
+      "year": 2021,
+      "M": [
+        0.58826059230097,
+        47,
+        707
+      ],
+      "W": [
+        0.418920156990581,
+        21,
+        451
+      ],
+      "metric": "log loss"
+    },
+    "2022": {
+      "year": 2022,
+      "M": [
+        0.6201060485674477,
+        184,
+        930
+      ],
+      "W": [
+        0.4405440431346423,
+        132,
+        651
+      ],
+      "metric": "log loss"
+    },
+    "2023": {
+      "year": 2023,
+      "all": [
+        0.18423785191539144,
+        161,
+        1033
+      ],
+      "metric": "Brier"
+    },
+    "2024": {
+      "year": 2024,
+      "all": [
+        0.05733839766669713,
+        19,
+        821
+      ],
+      "metric": "bracket Brier"
+    },
+    "2025": {
+      "year": 2025,
+      "all": [
+        0.10795913887723362,
+        10,
+        1727
+      ],
+      "metric": "Brier"
+    },
+    "2026": {
+      "year": 2026,
+      "all": [
+        0.12121753936910129,
+        31,
+        3462
+      ],
+      "metric": "Brier"
+    }
+  },
+  "brier": {
+    "2015": {
+      "M": 0.1592101021554081,
+      "W": 0.11073181059795292
+    },
+    "2016": {
+      "M": 0.1813558568450329,
+      "W": 0.1613768166979092
+    },
+    "2017": {
+      "M": 0.17150152466457821,
+      "W": 0.13839688668341138
+    },
+    "2018": {
+      "M": 0.19847332247336516,
+      "W": 0.15531417422970784
+    },
+    "2019": {
+      "M": 0.15083514603600193,
+      "W": 0.12291963084781912
+    },
+    "2021": {
+      "M": 0.2046360756524565,
+      "W": 0.14124077262711482
+    },
+    "2022": {
+      "M": 0.21879209867877195,
+      "W": 0.14562172042039329
+    },
+    "2023": {
+      "M": 0.20377286963976965,
+      "W": 0.1669218278216855
+    },
+    "2024": {
+      "M": 0.1857008891263695,
+      "W": 0.10836764715658576
+    }
+  },
+  "hist": {
+    "M": 0.186030876141306,
+    "W": 0.13898792078695332
+  },
+  "early": {
+    "M": 0.17227519043487724,
+    "W": 0.13774786381136012
+  }
+}
+
+CANDIDATE_EXT
+{
+  "real": {
+    "2021": {
+      "year": 2021,
+      "M": [
+        0.58826059230097,
+        47,
+        707
+      ],
+      "W": [
+        0.418920156990581,
+        21,
+        451
+      ],
+      "metric": "log loss"
+    },
+    "2022": {
+      "year": 2022,
+      "M": [
+        0.6201060485674477,
+        184,
+        930
+      ],
+      "W": [
+        0.4405440431346423,
+        132,
+        651
+      ],
+      "metric": "log loss"
+    },
+    "2023": {
+      "year": 2023,
+      "all": [
+        0.18423785191539144,
+        161,
+        1033
+      ],
+      "metric": "Brier"
+    },
+    "2024": {
+      "year": 2024,
+      "all": [
+        0.05771498062684981,
+        25,
+        821
+      ],
+      "metric": "bracket Brier"
+    },
+    "2025": {
+      "year": 2025,
+      "all": [
+        0.1074010088148603,
+        5,
+        1727
+      ],
+      "metric": "Brier"
+    },
+    "2026": {
+      "year": 2026,
+      "all": [
+        0.12089338989377033,
+        30,
+        3462
+      ],
+      "metric": "Brier"
+    }
+  },
+  "brier": {
+    "2015": {
+      "M": 0.1592101021554081,
+      "W": 0.11104698231917698
+    },
+    "2016": {
+      "M": 0.1813558568450329,
+      "W": 0.16410533028464333
+    },
+    "2017": {
+      "M": 0.17150152466457821,
+      "W": 0.1353762365731659
+    },
+    "2018": {
+      "M": 0.19847332247336516,
+      "W": 0.15168756413779125
+    },
+    "2019": {
+      "M": 0.15083514603600193,
+      "W": 0.12417202553076687
+    },
+    "2021": {
+      "M": 0.2046360756524565,
+      "W": 0.14180129030700223
+    },
+    "2022": {
+      "M": 0.21879209867877195,
+      "W": 0.13873600700952912
+    },
+    "2023": {
+      "M": 0.20377286963976965,
+      "W": 0.16705325549519523
+    },
+    "2024": {
+      "M": 0.1857008891263695,
+      "W": 0.1124750867838665
+    }
+  },
+  "hist": {
+    "M": 0.186030876141306,
+    "W": 0.13849486427123747
+  },
+  "early": {
+    "M": 0.17227519043487724,
+    "W": 0.13727762776910887
+  }
+}
+
+Guard failures (> .0005 early Brier in either gender):
+l1_all_1.0
+l1_logit_1.0
+l2_all_0.25
+l2_all_0.5
+l2_all_1.0
+l2_logit_0.25
+l2_logit_0.5
+l2_logit_1.0
+en25_all_0.25
+en25_all_0.5
+en25_all_1.0
+en25_logit_0.5
+en25_logit_1.0
+en25_tree_1.0
+en50_all_0.5
+en50_all_1.0
+en50_logit_0.5
+en50_logit_1.0
+en50_tree_1.0
+en75_all_0.5
+en75_all_1.0
+en75_logit_1.0
+lasso_margin_all_1.0
+ridge_margin_all_0.5
+ridge_margin_all_1.0
+ridge_margin_logit_0.5
+ridge_margin_logit_1.0
+
+Lasso coefficients, kept features per year, CV scores, and selected C/alpha/sigma: penalized_fits.json. Correlated, algebraically redundant box stats make individual feature selection unstable. Successive-year mean Jaccard: logistic L1 M .663 / W .629; margin lasso M .296 / W .488. Logistic C=.1 all 11 evaluated years, 19-24 M and 10-17 W nonzero features. Stable M logistic features: orb, ftr, T1_Ast, T1_Blk, T2_Blk, quality, elo, mstr_MAS, mstr_WLK, T1_FGM, T1_FGM3, T1_DR, T2_FGA3 (11/11). Stable W: T1_Blk, late_win, quality, seed (11/11). Margin-lasso always keeps M quality/elo and W T1_Ast/T1_Blk/late_win/quality; see JSON for every remaining selection.
+
+Past-writeup distinction: 2023 second-place 401578 used elastic-net models with richer rolling/conference features; 2024 second-place 492761 used ridge-derived ratings feeding XGBoost, not a wide penalized final matchup model. 2024 winner 493793 used Silver ratings and overrides. These leaderboard results do not isolate the benefit of penalization.
+
+Validation: two synthetic tests passed; all 168 final fits are below their iteration caps; all CV losses finite and training seasons precede target. All ten CLI runs (baseline EXT, combined BEST, candidate EXT, seven standalone models) match cached scorer output to five decimals. Exact CLI output: penalized_cli.txt.
