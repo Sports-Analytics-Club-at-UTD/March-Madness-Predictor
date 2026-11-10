@@ -1,0 +1,7 @@
+* 2020: no tournament (COVID)
+* 2021: men's rank #47 of 707, 0.58840; women's rank #21 of 451, 0.41892 (log loss)
+* 2022: men's rank #211 of 930, 0.62338; women's rank #132 of 651, 0.44054 (log loss)
+* 2023: rank #159 of 1033, 0.18404 (Brier)
+* 2024: rank #19 of 821, 0.05743 (bracket Brier)
+* 2025: rank #10 of 1727, 0.10797 (Brier)
+* 2026: rank #31 of 3462, 0.12114 (Brier)
