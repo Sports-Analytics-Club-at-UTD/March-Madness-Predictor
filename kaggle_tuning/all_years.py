@@ -45,10 +45,13 @@ def all_pair_predictions(cfg: dict, year: int) -> dict[str, pd.DataFrame]:
     from . import backtest as B
     from . import features as F
 
-    played = {g: B.test_pairs(g, year) for g in "MW"}
+    orig = getattr(B, "_orig_test_pairs", B.test_pairs)
+    B._orig_test_pairs = orig
+    played = {g: orig(g, year) for g in "MW"}
 
     def all_pairs(g, y):
-        assert y == year
+        if y != year:
+            return orig(g, y)
         teams = sorted(F.read(f"{g}NCAATourneySeeds").query("Season == @year").TeamID)
         pairs = pd.DataFrame([(a, b) for i, a in enumerate(teams) for b in teams[i + 1:]], columns=["T1", "T2"])
         pairs.insert(0, "Season", year)
