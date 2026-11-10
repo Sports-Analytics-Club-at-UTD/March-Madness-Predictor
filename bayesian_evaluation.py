@@ -264,6 +264,34 @@ def probability_metrics(outcomes, probabilities, bins=10):
     return metrics, reliability
 
 
+def season_bootstrap(rows, baseline, *, seed=42, draws=2000):
+    """Resample whole tournaments, retaining dependence among games in a season."""
+    positive_integer(draws, "bootstrap draws")
+    years = sorted({row["season"] for row in rows})
+    if len(years) < 2:
+        return None
+    totals = []
+    for year in years:
+        selected = [row for row in rows if row["season"] == year]
+        y = np.array([r["outcome_a"] for r in selected])
+        p = np.array([r["bayesian_probability"] for r in selected])
+        q = np.array([r[f"{baseline}_probability"] for r in selected])
+        brier = np.sum((p - y) ** 2 - (q - y) ** 2)
+        p, q = np.clip(p, 1e-12, 1 - 1e-12), np.clip(q, 1e-12, 1 - 1e-12)
+        loss_p = -y * np.log(p) - (1 - y) * np.log1p(-p)
+        loss_q = -y * np.log(q) - (1 - y) * np.log1p(-q)
+        totals.append([len(selected), brier, np.sum(loss_p - loss_q)])
+    totals = np.array(totals)
+    rng = np.random.default_rng(seed)
+    sampled = totals[rng.integers(0, len(years), size=(draws, len(years)))].sum(axis=1)
+    differences = sampled[:, 1:] / sampled[:, :1]
+    return {"unit": "season", "n_seasons": len(years), "draws": draws, "seed": seed,
+            "brier_difference_interval_95": np.quantile(differences[:, 0], [.025, .975]).tolist(),
+            "log_loss_difference_interval_95": np.quantile(differences[:, 1], [.025, .975]).tolist(),
+            "seasons_with_lower_bayesian_brier": int((totals[:, 1] < 0).sum()),
+            "seasons_with_lower_bayesian_log_loss": int((totals[:, 2] < 0).sum())}
+
+
 MODELS = ("bayesian", "seed", "matchup")
 
 
@@ -292,7 +320,8 @@ def summarize_predictions(rows, bins):
             other, _ = probability_metrics(y, [r[f"{baseline}_probability"] for r in available], bins)
             result.update(bayesian=bayes, baseline=other,
                           brier_difference=bayes["brier_score"] - other["brier_score"],
-                          log_loss_difference=bayes["log_loss"] - other["log_loss"])
+                          log_loss_difference=bayes["log_loss"] - other["log_loss"],
+                          season_bootstrap=season_bootstrap(available, baseline))
         comparisons[f"bayesian_vs_{baseline}"] = result
     return {"metrics": metrics, "comparisons": comparisons}, calibration
 
@@ -330,7 +359,7 @@ def baseline_models(spec, loaded, scores):
     return seed_model, model, provenance
 
 
-def render_report(summary, audits, baseline_info):
+def render_report(summary, audits, baseline_info, score_provenance=None):
     lines = ["# Bayesian tournament probability evaluation", "",
              "This evaluates individual held-out NCAA game probabilities, including First Four games. "
              "It does not evaluate championship or advancement probabilities.", "",
@@ -350,6 +379,14 @@ def render_report(summary, audits, baseline_info):
         lines.append(f"- {baseline}: {result['n_games']} shared games; {result['excluded_games']} excluded. "
                      f"Bayesian minus baseline Brier = {result['brier_difference']:+.4f}; "
                      f"log loss = {result['log_loss_difference']:+.4f}. Negative differences favor Bayesian.")
+        bootstrap = result.get("season_bootstrap")
+        if bootstrap:
+            lo_b, hi_b = bootstrap["brier_difference_interval_95"]
+            lo_l, hi_l = bootstrap["log_loss_difference_interval_95"]
+            lines.append(f"  Season bootstrap 95% intervals: Brier [{lo_b:+.4f}, {hi_b:+.4f}], "
+                         f"log loss [{lo_l:+.4f}, {hi_l:+.4f}]. Bayesian has lower Brier in "
+                         f"{bootstrap['seasons_with_lower_bayesian_brier']}/{bootstrap['n_seasons']} seasons "
+                         f"and lower log loss in {bootstrap['seasons_with_lower_bayesian_log_loss']}/{bootstrap['n_seasons']} seasons.")
     seed_result = summary["comparisons"]["bayesian_vs_seed"]
     if seed_result["n_games"]:
         directions = [seed_result[k] for k in ("brier_difference", "log_loss_difference")]
@@ -374,6 +411,16 @@ def render_report(summary, audits, baseline_info):
     for year, info in baseline_info.items():
         lines.append(f"- {year}: earlier tournament seasons {info['training_seasons']}; "
                      f"seed: {info['seed_status']}; matchup: {info['matchup_status']}.")
+    if score_provenance:
+        lines += ["", "## Matchup score provenance", "",
+                  f"Comparison: **{score_provenance['comparison_label']}**. "
+                  f"Members: {', '.join(score_provenance['members'])}. This is the existing score-plus-seed "
+                  "matchup specification with those members; it is not evidence about an unavailable full ensemble recipe.", "",
+                  "Every member uses a SHAP validation fold from an earlier season; model training seasons "
+                  "are earlier still. Feature construction filters regular-season game starts at the "
+                  "configured cutoff. Player snapshot scope relies on the saved statistics manifest.", ""]
+        for limitation in score_provenance.get("limitations", []):
+            lines.append(f"- {limitation}")
     lines += ["", "## Calibration", "",
               "`calibration.csv` contains equal-width probability bins, counts, mean predicted "
               "probability and observed win rate for every season and pooled model. Empty bins "
@@ -387,6 +434,9 @@ def render_report(summary, audits, baseline_info):
               "do not establish completion or historical data availability; later corrections remain possible.",
               "- Bayesian uncertainty uses a Laplace approximation and fixed priors. Probability credible "
               "intervals are saved but interval coverage is not evaluated against binary game outcomes.",
+              "- The models use different inputs: Bayesian ratings use game win/loss outcomes, while "
+              "the matchup baseline also uses seeds and SHAP-weighted statistics. Performance differences "
+              "cannot be attributed solely to Bayesian versus non-Bayesian inference.",
               "- Seed coefficients and the existing score-plus-seed logistic model are trained only on "
               "earlier configured tournaments. Future-season results are never baseline training data.",
               "- Existing matchup comparison requires actual ensemble scores with declared pre-cutoff, "
@@ -396,6 +446,9 @@ def render_report(summary, audits, baseline_info):
               "comparisons rather than comparing model-wide metrics with different coverage.",
               "- Games within a tournament share teams and are dependent. Multiple seasons, uncertainty "
               "analysis and settings fixed before evaluation are needed for stronger conclusions.",
+              "- Bootstrap intervals resample entire seasons (2,000 draws, seed 42). They are descriptive "
+              "and conditional on these seasons; expanding training histories share information, so this is "
+              "not an independent-season significance test. Two-season intervals are especially unstable.",
               "- Accuracy chooses team A at exactly 0.5. Log loss clips probabilities to [1e-12, 1-1e-12].",
               "", "## Artifacts", "",
               "`predictions.csv`, `metrics.json`, `calibration.csv`, `coverage.json`, `baseline_training.json`, "
@@ -406,7 +459,8 @@ def render_report(summary, audits, baseline_info):
 
 def run_evaluation(config_path, output_dir, *, data_dir=Path("data"), results_dir=None,
                    matchup_scores=None, fetch_results=False, draws=4000, seed=42, bins=10,
-                   min_games=10, rating_prior_sd=1.5, home_prior_sd=1.0):
+                   min_games=10, rating_prior_sd=1.5, home_prior_sd=1.0,
+                   matchup_provenance=None, require_complete_comparisons=False):
     specs, targets = load_config(config_path)
     positive_integer(draws, "draws")
     positive_integer(bins, "bins")
@@ -418,6 +472,15 @@ def run_evaluation(config_path, output_dir, *, data_dir=Path("data"), results_di
     data_dir, output_dir = Path(data_dir), Path(output_dir)
     results_dir = Path(results_dir) if results_dir is not None else data_dir
     scores = load_matchup_scores(matchup_scores, specs) if matchup_scores else {}
+    score_provenance = None
+    if matchup_provenance:
+        if not matchup_scores:
+            raise ValueError("Matchup provenance requires --matchup-scores")
+        score_provenance = json.loads(Path(matchup_provenance).read_text())
+        if (score_provenance.get("scores_sha256") != digest(matchup_scores)
+                or score_provenance.get("config_sha256") != digest(config_path)
+                or not score_provenance.get("members") or not score_provenance.get("comparison_label")):
+            raise ValueError("Matchup provenance does not match the score CSV and evaluation configuration")
     output_dir.mkdir(parents=True, exist_ok=False)
     loaded, audits, inputs = {}, {}, []
     for spec in specs:
@@ -485,6 +548,9 @@ def run_evaluation(config_path, output_dir, *, data_dir=Path("data"), results_di
     write_csv(output_dir / "calibration.csv", calibration)
     write_json(output_dir / "metrics.json", summary)
     write_json(output_dir / "baseline_training.json", baseline_info)
+    if score_provenance:
+        write_json(output_dir / "matchup_score_provenance.json", score_provenance)
+        inputs.append({"path": str(Path(matchup_provenance).resolve()), "sha256": digest(matchup_provenance)})
     if matchup_scores:
         inputs.append({"path": str(Path(matchup_scores).resolve()), "sha256": digest(matchup_scores)})
     import platform
@@ -496,9 +562,12 @@ def run_evaluation(config_path, output_dir, *, data_dir=Path("data"), results_di
         "config": json.loads(Path(config_path).read_text()), "config_sha256": digest(config_path),
         "draws": draws, "seed": seed, "bins": bins, "min_games": min_games,
         "rating_prior_sd": rating_prior_sd, "home_prior_sd": home_prior_sd,
+        "require_complete_comparisons": require_complete_comparisons,
         "versions": {"python": platform.python_version(), "numpy": np.__version__,
                      "scipy": scipy.__version__, "scikit_learn": sklearn.__version__},
         "inputs": inputs,
     })
-    (output_dir / "report.md").write_text(render_report(summary, audits, baseline_info))
+    (output_dir / "report.md").write_text(render_report(summary, audits, baseline_info, score_provenance))
+    if require_complete_comparisons and any(r[f"{model}_probability"] is None for r in rows for model in MODELS):
+        raise ValueError("Incomplete baseline comparisons; saved report lists missing predictions")
     return summary

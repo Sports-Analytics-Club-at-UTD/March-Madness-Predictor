@@ -36,6 +36,74 @@ The first real run's findings are saved in
 is explicitly unavailable in that pilot because no eligible ensemble scores
 were supplied.
 
+The follow-up [expanded report](bayesian-evaluation-expanded.md) evaluates all
+three models on 801 identical games across 12 seasons, using the strict score
+export below. The available matchup baseline has one member, Ridge; the full
+selected ensemble recipe is not present in this checkout.
+
+## Export historical scores and run the expanded comparison
+
+```bash
+uv run --extra bayesian python run_historical_matchup_scores.py \
+  --config docs/bayesian-evaluation.expanded.json \
+  --members ridge \
+  --output-dir model_outputs/bayesian_evaluation/historical-scores-1
+
+uv run --extra bayesian python run_bayesian_evaluation.py \
+  --config docs/bayesian-evaluation.expanded.json \
+  --matchup-scores model_outputs/bayesian_evaluation/historical-scores-1/ensemble_scores.csv \
+  --matchup-provenance model_outputs/bayesian_evaluation/historical-scores-1/provenance.json \
+  --output-dir model_outputs/bayesian_evaluation/expanded-1 \
+  --fetch-results --require-complete-comparisons
+```
+
+Both output directories must be new. Exporting scores requires only the
+Bayesian dependencies, not the plotting/SHAP training extras. It reads existing
+trusted local SHAP CSVs and inference bundles under `model_outputs/<member>/`;
+it does not retrain them. The current checkout contains only Ridge artifacts,
+so this run is explicitly a **single-member Ridge SHAP + seed** comparison.
+The existing score-plus-seed logistic model is fitted on earlier tournaments.
+It is not a test of the absent full ensemble or of Ridge's raw win predictions.
+
+Membership is fixed in `matchup_members` in the configuration and must match
+`--members`. There is no selection of the globally best combination using held-out
+tournament outcomes. If other members have compatible inference metadata and
+SHAP exports, configure a fixed member list before running that comparison.
+
+For each scored season, the exporter selects the latest SHAP validation fold
+**strictly earlier** than that season, verifies its bundle's training years,
+and rejects same-season/future fallback. This is deliberately stricter than
+`shap_monte_carlo.score_season`'s historical fallback. Exported
+`trained_through_season` includes the SHAP validation-feature season, not just
+the underlying model's last training season. Game/player feature formulas,
+population standardization, per-member SHAP dot-product normalization and member
+averaging follow the existing scorer; the dot-product implementation is shared.
+
+Game features use only regular-season rows with starts strictly before the
+cutoff. Numeric types are inferred after filtering so a future malformed value
+cannot change historical feature selection. Season-end Elo is excluded, as in
+the existing scorer. Player aggregates lack per-game timestamps, so export
+requires a complete same-season manifest declaring regular-season statistics
+and a snapshot time before the scoring cutoff. This relies on that declaration;
+it does not independently establish point-in-time player-data availability.
+Missing player files, invalid team identities, contradictory fold metadata,
+unusable weights and constant scores fail rather than silently dropping teams.
+
+The expanded configuration uses the first NCAA tipoff as the exclusive training
+cutoff. Declared snapshots are one millisecond earlier. It uses 2009 for initial
+baseline history and evaluates 2010–2016, 2019 and 2022–2025. Incomplete cached
+manifests exclude 2017, 2018 and 2021; 2020 was cancelled. Selection reasons are
+recorded in the configuration. This is a retrospective extension of the pilot,
+not an independent confirmatory test.
+
+`provenance.json` records exact member folds, model training years, missing
+feature/weight fractions, snapshot declarations, and file hashes for SHAP
+weights, bundles, feature caches and manifests. `--matchup-provenance` verifies
+the score/config hashes and copies that provenance into the evaluation run.
+`--require-complete-comparisons` exits with an error if any model lacks a
+prediction; the saved report still identifies the gaps. Use it when claiming
+that all three models were compared on the full evaluation set.
+
 ## Inputs and coverage
 
 The configuration has `seasons` and `evaluation_seasons`. Each season needs:
@@ -141,6 +209,7 @@ an unevaluated baseline from appearing to have passed.
 | `baseline_training.json` | Earlier seasons, original game counts and fitted baseline coefficients |
 | `ratings_<season>.npz` and `.summary.json` | Saved posterior draws, training fingerprint, cutoff and fit diagnostics |
 | `run.json` | Configuration, settings, dependency versions, and input file SHA-256 hashes |
+| `matchup_score_provenance.json` | Checked score-export provenance, when supplied |
 | `report.md` | Findings, tables, coverage, baseline availability and limitations |
 
 Lower Brier score and log loss are better. Accuracy uses 0.5 as the decision
@@ -148,7 +217,13 @@ threshold and chooses team A on ties. Calibration compares predicted probability
 with observed win frequency; ECE is an equal-width-bin summary, not proof of
 calibration. `--bins` defaults to 10. Small bins and shared teams make estimates
 noisy. The report gives descriptive differences, without claiming statistical
-significance. Stronger conclusions require more seasons and uncertainty analysis.
+significance. It also reports 95% percentile intervals by resampling whole
+seasons (2,000 draws, seed 42) and counts seasons where Bayesian Brier score and
+log loss improve. These intervals preserve games within each tournament but
+share information through expanding baseline-training histories. They are not
+independent-season significance tests; two-season intervals are especially
+unstable. Stronger conclusions require better data coverage and independent
+future validation.
 
 Every comparison scores both models on exactly the same game IDs. Individual
 model metrics may cover different samples if inputs are missing, so use the
@@ -167,3 +242,8 @@ isolation, cutoff and score-provenance rejection, missing entrants, overlapping
 game IDs, partial/conflicting result feeds, unavailable comparisons, calibration
 boundary bins, artifact preservation and API caching. Synthetic results validate
 the workflow, not the model's predictive quality.
+
+Historical score tests also reject future/same-season SHAP fallback, contradictory
+training metadata, post-cutoff or incomplete player snapshots, missing player
+files, unusable weights and changes to the fixed member list. Future text and
+postseason rows cannot change historical feature values or their numeric types.

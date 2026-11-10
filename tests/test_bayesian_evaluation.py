@@ -8,9 +8,9 @@ from unittest.mock import Mock, patch
 import numpy as np
 
 from bayesian_evaluation import (
-    SeasonSpec, fetch_tournament_results, load_config, load_matchup_scores,
+    SeasonSpec, digest, fetch_tournament_results, load_config, load_matchup_scores,
     load_tournament_results, probability_metrics, run_evaluation,
-    summarize_predictions,
+    season_bootstrap, summarize_predictions,
 )
 from bayesian_ratings import utc_timestamp
 
@@ -111,6 +111,25 @@ class HistoricalEvaluationTests(unittest.TestCase):
         self.assertEqual(result["metrics"]["pooled"]["matchup"]["unavailable_games"], 24)
         self.assertIn("no comparison can be made", (self.root / "run" / "report.md").read_text())
 
+    def test_complete_comparison_requirement_preserves_incomplete_report(self):
+        with self.assertRaisesRegex(ValueError, "Incomplete baseline"):
+            self.run_eval(require_complete_comparisons=True)
+        self.assertTrue((self.root / "run" / "report.md").exists())
+        result = self.run_eval("complete", matchup_scores=self.score_path, require_complete_comparisons=True)
+        self.assertEqual(result["comparisons"]["bayesian_vs_matchup"]["excluded_games"], 0)
+
+    def test_export_provenance_must_match_configuration_and_score_file(self):
+        path = self.root / "provenance.json"
+        metadata = dict(scores_sha256=digest(self.score_path), config_sha256=digest(self.config),
+                        members=["ridge"], comparison_label="single-member Ridge SHAP + seed")
+        path.write_text(json.dumps(metadata))
+        self.run_eval(matchup_scores=self.score_path, matchup_provenance=path)
+        self.assertEqual(json.loads((self.root / "run" / "matchup_score_provenance.json").read_text()), metadata)
+        metadata["config_sha256"] = "wrong"
+        path.write_text(json.dumps(metadata))
+        with self.assertRaisesRegex(ValueError, "does not match"):
+            self.run_eval("invalid", matchup_scores=self.score_path, matchup_provenance=path)
+
     def test_missing_entrant_fails_with_saved_coverage_audit(self):
         for row in self.results[2024]:
             if row["awayTeamId"] == "13":
@@ -185,6 +204,15 @@ class HistoricalEvaluationTests(unittest.TestCase):
 
 
 class ProbabilityMetricTests(unittest.TestCase):
+    def test_season_bootstrap_preserves_known_paired_difference(self):
+        rows = [dict(season=year, outcome_a=1, bayesian_probability=.8, seed_probability=.6)
+                for year in (2023, 2024)]
+        result = season_bootstrap(rows, "seed")
+        np.testing.assert_allclose(result["brier_difference_interval_95"], [-.12, -.12])
+        self.assertEqual(result["seasons_with_lower_bayesian_brier"], 2)
+        self.assertEqual(result, season_bootstrap(rows, "seed"))
+        self.assertIsNone(season_bootstrap(rows[:1], "seed"))
+
     def test_calibration_includes_empty_bins_and_probability_boundaries(self):
         metrics, bins = probability_metrics([0, 1, 0, 1], [0, 1, .25, .75], bins=4)
         self.assertEqual([b["n_games"] for b in bins], [1, 1, 0, 2])

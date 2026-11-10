@@ -26,6 +26,10 @@ Historical evaluation now audits coverage, fits before explicit tournament
 cutoffs, saves held-out game probabilities and calibration, and compares against
 earlier-trained baselines. See [evaluation instructions](docs/bayesian-evaluation.md)
 and [the 2024–2025 pilot findings](docs/bayesian-evaluation-pilot.md).
+The [expanded comparison](docs/bayesian-evaluation-expanded.md) covers 801 games
+across 12 seasons with seed and single-member Ridge SHAP matchup baselines.
+The [historical score exporter](docs/bayesian-evaluation.md#export-historical-scores-and-run-the-expanded-comparison)
+records earlier model folds and cutoff-filtered feature provenance.
 
 ```bash
 uv run --extra bayesian python run_bayesian_evaluation.py \
