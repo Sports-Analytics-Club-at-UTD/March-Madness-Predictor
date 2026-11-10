@@ -106,8 +106,29 @@ def bracket_score(g: str, year: int, pairs: pd.DataFrame) -> float:
     return float(np.mean(briers))
 
 
-def score_year(cfg: dict, year: int) -> dict:
-    preds = all_pair_predictions(cfg, year)
+def metric(year: int) -> str:
+    return "log loss" if year in (2021, 2022) else ("bracket Brier" if year == 2024 else "Brier")
+
+
+def apply_ext_blend(cfg: dict, year: int, preds: dict, history: dict) -> dict:
+    """cfg["ext_blend"] = {"M": [source names], "W": [...]}; used only for years without a betting-odds file."""
+    from . import ext_blend as X
+    from . import market as MK
+    if "ext_blend" not in cfg or year in MK.PATHS:
+        return preds
+    out = {}
+    for g, d in preds.items():
+        names = cfg["ext_blend"].get(g, [])
+        ze, ok = X.consensus(d, names, year, g)
+        m = "Brier" if metric(year) == "bracket Brier" else metric(year)
+        w = X.walk_forward_weight(names, g, year, m, {s: h[g] for s, h in history.items()}) if ok else 0.0
+        out[g] = d.assign(p=X.blend(d, w, ze), ext_w=w)
+    return out
+
+
+def score_year(cfg: dict, year: int, preds: dict | None = None, history: dict | None = None) -> dict:
+    preds = preds if preds is not None else all_pair_predictions(cfg, year)
+    preds = apply_ext_blend(cfg, year, preds, history or {})
     played = {g: d.dropna(subset=["y"]) for g, d in preds.items()}
     res = {"year": year}
     if year in (2021, 2022):
@@ -116,7 +137,7 @@ def score_year(cfg: dict, year: int) -> dict:
             p = np.clip(d.p.values, 1e-15, 1 - 1e-15)
             ll = float(-np.mean(d.y * np.log(p) + (1 - d.y) * np.log(1 - p)))
             res[g] = (ll, *rank(LB[year][g], ll))
-        res["metric"] = "log loss"
+        res["metric"] = metric(year)
     elif year == 2024:
         sc = float(np.mean([bracket_score(g, year, preds[g]) for g in "MW"]))
         res["all"] = (sc, *rank(LB[year], sc))
@@ -135,7 +156,13 @@ def main():
     path, name = spec.split(":")
     ns = runpy.run_path(path)
     cfg = ns[name] if name in ns else ns["CONFIGS"][name]
-    out = Parallel(n_jobs=6)(delayed(score_year)(cfg, y) for y in [2021, 2022, 2023, 2024, 2025, 2026])
+    years = [2021, 2022, 2023, 2024, 2025, 2026]
+    need = sorted(set(years) | ({2016, 2017, 2018, 2019} if "ext_blend" in cfg else set()))
+    model_cfg = {**cfg, "market_w": {}}
+    P = dict(zip(need, Parallel(n_jobs=6)(delayed(all_pair_predictions)(cfg, y) for y in need)))
+    H = dict(zip(need, Parallel(n_jobs=6)(delayed(all_pair_predictions)(model_cfg, y) for y in need if y < 2025))) \
+        if "ext_blend" in cfg else {}
+    out = [score_year(cfg, y, P[y], {s: h for s, h in H.items() if s < y}) for y in years]
     print("* 2020: no tournament (COVID)")
     for r in out:
         if "all" in r:
