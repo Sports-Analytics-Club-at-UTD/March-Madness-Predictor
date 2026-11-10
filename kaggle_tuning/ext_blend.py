@@ -6,6 +6,9 @@ Sources (log-odds averaged into one consensus per pair; missing pairs fall back 
   futures  vig-free championship futures -> team strengths, M 2021-24, W 2023 (ext_sources.py)
 The blend weight w (model vs consensus, in log-odds) is chosen walk-forward: for target year Y it minimises the
 target year's metric over earlier seasons that had every listed source family available at all (seasons >= 2016).
+
+Note: for women the walk-forward weight comes out at 1.0 in 2021-2023, so those official women's scores are the 538 forecast
+alone and are identical for every women's model variant; women's model changes are effectively judged on 2024-2026 only.
 """
 from __future__ import annotations
 

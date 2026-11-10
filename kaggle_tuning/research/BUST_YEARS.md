@@ -307,3 +307,11 @@ Scores below were recomputed through `all_years.all_pair_predictions` and `all_y
 
 Exact unchanged config dictionaries and full-precision scores: [baseline.json](bust_years/baseline.json).
 No proposed change failed the 2015–2019 Brier guard: the statistical screening failed first, and no temperature was fitted.
+
+## Limitation: the baseline is a seed-only model (council review)
+
+Surprise here is measured against a fixed seed-difference model, not against our submission (`allyears.py:EXT`) or the market.
+A seed-only model is under-confident when the field's ratings are spread out, which a rating-based model already accounts for,
+so the strongest (non-significant) signal, men's rating spread, is probably partly an artefact of this baseline. Even a
+significant correlation here would not by itself justify adjusting EXT. The decisive test would be surprise relative to EXT's own
+walk-forward predictions, but that leaves only about 9-10 seasons, too few to change the conclusion: no usable bust-year predictor.
