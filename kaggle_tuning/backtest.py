@@ -66,12 +66,15 @@ def fit_predict(cfg: dict, g: str, year: int, table: pd.DataFrame) -> np.ndarray
     if g == "W" and any(k in cfg for k in ("women_q_alpha", "women_q_recency", "women_q_clip", "women_elo_k")):
         table = F.team_table(g, cfg.get("women_q_alpha", 1.0), cfg.get("women_q_recency", 0.0),
                              cfg.get("women_q_clip", 60), cfg.get("women_elo_k", 20.0))
+    if g == "W" and cfg.get("model") == "women_consensus":
+        from .research.women_allyears import predict
+        return _post(cfg, g, year, predict(cfg, year, table))
     if g == "W" and (cfg.get("model") == "women_original" or cfg.get("women_calibration")):
         from .women import predict
         return _post(cfg, g, year, predict(cfg, year, table))
     if "models" in cfg:
         base = {k: v for k, v in cfg.items() if k != "models"}
-        parts = [(fit_predict({**base, **sub, "market_w": {}, "sharpen": {}, "clip_p": (0, 1), "models_inner": True}, g, year, table), w)
+        parts = [(fit_predict({**base, **sub, "market_w": {}, "sharpen": {}, "women_model_temperature": None, "clip_p": (0, 1), "models_inner": True}, g, year, table), w)
                  for sub, w in cfg["models"]]
         tot = sum(w for _, w in parts)
         p = 1 / (1 + np.exp(-sum(w * _logit(pp) for pp, w in parts) / tot))
@@ -142,6 +145,9 @@ def _post(cfg, g, year, p):
         # market file is clipped to ~[0.025, 0.975]; mkt_sharpen undoes some of that
         p = 1 / (1 + np.exp(-((1 - w) * lg(p) + w * cfg.get("mkt_sharpen", 1.0) * lg(mk))))
     a = cfg.get("sharpen", {}).get(g, 1.0)
+    if g == "W" and cfg.get("women_model_temperature") and not (w and year in MK.PATHS) and year != 2024:
+        from .research.women_temperature import temperature
+        a = temperature(cfg, year)
     if a != 1.0:
         lp = np.log(np.clip(p, 1e-6, 1 - 1e-6) / np.clip(1 - p, 1e-6, 1))
         p = 1 / (1 + np.exp(-a * lp))
