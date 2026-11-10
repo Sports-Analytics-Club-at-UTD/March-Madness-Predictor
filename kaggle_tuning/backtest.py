@@ -79,6 +79,10 @@ def fit_predict(cfg: dict, g: str, year: int, table: pd.DataFrame) -> np.ndarray
         tot = sum(w for _, w in parts)
         p = 1 / (1 + np.exp(-sum(w * _logit(pp) for pp, w in parts) / tot))
         return _post(cfg, g, year, p)
+    if cfg.get("model") == "penalized":
+        from .penalized import predict
+        p = predict(cfg, g, year)
+        return p if cfg.get("models_inner") else _post(cfg, g, year, p)
     if cfg.get("model") == "vilnius_ensemble":
         from .vilnius_experiment import ensemble
         p = ensemble(cfg.get("variant", "V"), g, year)
