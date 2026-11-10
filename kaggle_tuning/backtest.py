@@ -93,6 +93,9 @@ def fit_predict(cfg: dict, g: str, year: int, table: pd.DataFrame) -> np.ndarray
         p = predict_margin(opts, year) if opts.get("margin") else predict(cfg, year)
         return p if cfg.get("models_inner") else _post(cfg, g, year, p)
     feats = cfg[g]
+    if cfg.get("team_ratings"):
+        from .research.team_ratings import rating_table
+        table = table.merge(rating_table(g), on=["Season", "TeamID"], how="left")
     if g == "M" and cfg.get("mens_features"):
         from .mens_features import extra_table
         table = table.merge(extra_table(), on=["Season", "TeamID"], how="left")
