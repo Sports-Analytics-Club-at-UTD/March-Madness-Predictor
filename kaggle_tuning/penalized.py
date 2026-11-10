@@ -19,7 +19,9 @@ from . import features as F
 # Version caches by implementation and all input-file metadata, never predictions' row order.
 # Source dependencies: this module plus the shared feature/backtest/scorer code it and penalized_eval call.
 _SRC = [Path(__file__)] + [Path(__file__).with_name(n) for n in ('features.py', 'backtest.py', 'all_years.py', 'market.py', 'ext_blend.py')] \
-    + [Path(__file__).parent / 'research' / n for n in ('penalized_eval.py', 'women_temperature.py')]
+    + [Path(__file__).with_name('mens_features.py')] \
+    + [Path(__file__).parent / 'research' / n for n in ('penalized_eval.py', 'women_temperature.py', 'women_allyears.py')] \
+    + [Path(__file__).parent / 'configs' / n for n in ('allyears.py', 'combined.py')]
 STAMP = hashlib.sha256(b''.join(p.read_bytes() for p in _SRC if p.exists()) + repr([
     (str(p), p.stat().st_size, p.stat().st_mtime_ns)
     for p in sorted(F.DATA.glob('*.csv'))]).encode()).hexdigest()[:16]
