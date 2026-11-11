@@ -154,8 +154,8 @@ P = posterior.probability_matrix(teams64)
 ```
 
 This matrix has the interface accepted by `monte_carlo.simulate_bracket_tree`.
-The existing SHAP pipeline is unchanged; this release does not auto-select,
-blend, optimize brackets, or export this producer into the forecast JSON schema.
+The existing SHAP pipeline is unchanged. For the optional Bayesian simulator,
+pipeline stage and forecast JSON export, see [Bayesian bracket Monte Carlo](bayesian-monte-carlo.md).
 
 To preserve shared strength uncertainty across a tournament, select **one joint
 posterior draw per simulated tournament** and use
@@ -166,10 +166,11 @@ per-tournament draws. A scheduled bracket must also be supplied independently;
 the existing historical topology parser uses actual winners and is unsuitable
 as a pre-tournament schedule source without further work.
 
-After the JSON schema branch merges, a separate adapter can export Bayesian run
-metadata, correctly named posterior targets and credible intervals, advancement
-probabilities and full picks. The Convex importer would then consume the same
-complete bracket contract. Team ratings alone are not a bracket.
+`run_bayesian_monte_carlo.py` implements joint-draw simulation using an explicit
+pre-tournament schedule and exports run metadata, rating credible intervals,
+advancement probabilities and a consistent maximum expected points bracket.
+Its JSON follows main's forecast contract; full contract validation runs when
+`backend_data` is importable. Team ratings alone are not a bracket.
 
 ## Verification
 

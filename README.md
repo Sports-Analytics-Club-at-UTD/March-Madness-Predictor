@@ -37,6 +37,16 @@ uv run --extra bayesian python run_bayesian_evaluation.py \
   --output-dir model_outputs/bayesian_evaluation/pilot-1 --fetch-results
 ```
 
+An optional, experimental stage simulates an explicit pre-tournament bracket
+with one joint posterior rating draw per simulated tournament and writes
+forecast JSON in main's `backend_data` contract. `run_pipeline.py --all` does
+not run it. See [Bayesian bracket Monte Carlo](docs/bayesian-monte-carlo.md).
+
+```bash
+uv run --extra bayesian python run_pipeline.py --stages bayesian_monte_carlo \
+  --season 2025 --bayesian-cutoff 2025-03-18T00:00:00Z
+```
+
 ## Ridge forecasts
 
 Ridge predicts a continuous NCAA tournament-win score for each team.

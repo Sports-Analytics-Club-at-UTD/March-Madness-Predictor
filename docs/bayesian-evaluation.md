@@ -247,3 +247,10 @@ Historical score tests also reject future/same-season SHAP fallback, contradicto
 training metadata, post-cutoff or incomplete player snapshots, missing player
 files, unusable weights and changes to the fixed member list. Future text and
 postseason rows cannot change historical feature values or their numeric types.
+
+## Coverage acquisition and isolated experiments
+
+See [schedule coverage and experiment results](bayesian-coverage-experiments.md)
+for whole-season acquisition, enforced earlier-season tuning and single-setting
+ablations, exact reproduction blockers, and a separately labeled Kaggle run.
+The documented CBBD/Ridge 801-game benchmark was not reproduced in that checkout.

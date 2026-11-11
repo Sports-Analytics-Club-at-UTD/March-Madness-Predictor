@@ -266,6 +266,11 @@ def fit_ratings(dataset, *, season, cutoff, n_draws=4000, seed=42,
     optimized = minimize(objective, np.zeros(n + 1), jac=True, method="L-BFGS-B",
                          options={"maxiter": 2000, "ftol": 1e-14, "gtol": 1e-7})
     gradient_norm = float(np.max(np.abs(objective(optimized.x)[1])))
+    if optimized.success and np.isfinite(gradient_norm) and gradient_norm > 1e-4:
+        # Large schedules can hit relative-loss tolerance before stationarity.
+        optimized = minimize(objective, optimized.x, jac=True, method="L-BFGS-B",
+                             options={"maxiter": 2000, "ftol": 0., "gtol": 1e-7})
+        gradient_norm = float(np.max(np.abs(objective(optimized.x)[1])))
     if not optimized.success or not np.isfinite(optimized.x).all() or gradient_norm > 1e-4:
         raise ValueError(f"Rating fit failed convergence checks: {optimized.message}; gradient={gradient_norm}")
     p = expit(design @ optimized.x)

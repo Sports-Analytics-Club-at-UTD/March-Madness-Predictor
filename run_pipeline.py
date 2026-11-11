@@ -22,6 +22,10 @@ Examples:
 
   # Run specific models only, then parse logs and plot leaderboard
   python run_pipeline.py --stages models --models lasso_shap ridge_shap
+
+  # Optional, experimental Bayesian bracket simulation (never part of --all)
+  python run_pipeline.py --stages bayesian_monte_carlo --season 2025 \
+      --bayesian-cutoff 2025-03-18T00:00:00Z
 """
 
 import argparse
@@ -326,6 +330,65 @@ def run_stage_monte_carlo(args, root_dir: Path, py_exe: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Optional Stage: Bayesian Bracket Monte Carlo (opt-in; never part of --all)
+# ---------------------------------------------------------------------------
+def run_stage_bayesian_monte_carlo(args, root_dir: Path, py_exe: str) -> dict:
+    t0 = time.time()
+    script = root_dir / "run_bayesian_monte_carlo.py"
+    out_dir = root_dir / args.bayesian_output_dir
+    print_banner("Optional Stage: Bayesian Bracket Monte Carlo", f"Script: {script}")
+
+    def failed(message, artifacts=()):
+        print(f"{Colors.RED}[Error] {message}{Colors.END}")
+        return {"status": "FAILED", "elapsed": time.time() - t0, "artifacts": list(artifacts)}
+
+    try:
+        seasons = sorted({int(s) for s in args.seasons})
+    except ValueError:
+        return failed("The Bayesian stage needs explicit numeric --season values ('all' is not supported).")
+    if bool(args.bayesian_ratings) == bool(args.bayesian_cutoff):
+        return failed("Supply exactly one of --bayesian-ratings or --bayesian-cutoff.")
+    if args.bayesian_cutoff and len(seasons) > 1:
+        return failed("--bayesian-cutoff applies to one season; use --bayesian-ratings with {season} for several.")
+
+    def resolve(template, season):
+        path = Path(str(template).replace("{season}", str(season)))
+        return path if path.is_absolute() else root_dir / path
+
+    artifacts, any_failed = [], False
+    for season in seasons:
+        cmd = [
+            py_exe, str(script),
+            "--season", str(season),
+            "--bracket-schedule", str(resolve(args.bayesian_bracket_schedule, season)),
+            "--n-simulations", str(args.n_simulations),
+            "--seed", str(args.seed),
+            "--output-dir", str(out_dir),
+        ]
+        if args.bayesian_ratings:
+            cmd.extend(["--ratings", str(resolve(args.bayesian_ratings, season))])
+        else:
+            cmd.extend(["--cutoff", args.bayesian_cutoff, "--data-dir", str(root_dir / args.data_dir),
+                        "--draws", str(args.bayesian_draws)])
+        print(f"Command: {' '.join(cmd)}")
+        if args.dry_run:
+            continue
+        previous = set(out_dir.glob(f"*_{season}_*"))
+        try:
+            subprocess.run(cmd, cwd=str(root_dir), check=True)
+            print(f"{Colors.GREEN}[OK] Bayesian simulation completed for Season {season}{Colors.END}")
+            artifacts.extend(str(p) for p in sorted(set(out_dir.glob(f"*_{season}_*")) - previous))
+        except subprocess.CalledProcessError as e:
+            print(f"{Colors.RED}[X] Bayesian simulation failed for Season {season} with code {e.returncode}{Colors.END}")
+            any_failed = True
+            if args.fail_fast:
+                break
+    if args.dry_run:
+        return {"status": "DRY_RUN", "elapsed": 0.0, "artifacts": []}
+    return {"status": "FAILED" if any_failed else "SUCCESS", "elapsed": time.time() - t0, "artifacts": artifacts}
+
+
+# ---------------------------------------------------------------------------
 # CLI Argument Parsing & Runner Setup
 # ---------------------------------------------------------------------------
 def parse_arguments():
@@ -341,7 +404,8 @@ def parse_arguments():
     )
     stage_group.add_argument(
         "--stages", nargs="+",
-        choices=["models", "combo_eval", "combo-eval", "monte_carlo", "monte-carlo"],
+        choices=["models", "combo_eval", "combo-eval", "monte_carlo", "monte-carlo",
+                 "bayesian_monte_carlo", "bayesian-monte-carlo"],
         help="Explicitly specify which stage(s) to run (e.g. --stages combo_eval monte_carlo).",
     )
     stage_group.add_argument(
@@ -355,6 +419,11 @@ def parse_arguments():
     stage_group.add_argument(
         "--run-monte-carlo", action="store_true",
         help="Run Stage 3: Monte Carlo simulation, bracket tree simulation, and pool optimization.",
+    )
+
+    stage_group.add_argument(
+        "--run-bayesian-monte-carlo", action="store_true",
+        help="Run the optional Bayesian bracket Monte Carlo stage. Experimental; never included in --all.",
     )
 
     models_group = parser.add_argument_group("Stage 1: Models Options")
@@ -421,6 +490,33 @@ def parse_arguments():
     mc_group.add_argument(
         "--mc-output-dir", type=Path, default=Path("model_outputs/monte_carlo"),
         help="Output directory for Monte Carlo tables and optimal brackets. Default: model_outputs/monte_carlo.",
+    )
+
+    bayes_group = parser.add_argument_group(
+        "Optional Stage: Bayesian Monte Carlo Options",
+        "Uses --season, --n-simulations, --seed and --data-dir. One joint posterior draw per simulated tournament.",
+    )
+    bayes_group.add_argument(
+        "--bayesian-bracket-schedule", type=str, default="data/{season}/bracket_schedule.json",
+        help="Explicit pre-tournament bracket schedule JSON; {season} is substituted. "
+             "Default: data/{season}/bracket_schedule.json.",
+    )
+    bayes_group.add_argument(
+        "--bayesian-ratings", type=str,
+        help="Saved ratings artifact (.npz) from run_bayesian.py fit; {season} is substituted.",
+    )
+    bayes_group.add_argument(
+        "--bayesian-cutoff", type=str,
+        help="Fit new ratings from regular-season games strictly before this timezone-aware instant (one season).",
+    )
+    bayes_group.add_argument(
+        "--bayesian-draws", type=int, default=4000,
+        help="Posterior draws when fitting with --bayesian-cutoff. Default: 4000.",
+    )
+    bayes_group.add_argument(
+        "--bayesian-output-dir", type=Path, default=Path("model_outputs/bayesian_monte_carlo"),
+        help="Output directory for Bayesian forecast JSON and fitted ratings. "
+             "Default: model_outputs/bayesian_monte_carlo.",
     )
 
     gen_group = parser.add_argument_group("General & Execution Controls")
@@ -492,6 +588,11 @@ def main():
             active_stages.add("combo_eval")
         if args.run_monte_carlo:
             active_stages.add("monte_carlo")
+    # Opt-in only: --all keeps its original three stages.
+    if args.run_bayesian_monte_carlo:
+        active_stages.add("bayesian_monte_carlo")
+    if args.stages and any(s.lower().replace("-", "_") == "bayesian_monte_carlo" for s in args.stages):
+        active_stages.add("bayesian_monte_carlo")
 
     if not active_stages:
         print(f"{Colors.YELLOW}[Info] No execution stages selected.{Colors.END}")
@@ -500,6 +601,7 @@ def main():
         print("  python run_pipeline.py --stages models --skip-model-training")
         print("  python run_pipeline.py --stages combo_eval")
         print("  python run_pipeline.py --stages monte_carlo --season 2024 --shap-rank 1")
+        print("  python run_pipeline.py --stages bayesian_monte_carlo --season 2025 --bayesian-cutoff 2025-03-18T00:00:00Z")
         print("  python run_pipeline.py --help")
         return
 
@@ -537,6 +639,13 @@ def main():
             sys.exit(1)
     else:
         stage_results["monte_carlo"] = {"status": "SKIPPED", "elapsed": 0.0, "artifacts": []}
+
+    # Optional Bayesian stage: reported only when requested
+    if "bayesian_monte_carlo" in active_stages:
+        stage_results["bayesian_monte_carlo"] = run_stage_bayesian_monte_carlo(args, root_dir, py_exe)
+        if stage_results["bayesian_monte_carlo"]["status"] == "FAILED" and args.fail_fast:
+            print(f"\n{Colors.RED}[Pipeline Terminated] Stage 'bayesian_monte_carlo' failed and --fail-fast was specified.{Colors.END}")
+            sys.exit(1)
 
     total_elapsed = time.time() - pipeline_start
     print_banner("Pipeline Execution Summary", f"Total Duration: {total_elapsed:.1f}s")

@@ -62,6 +62,20 @@ class BayesianRatingTests(unittest.TestCase):
             writer.writerows(rows)
         return path
 
+    def test_fit_retries_relative_loss_stop_without_relaxing_gradient_check(self):
+        from scipy.optimize import minimize as real_minimize, OptimizeResult
+        calls = []
+        def early_stop(objective, start, **kwargs):
+            calls.append(kwargs)
+            if len(calls) == 1:
+                return OptimizeResult(x=start, success=True, nit=1, message="relative tolerance")
+            return real_minimize(objective, start, **kwargs)
+        with patch("bayesian_ratings.minimize", side_effect=early_stop):
+            posterior = fit_ratings(synthetic_games(10), season=2025, cutoff=CUTOFF, n_draws=20)
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(calls[1]["options"]["ftol"], 0.)
+        self.assertLessEqual(posterior.metadata["diagnostics"]["max_abs_gradient"], 1e-4)
+
     def test_loader_deduplicates_and_filters_without_future_score_leakage(self):
         self.write_rows("a", [row(), row(gameId="2", startDate=CUTOFF, **{"teamStats.points.total": "bad future score"}),
                               row(gameId="3", seasonType="postseason"),
