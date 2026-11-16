@@ -26,7 +26,7 @@ try { handlers = require(modulePath); } finally { Module._load = load; }
 const { marchMadness2026 } = require("../convex/data/marchMadness2026.ts");
 const { buildTournamentBracket } = require("../src/lib/tournament-bracket.ts");
 
-function fixture() {
+function fixture(official) {
   const teams = [0, 1, 2, 3].map(i => ({ id: `team-${i}`, name: `Team ${i}`, seed: i + 1, logoUrl: "/favicon.ico" }));
   const tournament = {
     slug: `forecast-2026-${"a".repeat(64)}`, name: "Model", season: 2026,
@@ -37,7 +37,7 @@ function fixture() {
       { id: "g3", round: 2, order: 0, label: "Final", topTeamId: "team-0", bottomTeamId: "team-2", winnerTeamId: "team-0", topSourceGameId: "g1", bottomSourceGameId: "g2" },
     ],
   };
-  const reference = { ...structuredClone(tournament), _id: "reference", slug: "march-madness-men-2026" };
+  const reference = { ...structuredClone(official ?? tournament), _id: "reference", slug: "march-madness-men-2026" };
   const tables = {
     tournaments: [reference],
     brackets: [{ _id: "official-card", slug: "2026-results", tournamentId: "reference", logoStorageId: "logo" }],
@@ -127,18 +127,57 @@ test("render a 64-team main bracket using the actual demo layout", () => {
   assert.ok(nodes.every(node => Number.isFinite(node.position.x) && Number.isFinite(node.position.y)));
 });
 
-// Allows cross-language verification of an actual Python-produced payload.
+// Cross-language check: `tests/fixtures/convex-payload-2026.json` in the Python repo is the
+// converter's output for a 64-team forecast. It is imported against the site's real
+// 68-team 2026 reference, not a roster derived from the payload.
 if (process.env.FORECAST_IMPORT_PAYLOAD) {
-  test("Python payload passes the real site validator, mutation and layout", async () => {
-    const { ctx, tables } = fixture();
+  test("Python payload matches the site schema, real roster, mutation and layout", async () => {
+    const { tournamentValidator } = require("../convex/tournamentModel.ts");
+    const { ctx, tables } = fixture(marchMadness2026);
     const payload = JSON.parse(fs.readFileSync(process.env.FORECAST_IMPORT_PAYLOAD, "utf8"));
-    tables.tournaments[0].teams = payload.items[0].tournament.teams;
-    for (const item of payload.items) item.logoStorageId = "logo";
-    await handlers.importForecast.handler(ctx, payload);
+    assert.equal(payload.items.length, 2);
+    const strict = (value, validator, where) => {
+      // Convex rejects fields a validator does not declare.
+      const fields = validator.fields;
+      assert.deepEqual(Object.keys(value).filter(key => !(key in fields)), [], where);
+      for (const [key, field] of Object.entries(fields)) assert.ok(field.isOptional === "optional" || key in value, `${where}.${key}`);
+    };
     for (const item of payload.items) {
-      const { nodes } = buildTournamentBracket(item.tournament);
-      assert.equal(nodes.length, item.tournament.games.length);
-      assert.ok(nodes.every(node => Number.isFinite(node.position.x) && Number.isFinite(node.position.y)));
+      assert.deepEqual(Object.keys(item).sort(), ["description", "logoStorageId", "title", "tournament"]);
+      strict(item.tournament, tournamentValidator, "tournament");
+      item.tournament.teams.forEach(team => strict(team, tournamentValidator.fields.teams.element, "team"));
+      item.tournament.games.forEach(game => strict(game, tournamentValidator.fields.games.element, "game"));
     }
+    const roster = await handlers.getRoster.handler(ctx, { season: 2026 });
+    assert.equal(roster.teams.length, 68);
+    const official = structuredClone(tables.tournaments[0]);
+    for (const item of payload.items) item.logoStorageId = roster.logoStorageId;
+    const first = await handlers.importForecast.handler(ctx, payload);
+    const second = await handlers.importForecast.handler(ctx, payload);
+    assert.deepEqual(second.map(row => row.bracketId), first.map(row => row.bracketId));
+    assert.ok(second.every(row => row.updated));
+    assert.deepEqual(tables.tournaments[0], official);
+    assert.equal(tables.tournaments.length, 3);
+    assert.equal(tables.brackets.length, 3);
+    const officialRoundOne = marchMadness2026.games.filter(game => game.round === 1).map(game => [game.order, game.topTeamId, game.bottomTeamId]);
+    const mainBracket = structuredClone(marchMadness2026);
+    mainBracket.games = mainBracket.games.filter(game => game.round > 0);
+    for (const game of mainBracket.games.filter(game => game.round === 1)) {
+      delete game.topSourceGameId;
+      delete game.bottomSourceGameId;
+    }
+    const entrants = new Set(mainBracket.games.filter(game => game.round === 1).flatMap(game => [game.topTeamId, game.bottomTeamId]));
+    mainBracket.teams = mainBracket.teams.filter(team => entrants.has(team.id));
+    const positions = nodes => nodes.map(node => `${node.position.x},${node.position.y}`).sort();
+    const officialLayout = buildTournamentBracket(mainBracket);
+    for (const item of payload.items) {
+      const { nodes, edges } = buildTournamentBracket(item.tournament);
+      // Forecast cards must lay out exactly like the official 64-team bracket.
+      assert.deepEqual(positions(nodes), positions(officialLayout.nodes));
+      assert.equal(edges.length, officialLayout.edges.length);
+      const roundOne = item.tournament.games.filter(game => game.round === 1).map(game => [game.order, game.topTeamId, game.bottomTeamId]);
+      assert.deepEqual(roundOne.sort((a, b) => a[0] - b[0]), officialRoundOne);
+    }
+    assert.notEqual(payload.items[0].tournament.winnerTeamId, payload.items[1].tournament.winnerTeamId);
   });
 }

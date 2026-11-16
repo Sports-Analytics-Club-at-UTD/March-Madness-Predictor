@@ -1,0 +1,546 @@
+{
+ "roster": {
+  "season": 2026,
+  "logoStorageId": "synthetic-logo",
+  "teams": [
+   {
+    "id": "umbc",
+    "name": "UMBC",
+    "seed": 16,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "howard",
+    "name": "Howard",
+    "seed": 16,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "texas",
+    "name": "Texas",
+    "seed": 11,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "nc-state",
+    "name": "NC State",
+    "seed": 11,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "prairie-view-a-m",
+    "name": "Prairie View A&M",
+    "seed": 16,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "lehigh",
+    "name": "Lehigh",
+    "seed": 16,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "miami-ohio",
+    "name": "Miami (Ohio)",
+    "seed": 11,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "smu",
+    "name": "SMU",
+    "seed": 11,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "duke",
+    "name": "Duke",
+    "seed": 1,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "siena",
+    "name": "Siena",
+    "seed": 16,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "ohio-state",
+    "name": "Ohio State",
+    "seed": 8,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "tcu",
+    "name": "TCU",
+    "seed": 9,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "st-john-s",
+    "name": "St. John's",
+    "seed": 5,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "northern-iowa",
+    "name": "Northern Iowa",
+    "seed": 12,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "kansas",
+    "name": "Kansas",
+    "seed": 4,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "cal-baptist",
+    "name": "Cal Baptist",
+    "seed": 13,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "louisville",
+    "name": "Louisville",
+    "seed": 6,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "south-florida",
+    "name": "South Florida",
+    "seed": 11,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "michigan-state",
+    "name": "Michigan State",
+    "seed": 3,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "north-dakota-state",
+    "name": "North Dakota State",
+    "seed": 14,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "ucla",
+    "name": "UCLA",
+    "seed": 7,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "ucf",
+    "name": "UCF",
+    "seed": 10,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "uconn",
+    "name": "UConn",
+    "seed": 2,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "furman",
+    "name": "Furman",
+    "seed": 15,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "florida",
+    "name": "Florida",
+    "seed": 1,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "clemson",
+    "name": "Clemson",
+    "seed": 8,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "iowa",
+    "name": "Iowa",
+    "seed": 9,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "vanderbilt",
+    "name": "Vanderbilt",
+    "seed": 5,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "mcneese",
+    "name": "McNeese",
+    "seed": 12,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "nebraska",
+    "name": "Nebraska",
+    "seed": 4,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "troy",
+    "name": "Troy",
+    "seed": 13,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "north-carolina",
+    "name": "North Carolina",
+    "seed": 6,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "vcu",
+    "name": "VCU",
+    "seed": 11,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "illinois",
+    "name": "Illinois",
+    "seed": 3,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "penn",
+    "name": "Penn",
+    "seed": 14,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "saint-mary-s",
+    "name": "Saint Mary's",
+    "seed": 7,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "texas-a-m",
+    "name": "Texas A&M",
+    "seed": 10,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "houston",
+    "name": "Houston",
+    "seed": 2,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "idaho",
+    "name": "Idaho",
+    "seed": 15,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "arizona",
+    "name": "Arizona",
+    "seed": 1,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "long-island",
+    "name": "Long Island",
+    "seed": 16,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "villanova",
+    "name": "Villanova",
+    "seed": 8,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "utah-state",
+    "name": "Utah State",
+    "seed": 9,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "wisconsin",
+    "name": "Wisconsin",
+    "seed": 5,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "high-point",
+    "name": "High Point",
+    "seed": 12,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "arkansas",
+    "name": "Arkansas",
+    "seed": 4,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "hawaii",
+    "name": "Hawaii",
+    "seed": 13,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "byu",
+    "name": "BYU",
+    "seed": 6,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "gonzaga",
+    "name": "Gonzaga",
+    "seed": 3,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "kennesaw-state",
+    "name": "Kennesaw State",
+    "seed": 14,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "miami-fl",
+    "name": "Miami (FL)",
+    "seed": 7,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "missouri",
+    "name": "Missouri",
+    "seed": 10,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "purdue",
+    "name": "Purdue",
+    "seed": 2,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "queens-n-c",
+    "name": "Queens (N.C.)",
+    "seed": 15,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "michigan",
+    "name": "Michigan",
+    "seed": 1,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "georgia",
+    "name": "Georgia",
+    "seed": 8,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "saint-louis",
+    "name": "Saint Louis",
+    "seed": 9,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "texas-tech",
+    "name": "Texas Tech",
+    "seed": 5,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "akron",
+    "name": "Akron",
+    "seed": 12,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "alabama",
+    "name": "Alabama",
+    "seed": 4,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "hofstra",
+    "name": "Hofstra",
+    "seed": 13,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "tennessee",
+    "name": "Tennessee",
+    "seed": 6,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "virginia",
+    "name": "Virginia",
+    "seed": 3,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "wright-state",
+    "name": "Wright State",
+    "seed": 14,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "kentucky",
+    "name": "Kentucky",
+    "seed": 7,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "santa-clara",
+    "name": "Santa Clara",
+    "seed": 10,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "iowa-state",
+    "name": "Iowa State",
+    "seed": 2,
+    "logoUrl": "/favicon.ico"
+   },
+   {
+    "id": "tennessee-state",
+    "name": "Tennessee State",
+    "seed": 15,
+    "logoUrl": "/favicon.ico"
+   }
+  ]
+ },
+ "round1": [
+  [
+   "duke",
+   "siena"
+  ],
+  [
+   "ohio-state",
+   "tcu"
+  ],
+  [
+   "st-john-s",
+   "northern-iowa"
+  ],
+  [
+   "kansas",
+   "cal-baptist"
+  ],
+  [
+   "louisville",
+   "south-florida"
+  ],
+  [
+   "michigan-state",
+   "north-dakota-state"
+  ],
+  [
+   "ucla",
+   "ucf"
+  ],
+  [
+   "uconn",
+   "furman"
+  ],
+  [
+   "florida",
+   "prairie-view-a-m"
+  ],
+  [
+   "clemson",
+   "iowa"
+  ],
+  [
+   "vanderbilt",
+   "mcneese"
+  ],
+  [
+   "nebraska",
+   "troy"
+  ],
+  [
+   "north-carolina",
+   "vcu"
+  ],
+  [
+   "illinois",
+   "penn"
+  ],
+  [
+   "saint-mary-s",
+   "texas-a-m"
+  ],
+  [
+   "houston",
+   "idaho"
+  ],
+  [
+   "arizona",
+   "long-island"
+  ],
+  [
+   "villanova",
+   "utah-state"
+  ],
+  [
+   "wisconsin",
+   "high-point"
+  ],
+  [
+   "arkansas",
+   "hawaii"
+  ],
+  [
+   "byu",
+   "texas"
+  ],
+  [
+   "gonzaga",
+   "kennesaw-state"
+  ],
+  [
+   "miami-fl",
+   "missouri"
+  ],
+  [
+   "purdue",
+   "queens-n-c"
+  ],
+  [
+   "michigan",
+   "howard"
+  ],
+  [
+   "georgia",
+   "saint-louis"
+  ],
+  [
+   "texas-tech",
+   "akron"
+  ],
+  [
+   "alabama",
+   "hofstra"
+  ],
+  [
+   "tennessee",
+   "miami-ohio"
+  ],
+  [
+   "virginia",
+   "wright-state"
+  ],
+  [
+   "kentucky",
+   "santa-clara"
+  ],
+  [
+   "iowa-state",
+   "tennessee-state"
+  ]
+ ]
+}

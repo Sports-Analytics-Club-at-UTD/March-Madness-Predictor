@@ -120,8 +120,13 @@ integration's TypeScript checks run from the site checkout after copying
 `integrations/convex/forecastImports.test.cjs` into `tests/`:
 
 ```bash
-node --test tests/forecastImports.test.cjs tests/tournament-bracket.test.cjs
+FORECAST_IMPORT_PAYLOAD=/path/to/backend/tests/fixtures/convex-payload-2026.json \
+  node --test tests/forecastImports.test.cjs tests/tournament-bracket.test.cjs
 ```
+
+`FORECAST_IMPORT_PAYLOAD` adds a test that imports the Python converter's committed
+64-team output against the site's real 2026 reference. See
+[convex-import-validation.md](convex-import-validation.md) for what has been verified.
 
 The new tests exercise the actual mutation handlers against an in-memory context;
 they do not contact Convex. After configuring a deployment, verify two cards,
