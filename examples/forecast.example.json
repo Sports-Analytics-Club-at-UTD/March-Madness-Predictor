@@ -1,0 +1,360 @@
+{
+  "schema_version": "1.0.0",
+  "tournament": {
+    "id": "example-men-2026",
+    "season": 2026,
+    "competition": "Men's college basketball",
+    "format": "single_elimination",
+    "topology_status": "available",
+    "bracket_team_count": 4,
+    "includes_first_four": false
+  },
+  "teams": [
+    {
+      "id": "example-team-0",
+      "name": "Example Team 0"
+    },
+    {
+      "id": "example-team-1",
+      "name": "Example Team 1"
+    },
+    {
+      "id": "example-team-2",
+      "name": "Example Team 2"
+    },
+    {
+      "id": "example-team-3",
+      "name": "Example Team 3"
+    }
+  ],
+  "games": [
+    {
+      "id": "example-men-2026-g1",
+      "slot": 1,
+      "round_number": 1,
+      "round_points": 10.0,
+      "participants": [
+        {
+          "team_id": "example-team-0",
+          "source_game_id": null
+        },
+        {
+          "team_id": "example-team-1",
+          "source_game_id": null
+        }
+      ],
+      "scheduled_start_utc": null,
+      "actual_winner_team_id": null
+    },
+    {
+      "id": "example-men-2026-g2",
+      "slot": 2,
+      "round_number": 1,
+      "round_points": 10.0,
+      "participants": [
+        {
+          "team_id": "example-team-2",
+          "source_game_id": null
+        },
+        {
+          "team_id": "example-team-3",
+          "source_game_id": null
+        }
+      ],
+      "scheduled_start_utc": null,
+      "actual_winner_team_id": null
+    },
+    {
+      "id": "example-men-2026-g3",
+      "slot": 3,
+      "round_number": 2,
+      "round_points": 20.0,
+      "participants": [
+        {
+          "team_id": null,
+          "source_game_id": "example-men-2026-g1"
+        },
+        {
+          "team_id": null,
+          "source_game_id": "example-men-2026-g2"
+        }
+      ],
+      "scheduled_start_utc": null,
+      "actual_winner_team_id": null
+    }
+  ],
+  "prediction_runs": [
+    {
+      "id": "example-shap-run",
+      "tournament_id": "example-men-2026",
+      "method": "shap_example",
+      "model_name": "synthetic_example",
+      "model_version": null,
+      "generated_at": "2026-03-18T12:00:00Z",
+      "n_simulations": null,
+      "seed": null,
+      "source_metadata": {
+        "example_only": true
+      },
+      "artifacts": []
+    },
+    {
+      "id": "example-bayesian-run",
+      "tournament_id": "example-men-2026",
+      "method": "bayesian_example",
+      "model_name": "synthetic_example",
+      "model_version": null,
+      "generated_at": "2026-03-18T12:00:00Z",
+      "n_simulations": null,
+      "seed": null,
+      "source_metadata": {
+        "example_only": true
+      },
+      "artifacts": []
+    }
+  ],
+  "team_predictions": [
+    {
+      "run_id": "example-shap-run",
+      "team_id": "example-team-0",
+      "statistics": {
+        "simulated_mean": 1.1
+      },
+      "probabilities": {
+        "success_score_threshold": [],
+        "calibrated_success_score_threshold": [],
+        "bracket_tree": [
+          {
+            "minimum_wins": 1,
+            "probability": 0.6
+          },
+          {
+            "minimum_wins": 2,
+            "probability": 0.4
+          }
+        ]
+      },
+      "intervals": [],
+      "posterior": null
+    },
+    {
+      "run_id": "example-bayesian-run",
+      "team_id": "example-team-0",
+      "statistics": {},
+      "probabilities": {
+        "success_score_threshold": [],
+        "calibrated_success_score_threshold": [],
+        "bracket_tree": []
+      },
+      "intervals": [],
+      "posterior": {
+        "target": "tournament_success_score",
+        "mean": 1.2,
+        "median": null,
+        "std": 0.3,
+        "intervals": [
+          {
+            "kind": "credible",
+            "target": "tournament_success_score",
+            "level": 0.9,
+            "lower": 0.7,
+            "upper": 1.7,
+            "method": "illustrative_posterior_quantiles"
+          }
+        ],
+        "diagnostics": {}
+      }
+    }
+  ],
+  "brackets": [
+    {
+      "id": "example-shap-run-max_ev",
+      "run_id": "example-shap-run",
+      "tournament_id": "example-men-2026",
+      "strategy": "max_ev",
+      "picks": [
+        {
+          "game_id": "example-men-2026-g1",
+          "winner_team_id": "example-team-0",
+          "confidence": {
+            "value": 0.4,
+            "meaning": "probability_team_wins_slot",
+            "method": "illustrative_slot_simulation",
+            "intervals": []
+          },
+          "public_pick_probability": null,
+          "expected_points": 4.0,
+          "leverage_ratio": null,
+          "actual_correct": null
+        },
+        {
+          "game_id": "example-men-2026-g2",
+          "winner_team_id": "example-team-2",
+          "confidence": {
+            "value": 0.4,
+            "meaning": "probability_team_wins_slot",
+            "method": "illustrative_slot_simulation",
+            "intervals": []
+          },
+          "public_pick_probability": null,
+          "expected_points": 4.0,
+          "leverage_ratio": null,
+          "actual_correct": null
+        },
+        {
+          "game_id": "example-men-2026-g3",
+          "winner_team_id": "example-team-0",
+          "confidence": {
+            "value": 0.4,
+            "meaning": "probability_team_wins_slot",
+            "method": "illustrative_slot_simulation",
+            "intervals": []
+          },
+          "public_pick_probability": null,
+          "expected_points": 8.0,
+          "leverage_ratio": null,
+          "actual_correct": null
+        }
+      ],
+      "summary": {
+        "champion_team_id": "example-team-0",
+        "expected_points": 16.0,
+        "pool_win_probability": null,
+        "top_10_percent_probability": null,
+        "actual_points": null,
+        "pool_size": null,
+        "extensions": {}
+      }
+    },
+    {
+      "id": "example-shap-run-leverage",
+      "run_id": "example-shap-run",
+      "tournament_id": "example-men-2026",
+      "strategy": "leverage",
+      "picks": [
+        {
+          "game_id": "example-men-2026-g1",
+          "winner_team_id": "example-team-1",
+          "confidence": {
+            "value": 0.4,
+            "meaning": "probability_team_wins_slot",
+            "method": "illustrative_slot_simulation",
+            "intervals": []
+          },
+          "public_pick_probability": null,
+          "expected_points": 4.0,
+          "leverage_ratio": null,
+          "actual_correct": null
+        },
+        {
+          "game_id": "example-men-2026-g2",
+          "winner_team_id": "example-team-3",
+          "confidence": {
+            "value": 0.4,
+            "meaning": "probability_team_wins_slot",
+            "method": "illustrative_slot_simulation",
+            "intervals": []
+          },
+          "public_pick_probability": null,
+          "expected_points": 4.0,
+          "leverage_ratio": null,
+          "actual_correct": null
+        },
+        {
+          "game_id": "example-men-2026-g3",
+          "winner_team_id": "example-team-3",
+          "confidence": {
+            "value": 0.4,
+            "meaning": "probability_team_wins_slot",
+            "method": "illustrative_slot_simulation",
+            "intervals": []
+          },
+          "public_pick_probability": null,
+          "expected_points": 8.0,
+          "leverage_ratio": null,
+          "actual_correct": null
+        }
+      ],
+      "summary": {
+        "champion_team_id": "example-team-3",
+        "expected_points": 16.0,
+        "pool_win_probability": null,
+        "top_10_percent_probability": null,
+        "actual_points": null,
+        "pool_size": null,
+        "extensions": {}
+      }
+    }
+  ],
+  "market_data": {
+    "provider": "kalshi",
+    "market_type": "game_winner",
+    "source": {
+      "uri": "synthetic-example.csv",
+      "media_type": "text/csv",
+      "description": null,
+      "sha256": null
+    },
+    "imported_at": "2026-03-20T12:00:00Z",
+    "season_start_utc": "2025-07-01T00:00:00Z",
+    "season_end_exclusive_utc": "2026-07-01T00:00:00Z",
+    "import_summary": {
+      "rows_read": 1,
+      "included": 1,
+      "excluded": [],
+      "unmatched_outcomes": 0
+    },
+    "snapshots": [
+      {
+        "id": "example-snapshot",
+        "event_ticker": "EXAMPLE-EVENT",
+        "provider_game_id": "EXAMPLE-PROVIDER-GAME",
+        "game_id": "example-men-2026-g1",
+        "title": "Synthetic game quote",
+        "competition": "Men's college basketball",
+        "scheduled_start_utc": "2026-03-19T16:00:00Z",
+        "requested_snapshot_utc": "2026-03-19T15:59:00Z",
+        "game_status": "example_only",
+        "markets_for_same_game": null,
+        "timing_basis": null,
+        "timing_source_url": null,
+        "price_basis": null,
+        "source_url": null,
+        "exception_source_url": null,
+        "outcomes": [
+          {
+            "team_name": "Example Team 0",
+            "team_id": "example-team-0",
+            "team_mapping": "exact_name",
+            "market_ticker": "EXAMPLE-MARKET-0",
+            "win_probability": 0.5,
+            "midpoint_probability": null,
+            "bid_probability": null,
+            "ask_probability": null,
+            "last_trade_probability": null,
+            "probability_basis": "bid_ask_midpoint",
+            "quote_asof_utc": "2026-03-19T15:59:00Z",
+            "seconds_before_start": 60.0,
+            "data_status": "ok"
+          },
+          {
+            "team_name": "Example Team 1",
+            "team_id": "example-team-1",
+            "team_mapping": "exact_name",
+            "market_ticker": "EXAMPLE-MARKET-1",
+            "win_probability": 0.51,
+            "midpoint_probability": null,
+            "bid_probability": null,
+            "ask_probability": null,
+            "last_trade_probability": null,
+            "probability_basis": "bid_ask_midpoint",
+            "quote_asof_utc": "2026-03-19T15:55:00Z",
+            "seconds_before_start": 300.0,
+            "data_status": "older_than_requested_minute"
+          }
+        ],
+        "source_fields": {}
+      }
+    ]
+  }
+}
