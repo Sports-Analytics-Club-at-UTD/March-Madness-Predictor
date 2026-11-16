@@ -5,6 +5,7 @@ import itertools
 import json
 from pathlib import Path
 import sys
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -399,6 +400,25 @@ class CommandTests(unittest.TestCase):
                          [row["statistics"] for row in document["team_predictions"]])
         self.assertEqual(len(list(out.glob("forecast_2025_*.json"))), 2)
         self.assertEqual(len(list(out.glob("bayesian_ratings_2025_*.npz"))), 1)
+
+    def test_pipeline_fit_to_forecast_smoke(self):
+        self.write_game_caches()
+        out = self.root / "pipeline-output"
+        result = subprocess.run([
+            sys.executable, str(Path(run_pipeline.__file__)),
+            "--stages", "bayesian_monte_carlo", "--season", "2025",
+            "--bayesian-cutoff", CUTOFF, "--bayesian-bracket-schedule", str(self.schedule),
+            "--data-dir", str(self.root / "data"), "--bayesian-output-dir", str(out),
+            "--bayesian-draws", "100", "--n-simulations", "100",
+        ], capture_output=True, text=True, timeout=60)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("SUCCESS", result.stdout)
+        forecasts = list(out.glob("forecast_2025_*.json"))
+        self.assertEqual(len(forecasts), 1)
+        document = json.loads(forecasts[0].read_text())
+        check_contract_relationships(self, document)
+        validate_forecast_document(document)
+        self.assertEqual(document["prediction_runs"][0]["source_metadata"]["n_games"], 72)
 
     def test_errors_exit_without_writing_outputs(self):
         ratings = self.root / "ratings.npz"
