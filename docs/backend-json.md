@@ -185,6 +185,12 @@ an explicit policy. Quotes are never substituted for model probabilities.
 
 ## Future integration and compatibility
 
+The [Convex demo importer](convex-import.md) now converts complete bracket
+forecasts into the existing site's tournament and sidebar-card tables. It uses
+the same validation models and an authenticated internal mutation; no HTTP
+server is required. Team-only Ridge documents remain unsuitable for the bracket
+view until a producer supplies topology and picks.
+
 FastAPI can import `ForecastDocument` as a response model and serve validated
 saved documents. Select/paginate records at the API layer; do not rerun training
 on a page request or send all historical markets on every bracket request.

@@ -1,0 +1,2062 @@
+{
+ "items": [
+  {
+   "tournament": {
+    "slug": "forecast-2026-667d9efc58726077d9b71cc9340b00f2bce4a182987d4ba0d8511569e2c74de0",
+    "name": "2026 Max expected points \u00b7 shap",
+    "season": 2026,
+    "winnerTeamId": "duke",
+    "sourceUrls": [],
+    "teams": [
+     {
+      "id": "akron",
+      "name": "Akron",
+      "seed": 12,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "alabama",
+      "name": "Alabama",
+      "seed": 4,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "arizona",
+      "name": "Arizona",
+      "seed": 1,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "arkansas",
+      "name": "Arkansas",
+      "seed": 4,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "byu",
+      "name": "BYU",
+      "seed": 6,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "cal-baptist",
+      "name": "Cal Baptist",
+      "seed": 13,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "clemson",
+      "name": "Clemson",
+      "seed": 8,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "duke",
+      "name": "Duke",
+      "seed": 1,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "florida",
+      "name": "Florida",
+      "seed": 1,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "furman",
+      "name": "Furman",
+      "seed": 15,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "georgia",
+      "name": "Georgia",
+      "seed": 8,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "gonzaga",
+      "name": "Gonzaga",
+      "seed": 3,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "hawaii",
+      "name": "Hawaii",
+      "seed": 13,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "high-point",
+      "name": "High Point",
+      "seed": 12,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "hofstra",
+      "name": "Hofstra",
+      "seed": 13,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "houston",
+      "name": "Houston",
+      "seed": 2,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "howard",
+      "name": "Howard",
+      "seed": 16,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "idaho",
+      "name": "Idaho",
+      "seed": 15,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "illinois",
+      "name": "Illinois",
+      "seed": 3,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "iowa",
+      "name": "Iowa",
+      "seed": 9,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "iowa-state",
+      "name": "Iowa State",
+      "seed": 2,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "kansas",
+      "name": "Kansas",
+      "seed": 4,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "kennesaw-state",
+      "name": "Kennesaw State",
+      "seed": 14,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "kentucky",
+      "name": "Kentucky",
+      "seed": 7,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "long-island",
+      "name": "Long Island",
+      "seed": 16,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "louisville",
+      "name": "Louisville",
+      "seed": 6,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "mcneese",
+      "name": "McNeese",
+      "seed": 12,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "miami-fl",
+      "name": "Miami (FL)",
+      "seed": 7,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "miami-ohio",
+      "name": "Miami (Ohio)",
+      "seed": 11,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "michigan",
+      "name": "Michigan",
+      "seed": 1,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "michigan-state",
+      "name": "Michigan State",
+      "seed": 3,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "missouri",
+      "name": "Missouri",
+      "seed": 10,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "nebraska",
+      "name": "Nebraska",
+      "seed": 4,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "north-carolina",
+      "name": "North Carolina",
+      "seed": 6,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "north-dakota-state",
+      "name": "North Dakota State",
+      "seed": 14,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "northern-iowa",
+      "name": "Northern Iowa",
+      "seed": 12,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "ohio-state",
+      "name": "Ohio State",
+      "seed": 8,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "penn",
+      "name": "Penn",
+      "seed": 14,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "prairie-view-a-m",
+      "name": "Prairie View A&M",
+      "seed": 16,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "purdue",
+      "name": "Purdue",
+      "seed": 2,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "queens-n-c",
+      "name": "Queens (N.C.)",
+      "seed": 15,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "saint-louis",
+      "name": "Saint Louis",
+      "seed": 9,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "saint-mary-s",
+      "name": "Saint Mary's",
+      "seed": 7,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "santa-clara",
+      "name": "Santa Clara",
+      "seed": 10,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "siena",
+      "name": "Siena",
+      "seed": 16,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "south-florida",
+      "name": "South Florida",
+      "seed": 11,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "st-john-s",
+      "name": "St. John's",
+      "seed": 5,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "tcu",
+      "name": "TCU",
+      "seed": 9,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "tennessee",
+      "name": "Tennessee",
+      "seed": 6,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "tennessee-state",
+      "name": "Tennessee State",
+      "seed": 15,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "texas",
+      "name": "Texas",
+      "seed": 11,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "texas-a-m",
+      "name": "Texas A&M",
+      "seed": 10,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "texas-tech",
+      "name": "Texas Tech",
+      "seed": 5,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "troy",
+      "name": "Troy",
+      "seed": 13,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "ucf",
+      "name": "UCF",
+      "seed": 10,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "ucla",
+      "name": "UCLA",
+      "seed": 7,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "uconn",
+      "name": "UConn",
+      "seed": 2,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "utah-state",
+      "name": "Utah State",
+      "seed": 9,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "vanderbilt",
+      "name": "Vanderbilt",
+      "seed": 5,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "vcu",
+      "name": "VCU",
+      "seed": 11,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "villanova",
+      "name": "Villanova",
+      "seed": 8,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "virginia",
+      "name": "Virginia",
+      "seed": 3,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "wisconsin",
+      "name": "Wisconsin",
+      "seed": 5,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "wright-state",
+      "name": "Wright State",
+      "seed": 14,
+      "logoUrl": "/favicon.ico"
+     }
+    ],
+    "games": [
+     {
+      "id": "ncaa-men-2026-g1",
+      "round": 1,
+      "order": 0,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "duke",
+      "bottomTeamId": "siena",
+      "winnerTeamId": "duke"
+     },
+     {
+      "id": "ncaa-men-2026-g2",
+      "round": 1,
+      "order": 1,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "ohio-state",
+      "bottomTeamId": "tcu",
+      "winnerTeamId": "ohio-state"
+     },
+     {
+      "id": "ncaa-men-2026-g3",
+      "round": 1,
+      "order": 2,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "st-john-s",
+      "bottomTeamId": "northern-iowa",
+      "winnerTeamId": "st-john-s"
+     },
+     {
+      "id": "ncaa-men-2026-g4",
+      "round": 1,
+      "order": 3,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "kansas",
+      "bottomTeamId": "cal-baptist",
+      "winnerTeamId": "kansas"
+     },
+     {
+      "id": "ncaa-men-2026-g5",
+      "round": 1,
+      "order": 4,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "louisville",
+      "bottomTeamId": "south-florida",
+      "winnerTeamId": "louisville"
+     },
+     {
+      "id": "ncaa-men-2026-g6",
+      "round": 1,
+      "order": 5,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "michigan-state",
+      "bottomTeamId": "north-dakota-state",
+      "winnerTeamId": "michigan-state"
+     },
+     {
+      "id": "ncaa-men-2026-g7",
+      "round": 1,
+      "order": 6,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "ucla",
+      "bottomTeamId": "ucf",
+      "winnerTeamId": "ucla"
+     },
+     {
+      "id": "ncaa-men-2026-g8",
+      "round": 1,
+      "order": 7,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "uconn",
+      "bottomTeamId": "furman",
+      "winnerTeamId": "uconn"
+     },
+     {
+      "id": "ncaa-men-2026-g9",
+      "round": 1,
+      "order": 8,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "florida",
+      "bottomTeamId": "prairie-view-a-m",
+      "winnerTeamId": "florida"
+     },
+     {
+      "id": "ncaa-men-2026-g10",
+      "round": 1,
+      "order": 9,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "clemson",
+      "bottomTeamId": "iowa",
+      "winnerTeamId": "clemson"
+     },
+     {
+      "id": "ncaa-men-2026-g11",
+      "round": 1,
+      "order": 10,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "vanderbilt",
+      "bottomTeamId": "mcneese",
+      "winnerTeamId": "vanderbilt"
+     },
+     {
+      "id": "ncaa-men-2026-g12",
+      "round": 1,
+      "order": 11,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "nebraska",
+      "bottomTeamId": "troy",
+      "winnerTeamId": "nebraska"
+     },
+     {
+      "id": "ncaa-men-2026-g13",
+      "round": 1,
+      "order": 12,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "north-carolina",
+      "bottomTeamId": "vcu",
+      "winnerTeamId": "north-carolina"
+     },
+     {
+      "id": "ncaa-men-2026-g14",
+      "round": 1,
+      "order": 13,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "illinois",
+      "bottomTeamId": "penn",
+      "winnerTeamId": "illinois"
+     },
+     {
+      "id": "ncaa-men-2026-g15",
+      "round": 1,
+      "order": 14,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "saint-mary-s",
+      "bottomTeamId": "texas-a-m",
+      "winnerTeamId": "saint-mary-s"
+     },
+     {
+      "id": "ncaa-men-2026-g16",
+      "round": 1,
+      "order": 15,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "houston",
+      "bottomTeamId": "idaho",
+      "winnerTeamId": "houston"
+     },
+     {
+      "id": "ncaa-men-2026-g17",
+      "round": 1,
+      "order": 16,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "arizona",
+      "bottomTeamId": "long-island",
+      "winnerTeamId": "arizona"
+     },
+     {
+      "id": "ncaa-men-2026-g18",
+      "round": 1,
+      "order": 17,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "villanova",
+      "bottomTeamId": "utah-state",
+      "winnerTeamId": "villanova"
+     },
+     {
+      "id": "ncaa-men-2026-g19",
+      "round": 1,
+      "order": 18,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "wisconsin",
+      "bottomTeamId": "high-point",
+      "winnerTeamId": "wisconsin"
+     },
+     {
+      "id": "ncaa-men-2026-g20",
+      "round": 1,
+      "order": 19,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "arkansas",
+      "bottomTeamId": "hawaii",
+      "winnerTeamId": "arkansas"
+     },
+     {
+      "id": "ncaa-men-2026-g21",
+      "round": 1,
+      "order": 20,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "byu",
+      "bottomTeamId": "texas",
+      "winnerTeamId": "byu"
+     },
+     {
+      "id": "ncaa-men-2026-g22",
+      "round": 1,
+      "order": 21,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "gonzaga",
+      "bottomTeamId": "kennesaw-state",
+      "winnerTeamId": "gonzaga"
+     },
+     {
+      "id": "ncaa-men-2026-g23",
+      "round": 1,
+      "order": 22,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "miami-fl",
+      "bottomTeamId": "missouri",
+      "winnerTeamId": "miami-fl"
+     },
+     {
+      "id": "ncaa-men-2026-g24",
+      "round": 1,
+      "order": 23,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "purdue",
+      "bottomTeamId": "queens-n-c",
+      "winnerTeamId": "purdue"
+     },
+     {
+      "id": "ncaa-men-2026-g25",
+      "round": 1,
+      "order": 24,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "michigan",
+      "bottomTeamId": "howard",
+      "winnerTeamId": "michigan"
+     },
+     {
+      "id": "ncaa-men-2026-g26",
+      "round": 1,
+      "order": 25,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "georgia",
+      "bottomTeamId": "saint-louis",
+      "winnerTeamId": "georgia"
+     },
+     {
+      "id": "ncaa-men-2026-g27",
+      "round": 1,
+      "order": 26,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "texas-tech",
+      "bottomTeamId": "akron",
+      "winnerTeamId": "texas-tech"
+     },
+     {
+      "id": "ncaa-men-2026-g28",
+      "round": 1,
+      "order": 27,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "alabama",
+      "bottomTeamId": "hofstra",
+      "winnerTeamId": "alabama"
+     },
+     {
+      "id": "ncaa-men-2026-g29",
+      "round": 1,
+      "order": 28,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "tennessee",
+      "bottomTeamId": "miami-ohio",
+      "winnerTeamId": "tennessee"
+     },
+     {
+      "id": "ncaa-men-2026-g30",
+      "round": 1,
+      "order": 29,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "virginia",
+      "bottomTeamId": "wright-state",
+      "winnerTeamId": "virginia"
+     },
+     {
+      "id": "ncaa-men-2026-g31",
+      "round": 1,
+      "order": 30,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "kentucky",
+      "bottomTeamId": "santa-clara",
+      "winnerTeamId": "kentucky"
+     },
+     {
+      "id": "ncaa-men-2026-g32",
+      "round": 1,
+      "order": 31,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "iowa-state",
+      "bottomTeamId": "tennessee-state",
+      "winnerTeamId": "iowa-state"
+     },
+     {
+      "id": "ncaa-men-2026-g33",
+      "round": 2,
+      "order": 0,
+      "label": "Region 1 \u00b7 Second round",
+      "topTeamId": "duke",
+      "bottomTeamId": "ohio-state",
+      "winnerTeamId": "duke",
+      "topSourceGameId": "ncaa-men-2026-g1",
+      "bottomSourceGameId": "ncaa-men-2026-g2"
+     },
+     {
+      "id": "ncaa-men-2026-g34",
+      "round": 2,
+      "order": 1,
+      "label": "Region 1 \u00b7 Second round",
+      "topTeamId": "st-john-s",
+      "bottomTeamId": "kansas",
+      "winnerTeamId": "kansas",
+      "topSourceGameId": "ncaa-men-2026-g3",
+      "bottomSourceGameId": "ncaa-men-2026-g4"
+     },
+     {
+      "id": "ncaa-men-2026-g35",
+      "round": 2,
+      "order": 2,
+      "label": "Region 1 \u00b7 Second round",
+      "topTeamId": "louisville",
+      "bottomTeamId": "michigan-state",
+      "winnerTeamId": "michigan-state",
+      "topSourceGameId": "ncaa-men-2026-g5",
+      "bottomSourceGameId": "ncaa-men-2026-g6"
+     },
+     {
+      "id": "ncaa-men-2026-g36",
+      "round": 2,
+      "order": 3,
+      "label": "Region 1 \u00b7 Second round",
+      "topTeamId": "ucla",
+      "bottomTeamId": "uconn",
+      "winnerTeamId": "uconn",
+      "topSourceGameId": "ncaa-men-2026-g7",
+      "bottomSourceGameId": "ncaa-men-2026-g8"
+     },
+     {
+      "id": "ncaa-men-2026-g37",
+      "round": 2,
+      "order": 4,
+      "label": "Region 2 \u00b7 Second round",
+      "topTeamId": "florida",
+      "bottomTeamId": "clemson",
+      "winnerTeamId": "florida",
+      "topSourceGameId": "ncaa-men-2026-g9",
+      "bottomSourceGameId": "ncaa-men-2026-g10"
+     },
+     {
+      "id": "ncaa-men-2026-g38",
+      "round": 2,
+      "order": 5,
+      "label": "Region 2 \u00b7 Second round",
+      "topTeamId": "vanderbilt",
+      "bottomTeamId": "nebraska",
+      "winnerTeamId": "nebraska",
+      "topSourceGameId": "ncaa-men-2026-g11",
+      "bottomSourceGameId": "ncaa-men-2026-g12"
+     },
+     {
+      "id": "ncaa-men-2026-g39",
+      "round": 2,
+      "order": 6,
+      "label": "Region 2 \u00b7 Second round",
+      "topTeamId": "north-carolina",
+      "bottomTeamId": "illinois",
+      "winnerTeamId": "illinois",
+      "topSourceGameId": "ncaa-men-2026-g13",
+      "bottomSourceGameId": "ncaa-men-2026-g14"
+     },
+     {
+      "id": "ncaa-men-2026-g40",
+      "round": 2,
+      "order": 7,
+      "label": "Region 2 \u00b7 Second round",
+      "topTeamId": "saint-mary-s",
+      "bottomTeamId": "houston",
+      "winnerTeamId": "houston",
+      "topSourceGameId": "ncaa-men-2026-g15",
+      "bottomSourceGameId": "ncaa-men-2026-g16"
+     },
+     {
+      "id": "ncaa-men-2026-g41",
+      "round": 2,
+      "order": 8,
+      "label": "Region 3 \u00b7 Second round",
+      "topTeamId": "arizona",
+      "bottomTeamId": "villanova",
+      "winnerTeamId": "arizona",
+      "topSourceGameId": "ncaa-men-2026-g17",
+      "bottomSourceGameId": "ncaa-men-2026-g18"
+     },
+     {
+      "id": "ncaa-men-2026-g42",
+      "round": 2,
+      "order": 9,
+      "label": "Region 3 \u00b7 Second round",
+      "topTeamId": "wisconsin",
+      "bottomTeamId": "arkansas",
+      "winnerTeamId": "arkansas",
+      "topSourceGameId": "ncaa-men-2026-g19",
+      "bottomSourceGameId": "ncaa-men-2026-g20"
+     },
+     {
+      "id": "ncaa-men-2026-g43",
+      "round": 2,
+      "order": 10,
+      "label": "Region 3 \u00b7 Second round",
+      "topTeamId": "byu",
+      "bottomTeamId": "gonzaga",
+      "winnerTeamId": "gonzaga",
+      "topSourceGameId": "ncaa-men-2026-g21",
+      "bottomSourceGameId": "ncaa-men-2026-g22"
+     },
+     {
+      "id": "ncaa-men-2026-g44",
+      "round": 2,
+      "order": 11,
+      "label": "Region 3 \u00b7 Second round",
+      "topTeamId": "miami-fl",
+      "bottomTeamId": "purdue",
+      "winnerTeamId": "purdue",
+      "topSourceGameId": "ncaa-men-2026-g23",
+      "bottomSourceGameId": "ncaa-men-2026-g24"
+     },
+     {
+      "id": "ncaa-men-2026-g45",
+      "round": 2,
+      "order": 12,
+      "label": "Region 4 \u00b7 Second round",
+      "topTeamId": "michigan",
+      "bottomTeamId": "georgia",
+      "winnerTeamId": "michigan",
+      "topSourceGameId": "ncaa-men-2026-g25",
+      "bottomSourceGameId": "ncaa-men-2026-g26"
+     },
+     {
+      "id": "ncaa-men-2026-g46",
+      "round": 2,
+      "order": 13,
+      "label": "Region 4 \u00b7 Second round",
+      "topTeamId": "texas-tech",
+      "bottomTeamId": "alabama",
+      "winnerTeamId": "alabama",
+      "topSourceGameId": "ncaa-men-2026-g27",
+      "bottomSourceGameId": "ncaa-men-2026-g28"
+     },
+     {
+      "id": "ncaa-men-2026-g47",
+      "round": 2,
+      "order": 14,
+      "label": "Region 4 \u00b7 Second round",
+      "topTeamId": "tennessee",
+      "bottomTeamId": "virginia",
+      "winnerTeamId": "virginia",
+      "topSourceGameId": "ncaa-men-2026-g29",
+      "bottomSourceGameId": "ncaa-men-2026-g30"
+     },
+     {
+      "id": "ncaa-men-2026-g48",
+      "round": 2,
+      "order": 15,
+      "label": "Region 4 \u00b7 Second round",
+      "topTeamId": "kentucky",
+      "bottomTeamId": "iowa-state",
+      "winnerTeamId": "iowa-state",
+      "topSourceGameId": "ncaa-men-2026-g31",
+      "bottomSourceGameId": "ncaa-men-2026-g32"
+     },
+     {
+      "id": "ncaa-men-2026-g49",
+      "round": 3,
+      "order": 0,
+      "label": "Region 1 \u00b7 Sweet 16",
+      "topTeamId": "duke",
+      "bottomTeamId": "kansas",
+      "winnerTeamId": "duke",
+      "topSourceGameId": "ncaa-men-2026-g33",
+      "bottomSourceGameId": "ncaa-men-2026-g34"
+     },
+     {
+      "id": "ncaa-men-2026-g50",
+      "round": 3,
+      "order": 1,
+      "label": "Region 1 \u00b7 Sweet 16",
+      "topTeamId": "michigan-state",
+      "bottomTeamId": "uconn",
+      "winnerTeamId": "uconn",
+      "topSourceGameId": "ncaa-men-2026-g35",
+      "bottomSourceGameId": "ncaa-men-2026-g36"
+     },
+     {
+      "id": "ncaa-men-2026-g51",
+      "round": 3,
+      "order": 2,
+      "label": "Region 2 \u00b7 Sweet 16",
+      "topTeamId": "florida",
+      "bottomTeamId": "nebraska",
+      "winnerTeamId": "florida",
+      "topSourceGameId": "ncaa-men-2026-g37",
+      "bottomSourceGameId": "ncaa-men-2026-g38"
+     },
+     {
+      "id": "ncaa-men-2026-g52",
+      "round": 3,
+      "order": 3,
+      "label": "Region 2 \u00b7 Sweet 16",
+      "topTeamId": "illinois",
+      "bottomTeamId": "houston",
+      "winnerTeamId": "houston",
+      "topSourceGameId": "ncaa-men-2026-g39",
+      "bottomSourceGameId": "ncaa-men-2026-g40"
+     },
+     {
+      "id": "ncaa-men-2026-g53",
+      "round": 3,
+      "order": 4,
+      "label": "Region 3 \u00b7 Sweet 16",
+      "topTeamId": "arizona",
+      "bottomTeamId": "arkansas",
+      "winnerTeamId": "arizona",
+      "topSourceGameId": "ncaa-men-2026-g41",
+      "bottomSourceGameId": "ncaa-men-2026-g42"
+     },
+     {
+      "id": "ncaa-men-2026-g54",
+      "round": 3,
+      "order": 5,
+      "label": "Region 3 \u00b7 Sweet 16",
+      "topTeamId": "gonzaga",
+      "bottomTeamId": "purdue",
+      "winnerTeamId": "purdue",
+      "topSourceGameId": "ncaa-men-2026-g43",
+      "bottomSourceGameId": "ncaa-men-2026-g44"
+     },
+     {
+      "id": "ncaa-men-2026-g55",
+      "round": 3,
+      "order": 6,
+      "label": "Region 4 \u00b7 Sweet 16",
+      "topTeamId": "michigan",
+      "bottomTeamId": "alabama",
+      "winnerTeamId": "michigan",
+      "topSourceGameId": "ncaa-men-2026-g45",
+      "bottomSourceGameId": "ncaa-men-2026-g46"
+     },
+     {
+      "id": "ncaa-men-2026-g56",
+      "round": 3,
+      "order": 7,
+      "label": "Region 4 \u00b7 Sweet 16",
+      "topTeamId": "virginia",
+      "bottomTeamId": "iowa-state",
+      "winnerTeamId": "iowa-state",
+      "topSourceGameId": "ncaa-men-2026-g47",
+      "bottomSourceGameId": "ncaa-men-2026-g48"
+     },
+     {
+      "id": "ncaa-men-2026-g57",
+      "round": 4,
+      "order": 0,
+      "label": "Region 1 \u00b7 Elite Eight",
+      "topTeamId": "duke",
+      "bottomTeamId": "uconn",
+      "winnerTeamId": "duke",
+      "topSourceGameId": "ncaa-men-2026-g49",
+      "bottomSourceGameId": "ncaa-men-2026-g50"
+     },
+     {
+      "id": "ncaa-men-2026-g58",
+      "round": 4,
+      "order": 1,
+      "label": "Region 2 \u00b7 Elite Eight",
+      "topTeamId": "florida",
+      "bottomTeamId": "houston",
+      "winnerTeamId": "florida",
+      "topSourceGameId": "ncaa-men-2026-g51",
+      "bottomSourceGameId": "ncaa-men-2026-g52"
+     },
+     {
+      "id": "ncaa-men-2026-g59",
+      "round": 4,
+      "order": 2,
+      "label": "Region 3 \u00b7 Elite Eight",
+      "topTeamId": "arizona",
+      "bottomTeamId": "purdue",
+      "winnerTeamId": "arizona",
+      "topSourceGameId": "ncaa-men-2026-g53",
+      "bottomSourceGameId": "ncaa-men-2026-g54"
+     },
+     {
+      "id": "ncaa-men-2026-g60",
+      "round": 4,
+      "order": 3,
+      "label": "Region 4 \u00b7 Elite Eight",
+      "topTeamId": "michigan",
+      "bottomTeamId": "iowa-state",
+      "winnerTeamId": "michigan",
+      "topSourceGameId": "ncaa-men-2026-g55",
+      "bottomSourceGameId": "ncaa-men-2026-g56"
+     },
+     {
+      "id": "ncaa-men-2026-g61",
+      "round": 5,
+      "order": 0,
+      "label": "Final Four",
+      "topTeamId": "duke",
+      "bottomTeamId": "florida",
+      "winnerTeamId": "duke",
+      "topSourceGameId": "ncaa-men-2026-g57",
+      "bottomSourceGameId": "ncaa-men-2026-g58"
+     },
+     {
+      "id": "ncaa-men-2026-g62",
+      "round": 5,
+      "order": 1,
+      "label": "Final Four",
+      "topTeamId": "arizona",
+      "bottomTeamId": "michigan",
+      "winnerTeamId": "arizona",
+      "topSourceGameId": "ncaa-men-2026-g59",
+      "bottomSourceGameId": "ncaa-men-2026-g60"
+     },
+     {
+      "id": "ncaa-men-2026-g63",
+      "round": 6,
+      "order": 0,
+      "label": "National championship",
+      "topTeamId": "duke",
+      "bottomTeamId": "arizona",
+      "winnerTeamId": "duke",
+      "topSourceGameId": "ncaa-men-2026-g61",
+      "bottomSourceGameId": "ncaa-men-2026-g62"
+     }
+    ]
+   },
+   "title": "2026 Max expected points \u00b7 shap",
+   "description": "shap_ensemble \u00b7 max_ev \u00b7 run site-2026-fixture \u00b7 generated 2026-03-15T12:00:00+00:00",
+   "logoStorageId": "synthetic-logo"
+  },
+  {
+   "tournament": {
+    "slug": "forecast-2026-a76df7607301ef244c066ebc34e578f1beb837f125cb688c78de70cd448205c4",
+    "name": "2026 Leverage \u00b7 shap",
+    "season": 2026,
+    "winnerTeamId": "michigan",
+    "sourceUrls": [],
+    "teams": [
+     {
+      "id": "akron",
+      "name": "Akron",
+      "seed": 12,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "alabama",
+      "name": "Alabama",
+      "seed": 4,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "arizona",
+      "name": "Arizona",
+      "seed": 1,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "arkansas",
+      "name": "Arkansas",
+      "seed": 4,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "byu",
+      "name": "BYU",
+      "seed": 6,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "cal-baptist",
+      "name": "Cal Baptist",
+      "seed": 13,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "clemson",
+      "name": "Clemson",
+      "seed": 8,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "duke",
+      "name": "Duke",
+      "seed": 1,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "florida",
+      "name": "Florida",
+      "seed": 1,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "furman",
+      "name": "Furman",
+      "seed": 15,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "georgia",
+      "name": "Georgia",
+      "seed": 8,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "gonzaga",
+      "name": "Gonzaga",
+      "seed": 3,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "hawaii",
+      "name": "Hawaii",
+      "seed": 13,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "high-point",
+      "name": "High Point",
+      "seed": 12,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "hofstra",
+      "name": "Hofstra",
+      "seed": 13,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "houston",
+      "name": "Houston",
+      "seed": 2,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "howard",
+      "name": "Howard",
+      "seed": 16,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "idaho",
+      "name": "Idaho",
+      "seed": 15,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "illinois",
+      "name": "Illinois",
+      "seed": 3,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "iowa",
+      "name": "Iowa",
+      "seed": 9,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "iowa-state",
+      "name": "Iowa State",
+      "seed": 2,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "kansas",
+      "name": "Kansas",
+      "seed": 4,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "kennesaw-state",
+      "name": "Kennesaw State",
+      "seed": 14,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "kentucky",
+      "name": "Kentucky",
+      "seed": 7,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "long-island",
+      "name": "Long Island",
+      "seed": 16,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "louisville",
+      "name": "Louisville",
+      "seed": 6,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "mcneese",
+      "name": "McNeese",
+      "seed": 12,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "miami-fl",
+      "name": "Miami (FL)",
+      "seed": 7,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "miami-ohio",
+      "name": "Miami (Ohio)",
+      "seed": 11,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "michigan",
+      "name": "Michigan",
+      "seed": 1,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "michigan-state",
+      "name": "Michigan State",
+      "seed": 3,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "missouri",
+      "name": "Missouri",
+      "seed": 10,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "nebraska",
+      "name": "Nebraska",
+      "seed": 4,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "north-carolina",
+      "name": "North Carolina",
+      "seed": 6,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "north-dakota-state",
+      "name": "North Dakota State",
+      "seed": 14,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "northern-iowa",
+      "name": "Northern Iowa",
+      "seed": 12,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "ohio-state",
+      "name": "Ohio State",
+      "seed": 8,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "penn",
+      "name": "Penn",
+      "seed": 14,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "prairie-view-a-m",
+      "name": "Prairie View A&M",
+      "seed": 16,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "purdue",
+      "name": "Purdue",
+      "seed": 2,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "queens-n-c",
+      "name": "Queens (N.C.)",
+      "seed": 15,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "saint-louis",
+      "name": "Saint Louis",
+      "seed": 9,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "saint-mary-s",
+      "name": "Saint Mary's",
+      "seed": 7,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "santa-clara",
+      "name": "Santa Clara",
+      "seed": 10,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "siena",
+      "name": "Siena",
+      "seed": 16,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "south-florida",
+      "name": "South Florida",
+      "seed": 11,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "st-john-s",
+      "name": "St. John's",
+      "seed": 5,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "tcu",
+      "name": "TCU",
+      "seed": 9,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "tennessee",
+      "name": "Tennessee",
+      "seed": 6,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "tennessee-state",
+      "name": "Tennessee State",
+      "seed": 15,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "texas",
+      "name": "Texas",
+      "seed": 11,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "texas-a-m",
+      "name": "Texas A&M",
+      "seed": 10,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "texas-tech",
+      "name": "Texas Tech",
+      "seed": 5,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "troy",
+      "name": "Troy",
+      "seed": 13,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "ucf",
+      "name": "UCF",
+      "seed": 10,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "ucla",
+      "name": "UCLA",
+      "seed": 7,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "uconn",
+      "name": "UConn",
+      "seed": 2,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "utah-state",
+      "name": "Utah State",
+      "seed": 9,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "vanderbilt",
+      "name": "Vanderbilt",
+      "seed": 5,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "vcu",
+      "name": "VCU",
+      "seed": 11,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "villanova",
+      "name": "Villanova",
+      "seed": 8,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "virginia",
+      "name": "Virginia",
+      "seed": 3,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "wisconsin",
+      "name": "Wisconsin",
+      "seed": 5,
+      "logoUrl": "/favicon.ico"
+     },
+     {
+      "id": "wright-state",
+      "name": "Wright State",
+      "seed": 14,
+      "logoUrl": "/favicon.ico"
+     }
+    ],
+    "games": [
+     {
+      "id": "ncaa-men-2026-g1",
+      "round": 1,
+      "order": 0,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "duke",
+      "bottomTeamId": "siena",
+      "winnerTeamId": "siena"
+     },
+     {
+      "id": "ncaa-men-2026-g2",
+      "round": 1,
+      "order": 1,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "ohio-state",
+      "bottomTeamId": "tcu",
+      "winnerTeamId": "ohio-state"
+     },
+     {
+      "id": "ncaa-men-2026-g3",
+      "round": 1,
+      "order": 2,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "st-john-s",
+      "bottomTeamId": "northern-iowa",
+      "winnerTeamId": "st-john-s"
+     },
+     {
+      "id": "ncaa-men-2026-g4",
+      "round": 1,
+      "order": 3,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "kansas",
+      "bottomTeamId": "cal-baptist",
+      "winnerTeamId": "kansas"
+     },
+     {
+      "id": "ncaa-men-2026-g5",
+      "round": 1,
+      "order": 4,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "louisville",
+      "bottomTeamId": "south-florida",
+      "winnerTeamId": "louisville"
+     },
+     {
+      "id": "ncaa-men-2026-g6",
+      "round": 1,
+      "order": 5,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "michigan-state",
+      "bottomTeamId": "north-dakota-state",
+      "winnerTeamId": "north-dakota-state"
+     },
+     {
+      "id": "ncaa-men-2026-g7",
+      "round": 1,
+      "order": 6,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "ucla",
+      "bottomTeamId": "ucf",
+      "winnerTeamId": "ucla"
+     },
+     {
+      "id": "ncaa-men-2026-g8",
+      "round": 1,
+      "order": 7,
+      "label": "Region 1 \u00b7 First round",
+      "topTeamId": "uconn",
+      "bottomTeamId": "furman",
+      "winnerTeamId": "uconn"
+     },
+     {
+      "id": "ncaa-men-2026-g9",
+      "round": 1,
+      "order": 8,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "florida",
+      "bottomTeamId": "prairie-view-a-m",
+      "winnerTeamId": "florida"
+     },
+     {
+      "id": "ncaa-men-2026-g10",
+      "round": 1,
+      "order": 9,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "clemson",
+      "bottomTeamId": "iowa",
+      "winnerTeamId": "clemson"
+     },
+     {
+      "id": "ncaa-men-2026-g11",
+      "round": 1,
+      "order": 10,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "vanderbilt",
+      "bottomTeamId": "mcneese",
+      "winnerTeamId": "mcneese"
+     },
+     {
+      "id": "ncaa-men-2026-g12",
+      "round": 1,
+      "order": 11,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "nebraska",
+      "bottomTeamId": "troy",
+      "winnerTeamId": "nebraska"
+     },
+     {
+      "id": "ncaa-men-2026-g13",
+      "round": 1,
+      "order": 12,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "north-carolina",
+      "bottomTeamId": "vcu",
+      "winnerTeamId": "north-carolina"
+     },
+     {
+      "id": "ncaa-men-2026-g14",
+      "round": 1,
+      "order": 13,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "illinois",
+      "bottomTeamId": "penn",
+      "winnerTeamId": "illinois"
+     },
+     {
+      "id": "ncaa-men-2026-g15",
+      "round": 1,
+      "order": 14,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "saint-mary-s",
+      "bottomTeamId": "texas-a-m",
+      "winnerTeamId": "saint-mary-s"
+     },
+     {
+      "id": "ncaa-men-2026-g16",
+      "round": 1,
+      "order": 15,
+      "label": "Region 2 \u00b7 First round",
+      "topTeamId": "houston",
+      "bottomTeamId": "idaho",
+      "winnerTeamId": "idaho"
+     },
+     {
+      "id": "ncaa-men-2026-g17",
+      "round": 1,
+      "order": 16,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "arizona",
+      "bottomTeamId": "long-island",
+      "winnerTeamId": "arizona"
+     },
+     {
+      "id": "ncaa-men-2026-g18",
+      "round": 1,
+      "order": 17,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "villanova",
+      "bottomTeamId": "utah-state",
+      "winnerTeamId": "villanova"
+     },
+     {
+      "id": "ncaa-men-2026-g19",
+      "round": 1,
+      "order": 18,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "wisconsin",
+      "bottomTeamId": "high-point",
+      "winnerTeamId": "wisconsin"
+     },
+     {
+      "id": "ncaa-men-2026-g20",
+      "round": 1,
+      "order": 19,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "arkansas",
+      "bottomTeamId": "hawaii",
+      "winnerTeamId": "arkansas"
+     },
+     {
+      "id": "ncaa-men-2026-g21",
+      "round": 1,
+      "order": 20,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "byu",
+      "bottomTeamId": "texas",
+      "winnerTeamId": "texas"
+     },
+     {
+      "id": "ncaa-men-2026-g22",
+      "round": 1,
+      "order": 21,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "gonzaga",
+      "bottomTeamId": "kennesaw-state",
+      "winnerTeamId": "gonzaga"
+     },
+     {
+      "id": "ncaa-men-2026-g23",
+      "round": 1,
+      "order": 22,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "miami-fl",
+      "bottomTeamId": "missouri",
+      "winnerTeamId": "miami-fl"
+     },
+     {
+      "id": "ncaa-men-2026-g24",
+      "round": 1,
+      "order": 23,
+      "label": "Region 3 \u00b7 First round",
+      "topTeamId": "purdue",
+      "bottomTeamId": "queens-n-c",
+      "winnerTeamId": "purdue"
+     },
+     {
+      "id": "ncaa-men-2026-g25",
+      "round": 1,
+      "order": 24,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "michigan",
+      "bottomTeamId": "howard",
+      "winnerTeamId": "michigan"
+     },
+     {
+      "id": "ncaa-men-2026-g26",
+      "round": 1,
+      "order": 25,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "georgia",
+      "bottomTeamId": "saint-louis",
+      "winnerTeamId": "saint-louis"
+     },
+     {
+      "id": "ncaa-men-2026-g27",
+      "round": 1,
+      "order": 26,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "texas-tech",
+      "bottomTeamId": "akron",
+      "winnerTeamId": "texas-tech"
+     },
+     {
+      "id": "ncaa-men-2026-g28",
+      "round": 1,
+      "order": 27,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "alabama",
+      "bottomTeamId": "hofstra",
+      "winnerTeamId": "alabama"
+     },
+     {
+      "id": "ncaa-men-2026-g29",
+      "round": 1,
+      "order": 28,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "tennessee",
+      "bottomTeamId": "miami-ohio",
+      "winnerTeamId": "tennessee"
+     },
+     {
+      "id": "ncaa-men-2026-g30",
+      "round": 1,
+      "order": 29,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "virginia",
+      "bottomTeamId": "wright-state",
+      "winnerTeamId": "virginia"
+     },
+     {
+      "id": "ncaa-men-2026-g31",
+      "round": 1,
+      "order": 30,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "kentucky",
+      "bottomTeamId": "santa-clara",
+      "winnerTeamId": "santa-clara"
+     },
+     {
+      "id": "ncaa-men-2026-g32",
+      "round": 1,
+      "order": 31,
+      "label": "Region 4 \u00b7 First round",
+      "topTeamId": "iowa-state",
+      "bottomTeamId": "tennessee-state",
+      "winnerTeamId": "iowa-state"
+     },
+     {
+      "id": "ncaa-men-2026-g33",
+      "round": 2,
+      "order": 0,
+      "label": "Region 1 \u00b7 Second round",
+      "topTeamId": "siena",
+      "bottomTeamId": "ohio-state",
+      "winnerTeamId": "ohio-state",
+      "topSourceGameId": "ncaa-men-2026-g1",
+      "bottomSourceGameId": "ncaa-men-2026-g2"
+     },
+     {
+      "id": "ncaa-men-2026-g34",
+      "round": 2,
+      "order": 1,
+      "label": "Region 1 \u00b7 Second round",
+      "topTeamId": "st-john-s",
+      "bottomTeamId": "kansas",
+      "winnerTeamId": "kansas",
+      "topSourceGameId": "ncaa-men-2026-g3",
+      "bottomSourceGameId": "ncaa-men-2026-g4"
+     },
+     {
+      "id": "ncaa-men-2026-g35",
+      "round": 2,
+      "order": 2,
+      "label": "Region 1 \u00b7 Second round",
+      "topTeamId": "louisville",
+      "bottomTeamId": "north-dakota-state",
+      "winnerTeamId": "louisville",
+      "topSourceGameId": "ncaa-men-2026-g5",
+      "bottomSourceGameId": "ncaa-men-2026-g6"
+     },
+     {
+      "id": "ncaa-men-2026-g36",
+      "round": 2,
+      "order": 3,
+      "label": "Region 1 \u00b7 Second round",
+      "topTeamId": "ucla",
+      "bottomTeamId": "uconn",
+      "winnerTeamId": "ucla",
+      "topSourceGameId": "ncaa-men-2026-g7",
+      "bottomSourceGameId": "ncaa-men-2026-g8"
+     },
+     {
+      "id": "ncaa-men-2026-g37",
+      "round": 2,
+      "order": 4,
+      "label": "Region 2 \u00b7 Second round",
+      "topTeamId": "florida",
+      "bottomTeamId": "clemson",
+      "winnerTeamId": "florida",
+      "topSourceGameId": "ncaa-men-2026-g9",
+      "bottomSourceGameId": "ncaa-men-2026-g10"
+     },
+     {
+      "id": "ncaa-men-2026-g38",
+      "round": 2,
+      "order": 5,
+      "label": "Region 2 \u00b7 Second round",
+      "topTeamId": "mcneese",
+      "bottomTeamId": "nebraska",
+      "winnerTeamId": "nebraska",
+      "topSourceGameId": "ncaa-men-2026-g11",
+      "bottomSourceGameId": "ncaa-men-2026-g12"
+     },
+     {
+      "id": "ncaa-men-2026-g39",
+      "round": 2,
+      "order": 6,
+      "label": "Region 2 \u00b7 Second round",
+      "topTeamId": "north-carolina",
+      "bottomTeamId": "illinois",
+      "winnerTeamId": "illinois",
+      "topSourceGameId": "ncaa-men-2026-g13",
+      "bottomSourceGameId": "ncaa-men-2026-g14"
+     },
+     {
+      "id": "ncaa-men-2026-g40",
+      "round": 2,
+      "order": 7,
+      "label": "Region 2 \u00b7 Second round",
+      "topTeamId": "saint-mary-s",
+      "bottomTeamId": "idaho",
+      "winnerTeamId": "saint-mary-s",
+      "topSourceGameId": "ncaa-men-2026-g15",
+      "bottomSourceGameId": "ncaa-men-2026-g16"
+     },
+     {
+      "id": "ncaa-men-2026-g41",
+      "round": 2,
+      "order": 8,
+      "label": "Region 3 \u00b7 Second round",
+      "topTeamId": "arizona",
+      "bottomTeamId": "villanova",
+      "winnerTeamId": "villanova",
+      "topSourceGameId": "ncaa-men-2026-g17",
+      "bottomSourceGameId": "ncaa-men-2026-g18"
+     },
+     {
+      "id": "ncaa-men-2026-g42",
+      "round": 2,
+      "order": 9,
+      "label": "Region 3 \u00b7 Second round",
+      "topTeamId": "wisconsin",
+      "bottomTeamId": "arkansas",
+      "winnerTeamId": "arkansas",
+      "topSourceGameId": "ncaa-men-2026-g19",
+      "bottomSourceGameId": "ncaa-men-2026-g20"
+     },
+     {
+      "id": "ncaa-men-2026-g43",
+      "round": 2,
+      "order": 10,
+      "label": "Region 3 \u00b7 Second round",
+      "topTeamId": "texas",
+      "bottomTeamId": "gonzaga",
+      "winnerTeamId": "gonzaga",
+      "topSourceGameId": "ncaa-men-2026-g21",
+      "bottomSourceGameId": "ncaa-men-2026-g22"
+     },
+     {
+      "id": "ncaa-men-2026-g44",
+      "round": 2,
+      "order": 11,
+      "label": "Region 3 \u00b7 Second round",
+      "topTeamId": "miami-fl",
+      "bottomTeamId": "purdue",
+      "winnerTeamId": "purdue",
+      "topSourceGameId": "ncaa-men-2026-g23",
+      "bottomSourceGameId": "ncaa-men-2026-g24"
+     },
+     {
+      "id": "ncaa-men-2026-g45",
+      "round": 2,
+      "order": 12,
+      "label": "Region 4 \u00b7 Second round",
+      "topTeamId": "michigan",
+      "bottomTeamId": "saint-louis",
+      "winnerTeamId": "michigan",
+      "topSourceGameId": "ncaa-men-2026-g25",
+      "bottomSourceGameId": "ncaa-men-2026-g26"
+     },
+     {
+      "id": "ncaa-men-2026-g46",
+      "round": 2,
+      "order": 13,
+      "label": "Region 4 \u00b7 Second round",
+      "topTeamId": "texas-tech",
+      "bottomTeamId": "alabama",
+      "winnerTeamId": "texas-tech",
+      "topSourceGameId": "ncaa-men-2026-g27",
+      "bottomSourceGameId": "ncaa-men-2026-g28"
+     },
+     {
+      "id": "ncaa-men-2026-g47",
+      "round": 2,
+      "order": 14,
+      "label": "Region 4 \u00b7 Second round",
+      "topTeamId": "tennessee",
+      "bottomTeamId": "virginia",
+      "winnerTeamId": "virginia",
+      "topSourceGameId": "ncaa-men-2026-g29",
+      "bottomSourceGameId": "ncaa-men-2026-g30"
+     },
+     {
+      "id": "ncaa-men-2026-g48",
+      "round": 2,
+      "order": 15,
+      "label": "Region 4 \u00b7 Second round",
+      "topTeamId": "santa-clara",
+      "bottomTeamId": "iowa-state",
+      "winnerTeamId": "iowa-state",
+      "topSourceGameId": "ncaa-men-2026-g31",
+      "bottomSourceGameId": "ncaa-men-2026-g32"
+     },
+     {
+      "id": "ncaa-men-2026-g49",
+      "round": 3,
+      "order": 0,
+      "label": "Region 1 \u00b7 Sweet 16",
+      "topTeamId": "ohio-state",
+      "bottomTeamId": "kansas",
+      "winnerTeamId": "kansas",
+      "topSourceGameId": "ncaa-men-2026-g33",
+      "bottomSourceGameId": "ncaa-men-2026-g34"
+     },
+     {
+      "id": "ncaa-men-2026-g50",
+      "round": 3,
+      "order": 1,
+      "label": "Region 1 \u00b7 Sweet 16",
+      "topTeamId": "louisville",
+      "bottomTeamId": "ucla",
+      "winnerTeamId": "louisville",
+      "topSourceGameId": "ncaa-men-2026-g35",
+      "bottomSourceGameId": "ncaa-men-2026-g36"
+     },
+     {
+      "id": "ncaa-men-2026-g51",
+      "round": 3,
+      "order": 2,
+      "label": "Region 2 \u00b7 Sweet 16",
+      "topTeamId": "florida",
+      "bottomTeamId": "nebraska",
+      "winnerTeamId": "nebraska",
+      "topSourceGameId": "ncaa-men-2026-g37",
+      "bottomSourceGameId": "ncaa-men-2026-g38"
+     },
+     {
+      "id": "ncaa-men-2026-g52",
+      "round": 3,
+      "order": 3,
+      "label": "Region 2 \u00b7 Sweet 16",
+      "topTeamId": "illinois",
+      "bottomTeamId": "saint-mary-s",
+      "winnerTeamId": "illinois",
+      "topSourceGameId": "ncaa-men-2026-g39",
+      "bottomSourceGameId": "ncaa-men-2026-g40"
+     },
+     {
+      "id": "ncaa-men-2026-g53",
+      "round": 3,
+      "order": 4,
+      "label": "Region 3 \u00b7 Sweet 16",
+      "topTeamId": "villanova",
+      "bottomTeamId": "arkansas",
+      "winnerTeamId": "arkansas",
+      "topSourceGameId": "ncaa-men-2026-g41",
+      "bottomSourceGameId": "ncaa-men-2026-g42"
+     },
+     {
+      "id": "ncaa-men-2026-g54",
+      "round": 3,
+      "order": 5,
+      "label": "Region 3 \u00b7 Sweet 16",
+      "topTeamId": "gonzaga",
+      "bottomTeamId": "purdue",
+      "winnerTeamId": "purdue",
+      "topSourceGameId": "ncaa-men-2026-g43",
+      "bottomSourceGameId": "ncaa-men-2026-g44"
+     },
+     {
+      "id": "ncaa-men-2026-g55",
+      "round": 3,
+      "order": 6,
+      "label": "Region 4 \u00b7 Sweet 16",
+      "topTeamId": "michigan",
+      "bottomTeamId": "texas-tech",
+      "winnerTeamId": "michigan",
+      "topSourceGameId": "ncaa-men-2026-g45",
+      "bottomSourceGameId": "ncaa-men-2026-g46"
+     },
+     {
+      "id": "ncaa-men-2026-g56",
+      "round": 3,
+      "order": 7,
+      "label": "Region 4 \u00b7 Sweet 16",
+      "topTeamId": "virginia",
+      "bottomTeamId": "iowa-state",
+      "winnerTeamId": "virginia",
+      "topSourceGameId": "ncaa-men-2026-g47",
+      "bottomSourceGameId": "ncaa-men-2026-g48"
+     },
+     {
+      "id": "ncaa-men-2026-g57",
+      "round": 4,
+      "order": 0,
+      "label": "Region 1 \u00b7 Elite Eight",
+      "topTeamId": "kansas",
+      "bottomTeamId": "louisville",
+      "winnerTeamId": "kansas",
+      "topSourceGameId": "ncaa-men-2026-g49",
+      "bottomSourceGameId": "ncaa-men-2026-g50"
+     },
+     {
+      "id": "ncaa-men-2026-g58",
+      "round": 4,
+      "order": 1,
+      "label": "Region 2 \u00b7 Elite Eight",
+      "topTeamId": "nebraska",
+      "bottomTeamId": "illinois",
+      "winnerTeamId": "illinois",
+      "topSourceGameId": "ncaa-men-2026-g51",
+      "bottomSourceGameId": "ncaa-men-2026-g52"
+     },
+     {
+      "id": "ncaa-men-2026-g59",
+      "round": 4,
+      "order": 2,
+      "label": "Region 3 \u00b7 Elite Eight",
+      "topTeamId": "arkansas",
+      "bottomTeamId": "purdue",
+      "winnerTeamId": "purdue",
+      "topSourceGameId": "ncaa-men-2026-g53",
+      "bottomSourceGameId": "ncaa-men-2026-g54"
+     },
+     {
+      "id": "ncaa-men-2026-g60",
+      "round": 4,
+      "order": 3,
+      "label": "Region 4 \u00b7 Elite Eight",
+      "topTeamId": "michigan",
+      "bottomTeamId": "virginia",
+      "winnerTeamId": "michigan",
+      "topSourceGameId": "ncaa-men-2026-g55",
+      "bottomSourceGameId": "ncaa-men-2026-g56"
+     },
+     {
+      "id": "ncaa-men-2026-g61",
+      "round": 5,
+      "order": 0,
+      "label": "Final Four",
+      "topTeamId": "kansas",
+      "bottomTeamId": "illinois",
+      "winnerTeamId": "kansas",
+      "topSourceGameId": "ncaa-men-2026-g57",
+      "bottomSourceGameId": "ncaa-men-2026-g58"
+     },
+     {
+      "id": "ncaa-men-2026-g62",
+      "round": 5,
+      "order": 1,
+      "label": "Final Four",
+      "topTeamId": "purdue",
+      "bottomTeamId": "michigan",
+      "winnerTeamId": "michigan",
+      "topSourceGameId": "ncaa-men-2026-g59",
+      "bottomSourceGameId": "ncaa-men-2026-g60"
+     },
+     {
+      "id": "ncaa-men-2026-g63",
+      "round": 6,
+      "order": 0,
+      "label": "National championship",
+      "topTeamId": "kansas",
+      "bottomTeamId": "michigan",
+      "winnerTeamId": "michigan",
+      "topSourceGameId": "ncaa-men-2026-g61",
+      "bottomSourceGameId": "ncaa-men-2026-g62"
+     }
+    ]
+   },
+   "title": "2026 Leverage \u00b7 shap",
+   "description": "shap_ensemble \u00b7 leverage \u00b7 run site-2026-fixture \u00b7 generated 2026-03-15T12:00:00+00:00",
+   "logoStorageId": "synthetic-logo"
+  }
+ ]
+}
