@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 Install dependencies and configure your Convex development deployment:
 
 ```bash
-npm install
+npm ci
 npm run convex:dev
 ```
 
@@ -245,8 +245,57 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Production deployment (pending #61)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+No live deployment is established by this change. Hosting account/project,
+domain, production Convex project/deployment, and access for the operator must
+be supplied before publishing. Use Node 22.18+ (also required by the importers).
+Use npm and the committed package-lock.json; explicitly configure the host's
+install command as `npm ci` rather than autodetecting the pnpm lockfile.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Select the approved production Convex project. Authenticate the CLI as its
+   operator, or inject that deployment's `CONVEX_DEPLOY_KEY` through the host's
+   secret settings. Never commit the key. Run `npm ci`, then
+   `npm run convex:deploy`; verify the target shown by Convex before confirming.
+2. Set the production Convex server environment, using the approved deployment:
+   `npx convex env set --prod CFBD_API_KEY`,
+   `npx convex env set --prod KALSHI_API_ID`, and
+   `npx convex env set --prod KALSHI_PRIVATE_KEY --from-file /secure/path/key.pem`.
+   The path is an operator-supplied file, not a repository asset. These are
+   server secrets; never prefix them with NEXT_PUBLIC. Development environment
+   values and database/storage contents do not automatically migrate to prod.
+3. Populate and verify the production tournament/reference data and logos before
+   opening the site to viewers. The development import scripts above default to
+   development: do not assume they populate production. An operator must adapt
+   and review their target selection for production. With approved production
+   reference data present, run `npx convex run --prod brackets:publish2026`,
+   then `npx convex run --prod cbbd:syncSeason '{"season":2026}'`.
+   Verify imported odds and server credentials as well; these data prerequisites
+   remain outstanding until the production target is supplied.
+4. Configure the selected host with repository root as app root, install command
+   `npm ci`, build command `npm run build`, and `NEXT_PUBLIC_CONVEX_URL` equal to
+   the actual production Convex URL. This public URL is embedded at build time;
+   rebuild after changing it. For a Node server use `npm start` (set `PORT` as
+   required by the host). A managed Next.js host must support Next.js 16 and
+   Cache Components. Google font downloads require network access during build.
+5. Run `node --test tests/*test*`, `npm run lint`, and `npm run build` with the
+   real URL. Review dependency security advisories before launch. Publish using
+   the approved host, then verify HTTPS, `/`, `/projects`, `/projects/mmp`, bracket
+   selection, logos, scores, themes, and Kalshi hover graphs against production.
+   Check missing-data/error states and server logs. Keep #61 open until this
+   live verification succeeds. Retain the previous host release for rollback;
+   frontend rollback does not roll back Convex schema or data.
+
+The UT Upheaval and A&M Avenue are illustrative seeded picks, not real model
+output. The Real Deal is historical results. Deploying or seeding these cards
+does not establish a working model prediction pipeline; real predictions still
+need an approved model output/import source.
+
+Local validation for this change: `npm ci` and all 24 existing tests passed;
+`npm run lint` passed with four generated-file warnings. A build without a URL
+failed with the expected configuration error. The build passed using only
+`NEXT_PUBLIC_CONVEX_URL=https://placeholder.convex.cloud` as a non-secret,
+nonfunctional placeholder. This proves compilation/prerendering only, not live
+Convex connectivity, credentials, imports, or deployment. The build reported a
+Next.js security advisory and npm reported 11 moderate dependency advisories;
+review these before production launch.
