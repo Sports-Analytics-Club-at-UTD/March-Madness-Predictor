@@ -15,6 +15,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+bayesian = [
+    "scipy>=1.14",
+]
 training = [
     "matplotlib",
     "optuna",

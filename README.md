@@ -1,5 +1,54 @@
 # March-Madness-Predictor
 
+## Bayesian team-rating baseline
+
+A standalone Bayesian Bradley–Terry model now learns team strengths and home
+advantage from cached regular-season games before an explicit cutoff. It saves
+joint posterior draws using a Laplace (Gaussian) approximation and predicts
+matchup probabilities with approximate credible intervals. It does not change
+the existing Ridge/SHAP pipeline. See [setup, assumptions, and usage](docs/bayesian-ratings.md).
+
+```bash
+uv sync --extra bayesian
+uv run --extra bayesian python run_bayesian.py fit \
+  --season 2025 --cutoff 2025-03-18T00:00:00Z \
+  --output model_outputs/bayesian/2025-run-1.npz \
+  --summary model_outputs/bayesian/2025-run-1.summary.json
+uv run --extra bayesian python run_bayesian.py predict \
+  model_outputs/bayesian/2025-run-1.npz --team-a Duke --team-b Houston
+```
+
+The input caches may cover only part of opponents' schedules; fitting success
+does not establish predictive improvement. This version is independent of the
+pending forecast JSON and Convex branches.
+
+Historical evaluation now audits coverage, fits before explicit tournament
+cutoffs, saves held-out game probabilities and calibration, and compares against
+earlier-trained baselines. See [evaluation instructions](docs/bayesian-evaluation.md)
+and [the 2024–2025 pilot findings](docs/bayesian-evaluation-pilot.md).
+The [expanded comparison](docs/bayesian-evaluation-expanded.md) covers 801 games
+across 12 seasons with seed and single-member Ridge SHAP matchup baselines.
+The [historical score exporter](docs/bayesian-evaluation.md#export-historical-scores-and-run-the-expanded-comparison)
+records earlier model folds and cutoff-filtered feature provenance.
+
+```bash
+uv run --extra bayesian python run_bayesian_evaluation.py \
+  --config docs/bayesian-evaluation.example.json \
+  --output-dir model_outputs/bayesian_evaluation/pilot-1 --fetch-results
+```
+
+An optional, experimental stage simulates an explicit pre-tournament bracket
+with one joint posterior rating draw per simulated tournament and writes
+forecast JSON in main's `backend_data` contract. `run_pipeline.py --all` does
+not run it. See [Bayesian bracket Monte Carlo](docs/bayesian-monte-carlo.md).
+
+```bash
+uv run --extra bayesian python run_pipeline.py --stages bayesian_monte_carlo \
+  --season 2025 --bayesian-cutoff 2025-03-18T00:00:00Z
+```
+
+## Ridge forecasts
+
 Ridge predicts a continuous NCAA tournament-win score for each team.
 
 The Ridge training script exports `ridge_bundle.joblib` in each walk-forward

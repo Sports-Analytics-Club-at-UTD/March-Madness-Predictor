@@ -32,3 +32,4 @@ __pycache__/
 *.py[cod]
 
 data/2008_audit/
+data/*/tournament_games.source.json

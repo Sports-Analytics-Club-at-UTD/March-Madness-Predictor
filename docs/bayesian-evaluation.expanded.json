@@ -1,0 +1,107 @@
+{
+  "seasons": [
+    {
+      "season": 2009,
+      "cutoff": "2009-03-17T23:30:00+00:00",
+      "until": "2009-05-01T00:00:00Z",
+      "expected_games": 64
+    },
+    {
+      "season": 2010,
+      "cutoff": "2010-03-16T23:30:00+00:00",
+      "until": "2010-05-01T00:00:00Z",
+      "expected_games": 64
+    },
+    {
+      "season": 2011,
+      "cutoff": "2011-03-15T22:30:00+00:00",
+      "until": "2011-05-01T00:00:00Z",
+      "expected_games": 67
+    },
+    {
+      "season": 2012,
+      "cutoff": "2012-03-13T22:40:00+00:00",
+      "until": "2012-05-01T00:00:00Z",
+      "expected_games": 67
+    },
+    {
+      "season": 2013,
+      "cutoff": "2013-03-19T22:40:00+00:00",
+      "until": "2013-05-01T00:00:00Z",
+      "expected_games": 67
+    },
+    {
+      "season": 2014,
+      "cutoff": "2014-03-18T22:40:00+00:00",
+      "until": "2014-05-01T00:00:00Z",
+      "expected_games": 67
+    },
+    {
+      "season": 2015,
+      "cutoff": "2015-03-17T22:40:00+00:00",
+      "until": "2015-05-01T00:00:00Z",
+      "expected_games": 67
+    },
+    {
+      "season": 2016,
+      "cutoff": "2016-03-15T22:40:00+00:00",
+      "until": "2016-05-01T00:00:00Z",
+      "expected_games": 67
+    },
+    {
+      "season": 2019,
+      "cutoff": "2019-03-19T22:40:00+00:00",
+      "until": "2019-05-01T00:00:00Z",
+      "expected_games": 67
+    },
+    {
+      "season": 2022,
+      "cutoff": "2022-03-15T22:40:00+00:00",
+      "until": "2022-05-01T00:00:00Z",
+      "expected_games": 67
+    },
+    {
+      "season": 2023,
+      "cutoff": "2023-03-14T22:40:00+00:00",
+      "until": "2023-05-01T00:00:00Z",
+      "expected_games": 67
+    },
+    {
+      "season": 2024,
+      "cutoff": "2024-03-19T22:40:00+00:00",
+      "until": "2024-05-01T00:00:00Z",
+      "expected_games": 67
+    },
+    {
+      "season": 2025,
+      "cutoff": "2025-03-18T22:40:00+00:00",
+      "until": "2025-05-01T00:00:00Z",
+      "expected_games": 67
+    }
+  ],
+  "evaluation_seasons": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2019,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "excluded_seasons": {
+    "2008": "Incomplete cached tournament and team-game coverage.",
+    "2017": "Manifest marks incomplete tournament coverage (65 cached games).",
+    "2018": "Statistics manifest is incomplete; player snapshot cannot be accepted by the strict exporter.",
+    "2020": "Tournament cancelled.",
+    "2021": "Manifest incomplete; includes a no-contest game requiring a separate outcome policy."
+  },
+  "matchup_members": [
+    "ridge"
+  ],
+  "comparison_scope": "Fixed single-member Ridge SHAP scores with the existing score-plus-seed logistic matchup specification; full ensemble recipe unavailable."
+}

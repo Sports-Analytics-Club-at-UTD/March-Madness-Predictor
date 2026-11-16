@@ -1,0 +1,11 @@
+{
+  "tuning_seasons": [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2019],
+  "held_out_seasons": [2022, 2023, 2024, 2025],
+  "candidates": {
+    "baseline": {"rating_prior_sd": 1.5, "home_prior_sd": 1.0, "coverage": "full"},
+    "stronger_rating_prior": {"rating_prior_sd": 0.75, "home_prior_sd": 1.0, "coverage": "full"},
+    "weaker_rating_prior": {"rating_prior_sd": 3.0, "home_prior_sd": 1.0, "coverage": "full"},
+    "stronger_home_prior": {"rating_prior_sd": 1.5, "home_prior_sd": 0.5, "coverage": "full"},
+    "entrant_schedules": {"rating_prior_sd": 1.5, "home_prior_sd": 1.0, "coverage": "entrants"}
+  }
+}
