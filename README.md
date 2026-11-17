@@ -69,3 +69,36 @@ Results are sorted by `simulated_mean` descending and saved to
 Each team gets an independent seeded random stream, assigned in alphabetical
 order. This reproduces a fixed roster regardless of its input row order;
 individual sample draws differ from the single-team smoke test with seed 42.
+
+## Plots
+
+Two entry points write PNGs (plus the CSVs behind them) to the gitignored
+`model_outputs/plots/`. Both need the Kaggle CSVs (see `kaggle_tuning/README.md`;
+set `MANIA_DATA=/abs/path/to/mirror26`) and the training extra:
+
+```bash
+export MANIA_DATA=/abs/path/to/data/kaggle/mirror26
+uv run --extra training python -m viz.kaggle               # kaggle/brier_by_season.png, kaggle/calibration.png
+uv run --extra training python -m viz.bracket --season 2026  # bracket/advancement_heatmap_2026.png,
+                                                             # bracket/wins_distribution_2026.png,
+                                                             # bracket/advancement_brier_by_season.png
+```
+
+`viz.kaggle` refits the walk-forward backtest of `kaggle_tuning/configs/final.py:final`
+(change it with `--config path.py:NAME`) once per season and gender, scoring every pair of
+tournament teams. It takes about 20 seconds with 8 jobs. The predictions are cached
+in `model_outputs/plots/cache/`, so `viz.bracket` and later runs reuse them. Pass
+`--refresh` after changing model code. The Brier plot shows men, women and the combined
+Kaggle metric by season. It compares the pipeline against a seed-only logit and, for 2025
+and 2026, the model before market blending and the market alone. It also marks the
+leaderboard top-100 and top-20 cutoffs.
+
+`viz.bracket` runs `monte_carlo.simulate_bracket_tree` over each season's official
+Kaggle bracket, using those pairwise probabilities. First Four winners are taken as
+known. To plot a `run_monte_carlo.py` output table instead, pass
+`--scores-csv model_outputs/monte_carlo/team_success_scores_shap_2025.csv`.
+
+![Brier by season](docs/figures/brier_by_season.png)
+![Calibration](docs/figures/calibration.png)
+![2026 advancement heatmap](docs/figures/advancement_heatmap_2026.png)
+![Bracket advancement Brier by season](docs/figures/advancement_brier_by_season.png)
