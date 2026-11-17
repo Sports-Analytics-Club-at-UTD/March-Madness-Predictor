@@ -21,6 +21,8 @@ import type * as gameOddsModel from "../gameOddsModel.js";
 import type * as kalshi from "../kalshi.js";
 import type * as kalshiChartModel from "../kalshiChartModel.js";
 import type * as kalshiHistory from "../kalshiHistory.js";
+import type * as liveMatchupModel from "../liveMatchupModel.js";
+import type * as liveMatchups from "../liveMatchups.js";
 import type * as resolveGameReference from "../resolveGameReference.js";
 import type * as teamLogos from "../teamLogos.js";
 import type * as tournamentModel from "../tournamentModel.js";
@@ -46,6 +48,8 @@ declare const fullApi: ApiFromModules<{
   kalshi: typeof kalshi;
   kalshiChartModel: typeof kalshiChartModel;
   kalshiHistory: typeof kalshiHistory;
+  liveMatchupModel: typeof liveMatchupModel;
+  liveMatchups: typeof liveMatchups;
   resolveGameReference: typeof resolveGameReference;
   teamLogos: typeof teamLogos;
   tournamentModel: typeof tournamentModel;

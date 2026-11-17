@@ -3,6 +3,7 @@ import { tournamentValidator } from "./tournamentModel";
 import { gameOddsValidator } from "./gameOddsModel";
 import { kalshiChartValidator } from "./kalshiChartModel";
 import { cbbdSeasonValidator } from "./cbbdModel";
+import { liveGamePredictionValidator, liveRatingRunValidator, liveTeamRatingValidator } from "./liveMatchupModel";
 import { v } from "convex/values";
 
 export default defineSchema({
@@ -25,4 +26,8 @@ export default defineSchema({
     logoStorageId: v.id("_storage"),
     tournamentId: v.id("tournaments"),
   }).index("by_slug", ["slug"]),
+  liveTeamRatings: defineTable(liveTeamRatingValidator).index("by_season_team", ["season", "teamId"]),
+  liveRatingRuns: defineTable(liveRatingRunValidator).index("by_season", ["season"]),
+  liveGamePredictions: defineTable(liveGamePredictionValidator)
+    .index("by_season_game", ["season", "gameId"]).index("by_season_week", ["season", "weekStart"]),
 });
