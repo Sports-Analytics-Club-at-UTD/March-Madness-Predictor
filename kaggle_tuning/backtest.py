@@ -79,6 +79,10 @@ def fit_predict(cfg: dict, g: str, year: int, table: pd.DataFrame) -> np.ndarray
         tot = sum(w for _, w in parts)
         p = 1 / (1 + np.exp(-sum(w * _logit(pp) for pp, w in parts) / tot))
         return _post(cfg, g, year, p)
+    if cfg.get("model") in ("strat_hedge", "strat_stack", "xgb_normal", "xgb_binary"):
+        from .strat_reeval import predict
+        p = predict(cfg, g, year, table)
+        return p if cfg.get("models_inner") else _post(cfg, g, year, p)
     if cfg.get("model") == "penalized":
         from .penalized import predict
         p = predict(cfg, g, year)
