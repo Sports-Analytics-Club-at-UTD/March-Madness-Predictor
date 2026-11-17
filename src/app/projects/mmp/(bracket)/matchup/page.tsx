@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useQuery } from "convex/react";
 import { ArrowLeftRight } from "lucide-react";
-import { api } from "../../../../../convex/_generated/api";
+import { api } from "../../../../../../convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LiveModelNotes, formatUpdated, percent } from "@/components/live-model-notes";
