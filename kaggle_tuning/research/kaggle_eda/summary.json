@@ -1,0 +1,569 @@
+{
+  "inventory": [
+    {
+      "file": "MRegularSeasonCompactResults",
+      "rows": 198577,
+      "seasons": [
+        1985,
+        2026
+      ],
+      "max_day": 132
+    },
+    {
+      "file": "MRegularSeasonDetailedResults",
+      "rows": 124529,
+      "seasons": [
+        2003,
+        2026
+      ],
+      "max_day": 132
+    },
+    {
+      "file": "MNCAATourneyCompactResults",
+      "rows": 2585,
+      "seasons": [
+        1985,
+        2025
+      ],
+      "max_day": 154
+    },
+    {
+      "file": "MNCAATourneyDetailedResults",
+      "rows": 1449,
+      "seasons": [
+        2003,
+        2025
+      ],
+      "max_day": 154
+    },
+    {
+      "file": "MNCAATourneySeeds",
+      "rows": 2694,
+      "seasons": [
+        1985,
+        2026
+      ],
+      "max_day": null
+    },
+    {
+      "file": "MConferenceTourneyGames",
+      "rows": 7093,
+      "seasons": [
+        2001,
+        2026
+      ],
+      "max_day": 132
+    },
+    {
+      "file": "MSecondaryTourneyCompactResults",
+      "rows": 1865,
+      "seasons": [
+        1985,
+        2025
+      ],
+      "max_day": 153
+    },
+    {
+      "file": "MMasseyOrdinals",
+      "rows": 5865001,
+      "seasons": [
+        2003,
+        2026
+      ],
+      "max_day": 133
+    },
+    {
+      "file": "MTeamCoaches",
+      "rows": 13900,
+      "seasons": [
+        1985,
+        2026
+      ],
+      "max_day": 154
+    },
+    {
+      "file": "WRegularSeasonCompactResults",
+      "rows": 142507,
+      "seasons": [
+        1998,
+        2026
+      ],
+      "max_day": 132
+    },
+    {
+      "file": "WRegularSeasonDetailedResults",
+      "rows": 87187,
+      "seasons": [
+        2010,
+        2026
+      ],
+      "max_day": 132
+    },
+    {
+      "file": "WNCAATourneyCompactResults",
+      "rows": 1717,
+      "seasons": [
+        1998,
+        2025
+      ],
+      "max_day": 155
+    },
+    {
+      "file": "WNCAATourneyDetailedResults",
+      "rows": 961,
+      "seasons": [
+        2010,
+        2025
+      ],
+      "max_day": 155
+    },
+    {
+      "file": "WNCAATourneySeeds",
+      "rows": 1812,
+      "seasons": [
+        1998,
+        2026
+      ],
+      "max_day": null
+    },
+    {
+      "file": "WConferenceTourneyGames",
+      "rows": 6777,
+      "seasons": [
+        2002,
+        2026
+      ],
+      "max_day": 132
+    },
+    {
+      "file": "WSecondaryTourneyCompactResults",
+      "rows": 906,
+      "seasons": [
+        2013,
+        2025
+      ],
+      "max_day": 152
+    },
+    {
+      "file": "WMasseyOrdinals",
+      "rows": 0
+    },
+    {
+      "file": "WTeamCoaches",
+      "rows": 0
+    }
+  ],
+  "stage2_rows": 132133,
+  "scored_2026_rows": 126,
+  "scoring": {
+    "M": {
+      "compact_games": {
+        "2015": 67,
+        "2016": 67,
+        "2017": 67,
+        "2018": 67,
+        "2019": 67,
+        "2021": 66,
+        "2022": 67,
+        "2023": 67,
+        "2024": 67,
+        "2025": 67
+      },
+      "scored_main_bracket": {
+        "2015": 63,
+        "2016": 63,
+        "2017": 63,
+        "2018": 63,
+        "2019": 63,
+        "2021": 62,
+        "2022": 63,
+        "2023": 63,
+        "2024": 63,
+        "2025": 63,
+        "2026": 63
+      },
+      "round_counts_ok": true,
+      "lower_id_win_rate": 0.517428350116189
+    },
+    "W": {
+      "compact_games": {
+        "2015": 63,
+        "2016": 63,
+        "2017": 63,
+        "2018": 63,
+        "2019": 63,
+        "2021": 63,
+        "2022": 67,
+        "2023": 67,
+        "2024": 67,
+        "2025": 67
+      },
+      "scored_main_bracket": {
+        "2015": 63,
+        "2016": 63,
+        "2017": 63,
+        "2018": 63,
+        "2019": 63,
+        "2021": 63,
+        "2022": 63,
+        "2023": 63,
+        "2024": 63,
+        "2025": 63,
+        "2026": 63
+      },
+      "round_counts_ok": true,
+      "lower_id_win_rate": 0.5136054421768708
+    }
+  },
+  "leakage": {
+    "M": {
+      "regular_max_day": 132,
+      "conference_tourney_in_regular": 1.0,
+      "tourney_min_day": 134,
+      "secondary_tourney_min_day": 133,
+      "massey_max_ranking_day": 133,
+      "massey_rows_day_133": 402089,
+      "coach_rows_ending_after_132": 1
+    },
+    "W": {
+      "regular_max_day": 132,
+      "conference_tourney_in_regular": 1.0,
+      "tourney_min_day": 135,
+      "secondary_tourney_min_day": 135,
+      "massey_available": false
+    }
+  },
+  "seed_walk_forward": {
+    "2015": {
+      "n": 126,
+      "seed_M": 0.1703930811594609,
+      "seed_W": 0.14696894002101685,
+      "seed_all": 0.15868101059023892,
+      "seed_all_boot95": [
+        0.1274386158876834,
+        0.19209304600365507
+      ],
+      "constant_half": 0.25
+    },
+    "2016": {
+      "n": 126,
+      "seed_M": 0.2027513518511243,
+      "seed_W": 0.1719266975229643,
+      "seed_all": 0.18733902468704436,
+      "seed_all_boot95": [
+        0.15104604577345285,
+        0.2266128292787097
+      ],
+      "constant_half": 0.25
+    },
+    "2017": {
+      "n": 126,
+      "seed_M": 0.17649646484817366,
+      "seed_W": 0.14075580731026893,
+      "seed_all": 0.1586261360792213,
+      "seed_all_boot95": [
+        0.12649503839154952,
+        0.194017872098497
+      ],
+      "constant_half": 0.25
+    },
+    "2018": {
+      "n": 126,
+      "seed_M": 0.20633108512894677,
+      "seed_W": 0.1676069772255523,
+      "seed_all": 0.1869690311772495,
+      "seed_all_boot95": [
+        0.1490379710897449,
+        0.22612177108552836
+      ],
+      "constant_half": 0.25
+    },
+    "2019": {
+      "n": 126,
+      "seed_M": 0.17352913394214195,
+      "seed_W": 0.13125926449077574,
+      "seed_all": 0.15239419921645886,
+      "seed_all_boot95": [
+        0.12414087174102098,
+        0.18520669709391419
+      ],
+      "constant_half": 0.25
+    },
+    "2021": {
+      "n": 125,
+      "seed_M": 0.2290666617039139,
+      "seed_W": 0.1427606180144391,
+      "seed_all": 0.18556841568441856,
+      "seed_all_boot95": [
+        0.14889507327315057,
+        0.2268572609991294
+      ],
+      "constant_half": 0.25
+    },
+    "2022": {
+      "n": 126,
+      "seed_M": 0.2189595645919817,
+      "seed_W": 0.17203234227068248,
+      "seed_all": 0.19549595343133203,
+      "seed_all_boot95": [
+        0.15823595471064011,
+        0.23654373824243355
+      ],
+      "constant_half": 0.25
+    },
+    "2023": {
+      "n": 126,
+      "seed_M": 0.2046612330032038,
+      "seed_W": 0.1695345503217731,
+      "seed_all": 0.1870978916624885,
+      "seed_all_boot95": [
+        0.15120914510550018,
+        0.22427725762439277
+      ],
+      "constant_half": 0.25
+    },
+    "2024": {
+      "n": 126,
+      "seed_M": 0.19154100626182863,
+      "seed_W": 0.11323534070638364,
+      "seed_all": 0.15238817348410616,
+      "seed_all_boot95": [
+        0.12289961436637614,
+        0.1846745490081097
+      ],
+      "constant_half": 0.25
+    },
+    "2025": {
+      "n": 126,
+      "seed_M": 0.1527928032512253,
+      "seed_W": 0.11205206272751143,
+      "seed_all": 0.13242243298936834,
+      "seed_all_boot95": [
+        0.10910401435689464,
+        0.15759702073684925
+      ],
+      "constant_half": 0.25
+    },
+    "2026": {
+      "n": 126,
+      "seed_M": 0.16529180732079476,
+      "seed_W": 0.11701644832405537,
+      "seed_all": 0.1411541278224251,
+      "seed_all_boot95": [
+        0.11301753857928161,
+        0.1709712709713963
+      ],
+      "constant_half": 0.25
+    }
+  },
+  "by_round": {
+    "M": {
+      "R64": {
+        "n": 351,
+        "seed_brier": 0.17379022159863428,
+        "favorite_win": 0.7207977207977208,
+        "share_of_total_sq_error": 0.4636863843402954
+      },
+      "R32": {
+        "n": 176,
+        "seed_brier": 0.18855169351102188,
+        "favorite_win": 0.7386363636363636,
+        "share_of_total_sq_error": 0.2522522189977132
+      },
+      "S16": {
+        "n": 88,
+        "seed_brier": 0.23047610282540348,
+        "favorite_win": 0.6818181818181818,
+        "share_of_total_sq_error": 0.15417020998608705
+      },
+      "E8": {
+        "n": 44,
+        "seed_brier": 0.24379484094622664,
+        "favorite_win": 0.6363636363636364,
+        "share_of_total_sq_error": 0.08153969405382898
+      },
+      "F4": {
+        "n": 22,
+        "seed_brier": 0.18135140966279215,
+        "favorite_win": 0.875,
+        "share_of_total_sq_error": 0.030327422850174854
+      },
+      "NC": {
+        "n": 11,
+        "seed_brier": 0.2155600544855292,
+        "favorite_win": 0.8333333333333334,
+        "share_of_total_sq_error": 0.01802406977190056
+      }
+    },
+    "W": {
+      "R64": {
+        "n": 352,
+        "seed_brier": 0.11028658067037617,
+        "favorite_win": 0.8352272727272727,
+        "share_of_total_sq_error": 0.3887359284298827
+      },
+      "R32": {
+        "n": 176,
+        "seed_brier": 0.16345757008470477,
+        "favorite_win": 0.7613636363636364,
+        "share_of_total_sq_error": 0.28807598295065356
+      },
+      "S16": {
+        "n": 88,
+        "seed_brier": 0.1838127659645611,
+        "favorite_win": 0.75,
+        "share_of_total_sq_error": 0.1619748880601837
+      },
+      "E8": {
+        "n": 44,
+        "seed_brier": 0.18518882991932492,
+        "favorite_win": 0.7727272727272727,
+        "share_of_total_sq_error": 0.08159373436000152
+      },
+      "F4": {
+        "n": 22,
+        "seed_brier": 0.24775877122731477,
+        "favorite_win": 0.5384615384615384,
+        "share_of_total_sq_error": 0.054580946846763255
+      },
+      "NC": {
+        "n": 11,
+        "seed_brier": 0.22731422397441914,
+        "favorite_win": 0.6666666666666666,
+        "share_of_total_sq_error": 0.02503851935251519
+      }
+    }
+  },
+  "r64_upsets": {
+    "M": {
+      "8v9": {
+        "n": 160,
+        "lower_seed_win": 0.51875
+      },
+      "7v10": {
+        "n": 159,
+        "lower_seed_win": 0.389937106918239
+      },
+      "6v11": {
+        "n": 160,
+        "lower_seed_win": 0.38749999999999996
+      },
+      "5v12": {
+        "n": 160,
+        "lower_seed_win": 0.35624999999999996
+      },
+      "4v13": {
+        "n": 160,
+        "lower_seed_win": 0.20625000000000004
+      },
+      "3v14": {
+        "n": 160,
+        "lower_seed_win": 0.14375000000000004
+      },
+      "2v15": {
+        "n": 160,
+        "lower_seed_win": 0.06874999999999998
+      },
+      "1v16": {
+        "n": 160,
+        "lower_seed_win": 0.012499999999999956
+      }
+    },
+    "W": {
+      "8v9": {
+        "n": 108,
+        "lower_seed_win": 0.4814814814814815
+      },
+      "7v10": {
+        "n": 108,
+        "lower_seed_win": 0.34259259259259256
+      },
+      "6v11": {
+        "n": 108,
+        "lower_seed_win": 0.32407407407407407
+      },
+      "5v12": {
+        "n": 108,
+        "lower_seed_win": 0.20370370370370372
+      },
+      "4v13": {
+        "n": 108,
+        "lower_seed_win": 0.05555555555555558
+      },
+      "3v14": {
+        "n": 108,
+        "lower_seed_win": 0.0
+      },
+      "2v15": {
+        "n": 108,
+        "lower_seed_win": 0.0
+      },
+      "1v16": {
+        "n": 108,
+        "lower_seed_win": 0.0092592592592593
+      }
+    }
+  },
+  "women_host": {
+    "n": 767,
+    "seasons": {
+      "1999": 32,
+      "2000": 48,
+      "2001": 63,
+      "2002": 48,
+      "2003": 28,
+      "2004": 21,
+      "2005": 46,
+      "2006": 17,
+      "2007": 48,
+      "2008": 16,
+      "2009": 23,
+      "2010": 23,
+      "2011": 25,
+      "2012": 6,
+      "2013": 27,
+      "2014": 16,
+      "2016": 33,
+      "2017": 34,
+      "2018": 33,
+      "2019": 38,
+      "2022": 33,
+      "2023": 34,
+      "2024": 43,
+      "2025": 32
+    },
+    "home_win": 0.8226857887874837,
+    "seed_expected": 0.7895478644632662,
+    "excess_season_boot95": [
+      0.006533313459258662,
+      0.06419793535667288
+    ],
+    "home_was_better_seed": 0.9374185136897001,
+    "rounds": {
+      "R64": 414,
+      "R32": 289,
+      "S16": 42,
+      "E8": 19,
+      "F4": 2,
+      "NC": 1
+    }
+  },
+  "leaderboard": {
+    "2025": {
+      "teams": 1727,
+      "best": 0.10411,
+      "top20": 0.10921,
+      "top100": 0.11078,
+      "median": 0.15463,
+      "teams_within_0.001_of_top100": 69
+    },
+    "2026": {
+      "teams": 3462,
+      "best": 0.1097454,
+      "top20": 0.120162,
+      "top100": 0.1243022,
+      "median": 0.1434329,
+      "teams_within_0.001_of_top100": 82
+    }
+  }
+}
