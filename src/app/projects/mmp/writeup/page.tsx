@@ -209,7 +209,7 @@ def compute_recency_weights(seasons_series, target_season, half_life=3.0):
     normalized_weights = weights / weights.mean()
     return normalized_weights.values
 `}
-                caption="Logging lines omitted. A season three years old counts half as much as the most recent one."
+                caption="Logging lines omitted. A season's weight halves for every three years between it and the target season."
               />
               <p>
                 A point prediction says nothing about uncertainty, so the Monte Carlo step adds held-out residuals back onto each team&apos;s baseline. The residual pool comes from walk-forward validation seasons, never from the model&apos;s own training data:

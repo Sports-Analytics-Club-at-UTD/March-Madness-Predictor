@@ -24,7 +24,7 @@ export type ScoredConfig = {
 export const leaderboardConfigs: ScoredConfig[] = [
   { key: "market", label: "Betting odds only", note: "goto_conversion file; 2025 includes its Drake gamble", scores: { 2025: 0.10921, 2026: 0.12584 } },
   { key: "final", label: "Original ensemble + market", note: "configs/final.py", scores: { 2025: 0.10992, 2026: 0.12267 }, ranks: { 2025: 90, 2026: 56 } },
-  { key: "best", label: "Tuned ensemble (current best)", note: "configs/combined.py:BEST", scores: { 2025: 0.107965, 2026: 0.121219 }, ranks: { 2025: 10, 2026: 31 } },
+  { key: "best", label: "Tuned ensemble (combined BEST)", note: "configs/combined.py:BEST", scores: { 2025: 0.107965, 2026: 0.121219 }, ranks: { 2025: 10, 2026: 31 } },
   { key: "efficiency", label: "+ ridge efficiency ratings", note: "ratings.py:EFFICIENCY, exploratory", scores: { 2025: 0.1077, 2026: 0.12103 }, ranks: { 2025: 9, 2026: 31 } },
 ];
 
