@@ -113,8 +113,8 @@ export default function WriteupPage() {
               Which data we used, which models we picked and why, how we scored them against the real 2025 and 2026 tournaments, and the ideas that didn&apos;t make it.
             </p>
             <div className="mt-8 grid gap-3 sm:grid-cols-3">
-              <Stat label="2025 Kaggle Brier" value="0.10797" detail="Rank #10. The top-20 cutoff was 0.10921." />
-              <Stat label="2026 Kaggle Brier" value="0.12122" detail="Rank #31. The top-100 cutoff was 0.12430." />
+              <Stat label="2025 Kaggle Brier" value="0.10797" detail="combined.py:BEST, rank #10. The top-20 cutoff was 0.10921." />
+              <Stat label="2026 Kaggle Brier" value="0.12122" detail="combined.py:BEST, rank #31. The top-100 cutoff was 0.12430." />
               <Stat label="Scored games per year" value="126" detail="63 men's and 63 women's main-bracket games. First Four excluded." />
             </div>
           </div>
@@ -302,7 +302,7 @@ if w and year in MK.PATHS:
                 <li><strong className="text-foreground">Women:</strong> 40% logistic with a ridge quality rating at α 0.1, 10% XGBoost, 30% of the original feature logistic and 20% of a port of the public &ldquo;Vilnius&rdquo; XGBoost recipe, sharpened by 1.1 in log odds.</li>
               </ul>
               <p>
-                Together these form <C>combined.py:BEST</C>, which scored 0.10797 (#10) in 2025 and 0.12122 (#31) in 2026, against 0.10992 (#90) and 0.12267 (#56) for the original ensemble.
+                Together these form <C>combined.py:BEST</C>, which scored 0.10797 (#10) in 2025 and 0.12122 (#31) in 2026, against 0.10992 (#90) and 0.12267 (#56) for the original ensemble. The submission script (<C>submit.py</C>) currently builds the simpler <C>women_recommended</C> configuration, with men on <C>final</C>, which scores 0.10838 and 0.12142.
               </p>
             </Section>
 
