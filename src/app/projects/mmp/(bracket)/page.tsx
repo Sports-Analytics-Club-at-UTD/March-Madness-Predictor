@@ -2,7 +2,7 @@
 
 import { useQuery } from "convex/react";
 import dynamic from "next/dynamic";
-import { api } from "../../../../convex/_generated/api";
+import { api } from "../../../../../convex/_generated/api";
 import { TournamentBracketSkeleton } from "@/components/tournament-bracket-skeleton";
 import { useBracketWorkspace } from "@/components/bracket-workspace";
 import { CbbdResultSync } from "@/components/cbbd-result-sync";

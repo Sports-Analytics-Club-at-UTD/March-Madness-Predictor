@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BookOpen } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarHeader, useSidebar } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PredictionBracketCard } from "@/components/prediction-bracket-card";
@@ -15,6 +15,10 @@ export function MmpSidebar() {
       <SidebarHeader className="px-3 pt-3 pb-0">
         <Link href="/projects" aria-label="Back to projects" title="Back to projects" className="flex size-8 items-center justify-center rounded-lg text-accent transition-colors hover:bg-accent/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
           <ArrowLeft aria-hidden="true" className="size-4" />
+        </Link>
+        <Link href="/projects/mmp/writeup" className="mt-3 flex items-center gap-2 rounded-lg border border-sidebar-border px-3 py-2 text-sm font-medium transition-colors hover:bg-foreground/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+          <BookOpen aria-hidden="true" className="size-4 text-accent" />
+          How the model works
         </Link>
       </SidebarHeader>
       <SidebarContent aria-label="Brackets" aria-busy={brackets === undefined} className="gap-5 px-3 py-4">
