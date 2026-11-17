@@ -4,8 +4,8 @@
         --season 2026 --out submission.csv [--market odds.csv | --model-only] [--score solution.csv]
 
 Fits `configs/women_recommended.RECOMMENDED` (men = configs/final, women = recommended ensemble,
-market blend M 0.85 / W 0.5) on data as of Selection Sunday of --season, predicts every pair of
-seeded teams, writes 0.5 for all other rows of the Stage 2 sample (never scored), validates the
+market blend M 0.85 / W 0.5). Competition CSVs are cut at Selection Sunday of --season; market
+odds are taken as given and must predate the submission deadline. It predicts every pair of seeded teams, writes 0.5 for all other rows of the Stage 2 sample (never scored), validates the
 file and writes `<out>.provenance.json`.
 """
 from __future__ import annotations
@@ -160,7 +160,8 @@ def main(argv=None):
         "created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "season": a.season, "config_name": name, "config": cfg,
         "config_source": "kaggle_tuning/configs/women_recommended.py (men: configs/final.py)",
-        "data_cutoff": f"regular season DayNum <= 132, Massey RankingDayNum <= 133, NCAA results seasons < {a.season}",
+        "data_cutoff": f"regular season DayNum <= 132, Massey RankingDayNum <= 133, NCAA results seasons < {a.season}"
+                       + ("; market odds as given (must predate the submission deadline)" if market_path else ""),
         "rows": len(written), "counts": counts,
         "pred_summary": {k: float(v) for k, v in written.Pred.describe()[["min", "mean", "max"]].items()},
         "git": {"sha": git("rev-parse", "HEAD"), "dirty": bool(git("status", "--porcelain"))},

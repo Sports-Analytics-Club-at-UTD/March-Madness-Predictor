@@ -97,9 +97,11 @@ uv run --extra training python -m kaggle_tuning.submit --season 2026 --out submi
     [--market path/to/goto_submission.csv | --model-only] [--score solution.csv]
 ```
 
-The script fits `configs/women_recommended.RECOMMENDED` (men = `configs/final.BASE`). Every CSV
-is first cut to what was known on Selection Sunday of `--season`: regular season DayNum ≤ 132,
-Massey RankingDayNum ≤ 133, and NCAA results only from earlier seasons. The script then predicts
+The script fits `configs/women_recommended.RECOMMENDED` (men = `configs/final.BASE`). Every
+competition CSV is first cut to what was known on Selection Sunday of `--season`: regular season
+DayNum ≤ 132, Massey RankingDayNum ≤ 133, and NCAA results only from earlier seasons. Market odds
+are not filtered. They must come from before the submission deadline, not from before Selection
+Sunday: the 2026 file is goto-conversion 4.0.1 from 2026-03-17, two days before the deadline. The script then predicts
 all seeded × seeded pairs, writes the file, and re-reads it to check that the IDs and order
 exactly match the sample, that there are no duplicates, and that every Pred is finite and in
 [0, 1]. It writes `<out>.provenance.json` with the config, git SHA and dirty flag, package
