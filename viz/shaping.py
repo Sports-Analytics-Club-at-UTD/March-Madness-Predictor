@@ -101,8 +101,23 @@ def bracket_tree(slots: pd.DataFrame, seeds: pd.DataFrame, field: set[int]):
     return teams, pairs, edges
 
 
-def actual_wins(played: pd.DataFrame) -> pd.Series:
-    """played: T1, T2, y (1 if T1 won). Returns wins per TeamID, counting every team that played."""
-    winners = np.where(played.y.values == 1, played.T1.values, played.T2.values)
-    teams = pd.Index(np.unique(np.concatenate([played.T1.values, played.T2.values])))
-    return pd.Series(winners).value_counts().reindex(teams, fill_value=0).astype(int)
+def actual_wins(teams, pairs, edges, played: pd.DataFrame) -> np.ndarray:
+    """Games won by each bracket team, walking the tree from bracket_tree. played: T1, T2, y (1 if T1 won).
+    A matchup with no played game (e.g. 2021 men's VCU-Oregon, a no-contest) goes to the side that
+    played later in the tournament."""
+    result = {frozenset((t1, t2)): (t1 if y == 1 else t2) for t1, t2, y in zip(played.T1, played.T2, played.y)}
+    seen = set(played.T1) | set(played.T2)
+    wins = dict.fromkeys(teams, 0)
+    winners = []
+    games = [(teams[h], teams[a]) for h, a in pairs] + [None] * len(edges)
+    for i, game in enumerate(games):
+        a, b = game or (winners[edges[i - len(pairs)][0]], winners[edges[i - len(pairs)][1]])
+        w = result.get(frozenset((a, b)))
+        if w is None:
+            alive = [t for t in (a, b) if t in seen]
+            if len(alive) != 1:
+                raise ValueError(f"No result for {a} vs {b}.")
+            w = alive[0]
+        winners.append(w)
+        wins[w] += 1
+    return np.array([wins[t] for t in teams])

@@ -55,9 +55,13 @@ class ShapingTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             bracket_tree(slots, seeds, field={1, 2, 3, 4, 5})
 
-    def test_actual_wins_counts_losers_as_zero(self):
-        played = pd.DataFrame({"T1": [1, 3, 1], "T2": [2, 4, 3], "y": [1, 0, 0]})
-        self.assertEqual(actual_wins(played).to_dict(), {1: 1, 2: 0, 3: 1, 4: 1})
+    def test_actual_wins_walks_tree_and_awards_no_contest(self):
+        teams, pairs, edges = [1, 2, 3, 4], [(0, 1), (2, 3)], [(0, 1)]
+        # 3 vs 4 was never played (no contest); 3 then played and lost the final to 1
+        played = pd.DataFrame({"T1": [1, 1], "T2": [2, 3], "y": [1, 1]})
+        self.assertEqual(actual_wins(teams, pairs, edges, played).tolist(), [2, 0, 1, 0])
+        with self.assertRaises(ValueError):
+            actual_wins(teams, pairs, edges, played.iloc[:1])
 
 
 if __name__ == "__main__":

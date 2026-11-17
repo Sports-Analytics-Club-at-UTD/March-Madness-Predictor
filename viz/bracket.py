@@ -35,8 +35,8 @@ def simulate_season(preds: pd.DataFrame, g: str, year: int, n_sims: int, seed: i
 
     seeds = F.read(f"{g}NCAATourneySeeds").query("Season == @year")
     slots = F.read(f"{g}NCAATourneySlots").query("Season == @year")
-    wins = actual_wins(B.test_pairs(g, year))
-    teams, pairs, edges = bracket_tree(slots, seeds, set(wins.index))
+    played = B.test_pairs(g, year)
+    teams, pairs, edges = bracket_tree(slots, seeds, set(played.T1) | set(played.T2))
     idx = {t: i for i, t in enumerate(teams)}
     m = np.full((len(teams), len(teams)), np.nan)
     d = preds[preds.T1.isin(idx) & preds.T2.isin(idx)]
@@ -49,7 +49,7 @@ def simulate_season(preds: pd.DataFrame, g: str, year: int, n_sims: int, seed: i
     names = F.read(f"{g}Teams").set_index("TeamID").TeamName
     out = pd.DataFrame({"team": names.reindex(teams).values, "season": year, "gender": g, "TeamID": teams,
                         "seed": seeds.set_index("TeamID").Seed.str[1:3].astype(int).reindex(teams).values,
-                        "simulated_mean": counts.mean(axis=1), "actual_wins": wins.reindex(teams).values})
+                        "simulated_mean": counts.mean(axis=1), "actual_wins": actual_wins(teams, pairs, edges, played)})
     for k in THRESHOLDS:
         out[prob_col("probability_ge_", k)] = (counts >= k).mean(axis=1)
     return out.sort_values(["simulated_mean", "team"], ascending=[False, True]).reset_index(drop=True)
