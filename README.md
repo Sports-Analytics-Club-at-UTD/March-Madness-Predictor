@@ -219,6 +219,94 @@ intentionally refresh a completed season or retry upgraded scoreboard access:
 pnpm exec convex run cbbd:syncSeason '{"season":2026,"force":true}'
 ```
 
+## Live matchups and weekly predictions
+
+`/projects/mmp/matchup` gives the model's win probability for any two Division I
+men's teams this season, on a neutral court or at either team's arena.
+`/projects/mmp/weekly` lists the predictions for the coming week's games by week
+and day, then marks each pick right or wrong and reports accuracy and Brier score
+once games are final. Both pages are linked from the mmp sidebar.
+
+**Model.** `model/live_matchup_model.py` reuses the logistic member of the
+`final` men's configuration in `kaggle_tuning` (`origin/kaggle-score-tuning`).
+That model is a StandardScaler plus an L2 logistic regression with C = 0.1, no
+intercept, and both team orders averaged. Here it uses only the three features
+that exist during the season:
+ridge-adjusted scoring margin (alpha 1, margins clipped at 60, with a home
+term), margin-aware Elo (k 20, home 75, 75% carried between seasons), and mean
+net efficiency per 100 possessions. Seeds and Massey rankings do not exist before
+Selection Sunday, so they are left out, along with the XGBoost member and the
+betting-market blend. The model trains on the 2003–2025 men's tournaments (First
+Four excluded) from the Kaggle mirror. Walk-forward tournament Brier scores for
+2015–2025 range from 0.132 to 0.228, with 62–81% of winners picked; the
+`backtest` field of the artifact has each year.
+
+Regenerate the artifact with a pinned environment (Python 3.13; dependency
+versions live in the script header):
+
+```bash
+uv run model/live_matchup_model.py export --kaggle-dir /path/to/data/kaggle/mirror26
+```
+
+This writes the scaler and coefficients to `convex/data/liveMatchupModel.json`
+and each team's end-of-2026 regular-season Elo, with its Kaggle spellings, to
+`model/elo-prior-2026.json`.
+
+**Sync.** Run the importer against your configured Convex deployment:
+
+```bash
+pnpm exec convex dev --once
+pnpm live:sync            # optional: --season 2027 --dump /tmp/live.json
+```
+
+The importer reads the season's games and team box scores from CBBD in 10-day
+windows, staying under the API's 3,000-row limit. It uses final regular-season
+games between Division I teams, which includes conference tournaments but not
+the NCAA tournament or NIT, the same games the Kaggle regular season covers. From
+these it computes the three features in `scripts/lib/live-ratings.mjs` and stores
+them in `liveTeamRatings`, with run details in `liveRatingRuns`. It then stores
+predictions in `liveGamePredictions` for Division I games in the next seven days,
+including NCAA tournament and NIT games,
+and refreshes results for stored games that are not final. A prediction is made
+only before tip-off, from ratings that exclude the game, and is refreshed on each
+sync until tip-off. After that, only the status and score change. Games first
+seen after they start are skipped rather than predicted after the fact. Rerun
+the sync to update ratings and grade results; it is safe to repeat.
+
+CBBD schools are matched to Kaggle Elo priors by spelling, plus a few aliases
+listed in `live-ratings.mjs`. A spelling that maps to more than one team leaves
+both unmatched. Teams without a prior, such as new Division I members, start at
+1500. Teams without a completed game and box score get no features. Both pages
+list these teams.
+
+To compare against Python on the same CBBD data:
+
+```bash
+pnpm live:sync --dump /tmp/live.json
+uv run model/live_matchup_model.py parity --dump /tmp/live.json --team-a Duke --team-b Houston
+```
+
+On November 17, 2026, the Python and TypeScript features agreed within 1e-13.
+Both gave Duke a 0.705702 chance against Houston on a neutral court and 0.816507
+at Duke. Training used sklearn's default iterative sparse ridge solver, while the
+site solves exactly; with `--solver auto` Python reproduces training instead,
+with quality differences up to 0.07 points.
+
+**Limits.** Early in the season each team has only a few games, so ratings rest
+on little data and lean on last season's Elo. The model was trained on
+neutral-court tournament games, so regular-season games, especially mismatches,
+fall outside its training data. Home court is an adjustment the model did not
+learn: the home team's adjusted margin gains the mean full-season ridge home
+edge (3.56 points, 2003–2026) and its Elo gains the 75-point Elo home bonus.
+This season's own fitted home edge, 7.4 points in mid-November, is stored but
+not used, because early schedules mix home court with strong teams hosting weak
+ones. Injuries and lineups enter only through results. The weekly page tracks how
+these probabilities hold up on regular-season games.
+
+```bash
+node --test tests/live-matchups.test.cjs tests/live-ratings.test.mjs
+```
+
 ## App theme
 
 The root `ThemeProvider` uses `next-themes` with a system default and applies

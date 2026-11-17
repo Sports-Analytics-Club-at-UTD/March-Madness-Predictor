@@ -8,6 +8,7 @@
     "convex:deploy": "convex deploy",
     "logos:sync": "node --env-file=.env.local scripts/sync-team-logos.mts",
     "odds:sync": "node --env-file=.env.local scripts/sync-kalshi-odds.mts",
+    "live:sync": "node --env-file=.env.local scripts/sync-live-matchups.mts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

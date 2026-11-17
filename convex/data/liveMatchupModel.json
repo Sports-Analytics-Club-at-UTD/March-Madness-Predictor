@@ -1,0 +1,96 @@
+{
+  "id": "kaggle-logit-live-v1",
+  "source": "kaggle_tuning `final` logit member (origin/kaggle-score-tuning @ 07db721), seed and Massey features removed",
+  "features": [
+    "quality",
+    "elo",
+    "net_eff"
+  ],
+  "scalerMean": [
+    5.453479625364524e-15,
+    -6.484664389897232e-14,
+    -1.355033213593043e-15
+  ],
+  "scalerScale": [
+    9.716941503113894,
+    175.5906449161173,
+    9.515773163519222
+  ],
+  "coefficients": [
+    1.0215666956044553,
+    0.571244831641557,
+    -0.10856344186175548
+  ],
+  "regularizationC": 0.1,
+  "trainingSeasons": [
+    2003,
+    2025
+  ],
+  "trainingRows": 2770,
+  "quality": {
+    "alpha": 1.0,
+    "marginClip": 60.0
+  },
+  "elo": {
+    "k": 20.0,
+    "home": 75.0,
+    "carry": 0.75
+  },
+  "homeEdgePoints": 3.5599496545698863,
+  "homeEdgeSeasons": [
+    2003,
+    2026
+  ],
+  "backtest": {
+    "2015": {
+      "games": 63,
+      "brier": 0.15306,
+      "accuracy": 0.7778
+    },
+    "2016": {
+      "games": 63,
+      "brier": 0.17858,
+      "accuracy": 0.7302
+    },
+    "2017": {
+      "games": 63,
+      "brier": 0.17118,
+      "accuracy": 0.7302
+    },
+    "2018": {
+      "games": 63,
+      "brier": 0.19835,
+      "accuracy": 0.7143
+    },
+    "2019": {
+      "games": 63,
+      "brier": 0.15818,
+      "accuracy": 0.7143
+    },
+    "2021": {
+      "games": 62,
+      "brier": 0.22083,
+      "accuracy": 0.6774
+    },
+    "2022": {
+      "games": 63,
+      "brier": 0.22772,
+      "accuracy": 0.619
+    },
+    "2023": {
+      "games": 63,
+      "brier": 0.21031,
+      "accuracy": 0.6667
+    },
+    "2024": {
+      "games": 63,
+      "brier": 0.18867,
+      "accuracy": 0.6667
+    },
+    "2025": {
+      "games": 63,
+      "brier": 0.13158,
+      "accuracy": 0.8095
+    }
+  }
+}

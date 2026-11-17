@@ -1,0 +1,3697 @@
+{
+ "season": 2026,
+ "note": "End of 2026 regular season Elo from the Kaggle mirror (before carry-over).",
+ "teams": [
+  {
+   "kaggleTeamId": 1101,
+   "teamName": "Abilene Chr",
+   "spellings": [
+    "abilene chr",
+    "abilene christian",
+    "abilene-christian"
+   ],
+   "elo": 1368.9759
+  },
+  {
+   "kaggleTeamId": 1102,
+   "teamName": "Air Force",
+   "spellings": [
+    "air force",
+    "air-force"
+   ],
+   "elo": 1154.2211
+  },
+  {
+   "kaggleTeamId": 1103,
+   "teamName": "Akron",
+   "spellings": [
+    "akron"
+   ],
+   "elo": 1804.6246
+  },
+  {
+   "kaggleTeamId": 1104,
+   "teamName": "Alabama",
+   "spellings": [
+    "alabama"
+   ],
+   "elo": 1852.9317
+  },
+  {
+   "kaggleTeamId": 1105,
+   "teamName": "Alabama A&M",
+   "spellings": [
+    "alabama a&m",
+    "alabama-am"
+   ],
+   "elo": 1342.3741
+  },
+  {
+   "kaggleTeamId": 1106,
+   "teamName": "Alabama St",
+   "spellings": [
+    "alabama st",
+    "alabama st.",
+    "alabama state",
+    "alabama-st",
+    "alabama-state"
+   ],
+   "elo": 1234.6941
+  },
+  {
+   "kaggleTeamId": 1107,
+   "teamName": "SUNY Albany",
+   "spellings": [
+    "albany",
+    "albany (ny)",
+    "albany ny",
+    "albany-ny",
+    "suny albany"
+   ],
+   "elo": 1310.8014
+  },
+  {
+   "kaggleTeamId": 1108,
+   "teamName": "Alcorn St",
+   "spellings": [
+    "alcorn",
+    "alcorn st",
+    "alcorn st.",
+    "alcorn state",
+    "alcorn-state"
+   ],
+   "elo": 1210.6035
+  },
+  {
+   "kaggleTeamId": 1110,
+   "teamName": "American Univ",
+   "spellings": [
+    "american",
+    "american u.",
+    "american univ",
+    "american university",
+    "american-university"
+   ],
+   "elo": 1402.2827
+  },
+  {
+   "kaggleTeamId": 1111,
+   "teamName": "Appalachian St",
+   "spellings": [
+    "appalachian st",
+    "appalachian st.",
+    "appalachian state",
+    "appalachian-st",
+    "appalachian-state"
+   ],
+   "elo": 1527.9153
+  },
+  {
+   "kaggleTeamId": 1112,
+   "teamName": "Arizona",
+   "spellings": [
+    "arizona"
+   ],
+   "elo": 2044.7784
+  },
+  {
+   "kaggleTeamId": 1113,
+   "teamName": "Arizona St",
+   "spellings": [
+    "arizona st",
+    "arizona st.",
+    "arizona state",
+    "arizona-st",
+    "arizona-state"
+   ],
+   "elo": 1628.7648
+  },
+  {
+   "kaggleTeamId": 1114,
+   "teamName": "Ark Little Rock",
+   "spellings": [
+    "ark little rock",
+    "arkansas-little rock",
+    "arkansas-little-rock",
+    "little rock",
+    "little-rock",
+    "ualr"
+   ],
+   "elo": 1303.4791
+  },
+  {
+   "kaggleTeamId": 1115,
+   "teamName": "Ark Pine Bluff",
+   "spellings": [
+    "ark pine bluff",
+    "ark-pine-bluff",
+    "ark.-pine bluff",
+    "arkansas-pine bluff",
+    "arkansas-pine-bluff"
+   ],
+   "elo": 1265.4962
+  },
+  {
+   "kaggleTeamId": 1116,
+   "teamName": "Arkansas",
+   "spellings": [
+    "arkansas"
+   ],
+   "elo": 1894.3201
+  },
+  {
+   "kaggleTeamId": 1117,
+   "teamName": "Arkansas St",
+   "spellings": [
+    "arkansas st",
+    "arkansas st.",
+    "arkansas state",
+    "arkansas-st",
+    "arkansas-state"
+   ],
+   "elo": 1578.5927
+  },
+  {
+   "kaggleTeamId": 1119,
+   "teamName": "Army",
+   "spellings": [
+    "army",
+    "army west point",
+    "army-west-point"
+   ],
+   "elo": 1209.6969
+  },
+  {
+   "kaggleTeamId": 1120,
+   "teamName": "Auburn",
+   "spellings": [
+    "auburn"
+   ],
+   "elo": 1674.5591
+  },
+  {
+   "kaggleTeamId": 1122,
+   "teamName": "Austin Peay",
+   "spellings": [
+    "austin peay",
+    "austin-peay"
+   ],
+   "elo": 1523.4338
+  },
+  {
+   "kaggleTeamId": 1123,
+   "teamName": "Ball St",
+   "spellings": [
+    "ball st",
+    "ball st.",
+    "ball state",
+    "ball-st",
+    "ball-state"
+   ],
+   "elo": 1359.1407
+  },
+  {
+   "kaggleTeamId": 1124,
+   "teamName": "Baylor",
+   "spellings": [
+    "baylor"
+   ],
+   "elo": 1615.6271
+  },
+  {
+   "kaggleTeamId": 1125,
+   "teamName": "Belmont",
+   "spellings": [
+    "belmont"
+   ],
+   "elo": 1714.996
+  },
+  {
+   "kaggleTeamId": 1126,
+   "teamName": "Bethune-Cookman",
+   "spellings": [
+    "bethune-cookman"
+   ],
+   "elo": 1461.2192
+  },
+  {
+   "kaggleTeamId": 1127,
+   "teamName": "Binghamton",
+   "spellings": [
+    "binghamton"
+   ],
+   "elo": 1200.925
+  },
+  {
+   "kaggleTeamId": 1129,
+   "teamName": "Boise St",
+   "spellings": [
+    "boise st",
+    "boise st.",
+    "boise state",
+    "boise-st",
+    "boise-state"
+   ],
+   "elo": 1686.5266
+  },
+  {
+   "kaggleTeamId": 1130,
+   "teamName": "Boston College",
+   "spellings": [
+    "boston college",
+    "boston-college"
+   ],
+   "elo": 1427.8042
+  },
+  {
+   "kaggleTeamId": 1131,
+   "teamName": "Boston Univ",
+   "spellings": [
+    "boston",
+    "boston u",
+    "boston u.",
+    "boston univ",
+    "boston university",
+    "boston-u",
+    "boston-university"
+   ],
+   "elo": 1434.3842
+  },
+  {
+   "kaggleTeamId": 1132,
+   "teamName": "Bowling Green",
+   "spellings": [
+    "bowling green",
+    "bowling green state",
+    "bowling-green",
+    "bowling-green-state"
+   ],
+   "elo": 1472.8918
+  },
+  {
+   "kaggleTeamId": 1133,
+   "teamName": "Bradley",
+   "spellings": [
+    "bradley"
+   ],
+   "elo": 1658.2476
+  },
+  {
+   "kaggleTeamId": 1135,
+   "teamName": "Brown",
+   "spellings": [
+    "brown"
+   ],
+   "elo": 1341.1239
+  },
+  {
+   "kaggleTeamId": 1136,
+   "teamName": "Bryant",
+   "spellings": [
+    "bryant",
+    "bryant university"
+   ],
+   "elo": 1257.7801
+  },
+  {
+   "kaggleTeamId": 1137,
+   "teamName": "Bucknell",
+   "spellings": [
+    "bucknell"
+   ],
+   "elo": 1252.9277
+  },
+  {
+   "kaggleTeamId": 1138,
+   "teamName": "Buffalo",
+   "spellings": [
+    "buffalo"
+   ],
+   "elo": 1408.8085
+  },
+  {
+   "kaggleTeamId": 1139,
+   "teamName": "Butler",
+   "spellings": [
+    "butler"
+   ],
+   "elo": 1523.46
+  },
+  {
+   "kaggleTeamId": 1140,
+   "teamName": "BYU",
+   "spellings": [
+    "brigham young",
+    "brigham-young",
+    "byu"
+   ],
+   "elo": 1762.9106
+  },
+  {
+   "kaggleTeamId": 1141,
+   "teamName": "C Michigan",
+   "spellings": [
+    "c michigan",
+    "central mich.",
+    "central michigan",
+    "central-mich",
+    "central-michigan"
+   ],
+   "elo": 1352.6222
+  },
+  {
+   "kaggleTeamId": 1142,
+   "teamName": "Cal Poly",
+   "spellings": [
+    "cal poly",
+    "cal poly slo",
+    "cal-poly"
+   ],
+   "elo": 1474.8023
+  },
+  {
+   "kaggleTeamId": 1143,
+   "teamName": "California",
+   "spellings": [
+    "california",
+    "university of california"
+   ],
+   "elo": 1582.3073
+  },
+  {
+   "kaggleTeamId": 1144,
+   "teamName": "Campbell",
+   "spellings": [
+    "campbell"
+   ],
+   "elo": 1505.3474
+  },
+  {
+   "kaggleTeamId": 1145,
+   "teamName": "Canisius",
+   "spellings": [
+    "canisius"
+   ],
+   "elo": 1258.8812
+  },
+  {
+   "kaggleTeamId": 1146,
+   "teamName": "Cent Arkansas",
+   "spellings": [
+    "cent arkansas",
+    "central ark.",
+    "central arkansas",
+    "central-ark",
+    "central-arkansas"
+   ],
+   "elo": 1570.5033
+  },
+  {
+   "kaggleTeamId": 1148,
+   "teamName": "Central Conn",
+   "spellings": [
+    "central conn",
+    "central conn. st.",
+    "central connecticut",
+    "central connecticut state",
+    "central-conn-st",
+    "central-connecticut-state"
+   ],
+   "elo": 1379.0968
+  },
+  {
+   "kaggleTeamId": 1149,
+   "teamName": "Charleston So",
+   "spellings": [
+    "charleston so",
+    "charleston so.",
+    "charleston southern",
+    "charleston-so",
+    "charleston-southern"
+   ],
+   "elo": 1379.1942
+  },
+  {
+   "kaggleTeamId": 1150,
+   "teamName": "Charlotte",
+   "spellings": [
+    "charlotte",
+    "nc charlotte",
+    "north-carolina-charlotte"
+   ],
+   "elo": 1483.7925
+  },
+  {
+   "kaggleTeamId": 1151,
+   "teamName": "Chattanooga",
+   "spellings": [
+    "chattanooga",
+    "tennessee-chattanooga"
+   ],
+   "elo": 1385.067
+  },
+  {
+   "kaggleTeamId": 1152,
+   "teamName": "Chicago St",
+   "spellings": [
+    "chicago st",
+    "chicago st.",
+    "chicago state",
+    "chicago-st",
+    "chicago-state"
+   ],
+   "elo": 1228.2791
+  },
+  {
+   "kaggleTeamId": 1153,
+   "teamName": "Cincinnati",
+   "spellings": [
+    "cincinnati"
+   ],
+   "elo": 1735.7366
+  },
+  {
+   "kaggleTeamId": 1154,
+   "teamName": "Citadel",
+   "spellings": [
+    "citadel",
+    "the citadel",
+    "the-citadel"
+   ],
+   "elo": 1251.1665
+  },
+  {
+   "kaggleTeamId": 1155,
+   "teamName": "Clemson",
+   "spellings": [
+    "clemson"
+   ],
+   "elo": 1754.7664
+  },
+  {
+   "kaggleTeamId": 1156,
+   "teamName": "Cleveland St",
+   "spellings": [
+    "cleveland st",
+    "cleveland st.",
+    "cleveland state",
+    "cleveland-st",
+    "cleveland-state"
+   ],
+   "elo": 1306.2979
+  },
+  {
+   "kaggleTeamId": 1157,
+   "teamName": "Coastal Car",
+   "spellings": [
+    "coastal car",
+    "coastal caro.",
+    "coastal carolina",
+    "coastal-caro",
+    "coastal-carolina"
+   ],
+   "elo": 1461.382
+  },
+  {
+   "kaggleTeamId": 1158,
+   "teamName": "Col Charleston",
+   "spellings": [
+    "charleston",
+    "col charleston",
+    "col-of-charleston",
+    "col. of charleston",
+    "college of charlesto",
+    "college of charleston",
+    "college-of-charleston"
+   ],
+   "elo": 1605.7682
+  },
+  {
+   "kaggleTeamId": 1159,
+   "teamName": "Colgate",
+   "spellings": [
+    "colgate"
+   ],
+   "elo": 1435.1006
+  },
+  {
+   "kaggleTeamId": 1160,
+   "teamName": "Colorado",
+   "spellings": [
+    "colorado"
+   ],
+   "elo": 1605.0673
+  },
+  {
+   "kaggleTeamId": 1161,
+   "teamName": "Colorado St",
+   "spellings": [
+    "colorado st",
+    "colorado st.",
+    "colorado state",
+    "colorado-st",
+    "colorado-state"
+   ],
+   "elo": 1673.6992
+  },
+  {
+   "kaggleTeamId": 1162,
+   "teamName": "Columbia",
+   "spellings": [
+    "columbia"
+   ],
+   "elo": 1447.7919
+  },
+  {
+   "kaggleTeamId": 1163,
+   "teamName": "Connecticut",
+   "spellings": [
+    "connecticut",
+    "uconn"
+   ],
+   "elo": 1881.4851
+  },
+  {
+   "kaggleTeamId": 1164,
+   "teamName": "Coppin St",
+   "spellings": [
+    "coppin st",
+    "coppin st.",
+    "coppin state",
+    "coppin-st",
+    "coppin-state"
+   ],
+   "elo": 1170.0144
+  },
+  {
+   "kaggleTeamId": 1165,
+   "teamName": "Cornell",
+   "spellings": [
+    "cornell"
+   ],
+   "elo": 1570.1953
+  },
+  {
+   "kaggleTeamId": 1166,
+   "teamName": "Creighton",
+   "spellings": [
+    "creighton"
+   ],
+   "elo": 1605.5204
+  },
+  {
+   "kaggleTeamId": 1167,
+   "teamName": "CS Bakersfield",
+   "spellings": [
+    "bakersfield",
+    "cal state bakersfield",
+    "cal-state-bakersfield",
+    "cal. state - bakersfield",
+    "cs bakersfield",
+    "csu bakersfield",
+    "csu-bakersfield"
+   ],
+   "elo": 1187.7018
+  },
+  {
+   "kaggleTeamId": 1168,
+   "teamName": "CS Fullerton",
+   "spellings": [
+    "cal st. fullerton",
+    "cal state fullerton",
+    "cal state-fullerton",
+    "cal-st-fullerton",
+    "cal-state-fullerton",
+    "cs fullerton"
+   ],
+   "elo": 1520.2423
+  },
+  {
+   "kaggleTeamId": 1169,
+   "teamName": "CS Northridge",
+   "spellings": [
+    "cal st. northridge",
+    "cal state northridge",
+    "cal-state-northridge",
+    "cs northridge",
+    "csu northridge",
+    "csun"
+   ],
+   "elo": 1526.9037
+  },
+  {
+   "kaggleTeamId": 1170,
+   "teamName": "CS Sacramento",
+   "spellings": [
+    "cs sacramento",
+    "sacramento st.",
+    "sacramento state",
+    "sacramento-st",
+    "sacramento-state"
+   ],
+   "elo": 1259.581
+  },
+  {
+   "kaggleTeamId": 1171,
+   "teamName": "Dartmouth",
+   "spellings": [
+    "dartmouth"
+   ],
+   "elo": 1360.6515
+  },
+  {
+   "kaggleTeamId": 1172,
+   "teamName": "Davidson",
+   "spellings": [
+    "davidson"
+   ],
+   "elo": 1575.8261
+  },
+  {
+   "kaggleTeamId": 1173,
+   "teamName": "Dayton",
+   "spellings": [
+    "dayton"
+   ],
+   "elo": 1714.8615
+  },
+  {
+   "kaggleTeamId": 1174,
+   "teamName": "Delaware",
+   "spellings": [
+    "delaware"
+   ],
+   "elo": 1364.2536
+  },
+  {
+   "kaggleTeamId": 1175,
+   "teamName": "Delaware St",
+   "spellings": [
+    "delaware st",
+    "delaware st.",
+    "delaware state",
+    "delaware-st",
+    "delaware-state"
+   ],
+   "elo": 1160.1058
+  },
+  {
+   "kaggleTeamId": 1176,
+   "teamName": "Denver",
+   "spellings": [
+    "denver"
+   ],
+   "elo": 1369.9542
+  },
+  {
+   "kaggleTeamId": 1177,
+   "teamName": "DePaul",
+   "spellings": [
+    "depaul"
+   ],
+   "elo": 1506.1454
+  },
+  {
+   "kaggleTeamId": 1178,
+   "teamName": "Detroit",
+   "spellings": [
+    "detroit",
+    "detroit mercy",
+    "detroit-mercy"
+   ],
+   "elo": 1498.0343
+  },
+  {
+   "kaggleTeamId": 1179,
+   "teamName": "Drake",
+   "spellings": [
+    "drake"
+   ],
+   "elo": 1508.6391
+  },
+  {
+   "kaggleTeamId": 1180,
+   "teamName": "Drexel",
+   "spellings": [
+    "drexel"
+   ],
+   "elo": 1478.6347
+  },
+  {
+   "kaggleTeamId": 1181,
+   "teamName": "Duke",
+   "spellings": [
+    "duke"
+   ],
+   "elo": 2069.9134
+  },
+  {
+   "kaggleTeamId": 1182,
+   "teamName": "Duquesne",
+   "spellings": [
+    "duquesne"
+   ],
+   "elo": 1544.1197
+  },
+  {
+   "kaggleTeamId": 1183,
+   "teamName": "E Illinois",
+   "spellings": [
+    "e illinois",
+    "eastern ill.",
+    "eastern illinois",
+    "eastern-ill",
+    "eastern-illinois"
+   ],
+   "elo": 1307.8746
+  },
+  {
+   "kaggleTeamId": 1184,
+   "teamName": "E Kentucky",
+   "spellings": [
+    "e kentucky",
+    "eastern kentucky",
+    "eastern ky.",
+    "eastern-kentucky",
+    "eastern-ky"
+   ],
+   "elo": 1300.3516
+  },
+  {
+   "kaggleTeamId": 1185,
+   "teamName": "E Michigan",
+   "spellings": [
+    "e michigan",
+    "eastern mich.",
+    "eastern michigan",
+    "eastern-mich",
+    "eastern-michigan"
+   ],
+   "elo": 1306.7663
+  },
+  {
+   "kaggleTeamId": 1186,
+   "teamName": "E Washington",
+   "spellings": [
+    "e washington",
+    "eastern wash.",
+    "eastern washington",
+    "eastern-wash",
+    "eastern-washington"
+   ],
+   "elo": 1460.0041
+  },
+  {
+   "kaggleTeamId": 1187,
+   "teamName": "East Carolina",
+   "spellings": [
+    "east carolina",
+    "east-carolina"
+   ],
+   "elo": 1399.212
+  },
+  {
+   "kaggleTeamId": 1188,
+   "teamName": "SIUE",
+   "spellings": [
+    "edwardsville",
+    "siu - edwardsville",
+    "siu edwardsville",
+    "siu-edwardsville",
+    "siue",
+    "southern illinois-edwardsville",
+    "southern-illinois-edwardsville"
+   ],
+   "elo": 1437.9192
+  },
+  {
+   "kaggleTeamId": 1189,
+   "teamName": "Elon",
+   "spellings": [
+    "elon",
+    "elon university"
+   ],
+   "elo": 1360.4303
+  },
+  {
+   "kaggleTeamId": 1190,
+   "teamName": "ETSU",
+   "spellings": [
+    "east tenn. st.",
+    "east tennessee st.",
+    "east tennessee state",
+    "east-tennessee-state",
+    "etsu"
+   ],
+   "elo": 1555.2451
+  },
+  {
+   "kaggleTeamId": 1191,
+   "teamName": "Evansville",
+   "spellings": [
+    "evansville"
+   ],
+   "elo": 1302.1594
+  },
+  {
+   "kaggleTeamId": 1192,
+   "teamName": "F Dickinson",
+   "spellings": [
+    "f dickinson",
+    "fairleigh dickinson",
+    "fairleigh-dickinson",
+    "fdu"
+   ],
+   "elo": 1248.1057
+  },
+  {
+   "kaggleTeamId": 1193,
+   "teamName": "Fairfield",
+   "spellings": [
+    "fairfield"
+   ],
+   "elo": 1494.7547
+  },
+  {
+   "kaggleTeamId": 1194,
+   "teamName": "FL Atlantic",
+   "spellings": [
+    "fl atlantic",
+    "fla-atlantic",
+    "fla. atlantic",
+    "florida atlantic",
+    "florida-atlantic"
+   ],
+   "elo": 1557.8006
+  },
+  {
+   "kaggleTeamId": 1195,
+   "teamName": "FGCU",
+   "spellings": [
+    "fgcu",
+    "fl gulf coast",
+    "florida gulf coast",
+    "florida-gulf-coast"
+   ],
+   "elo": 1431.5754
+  },
+  {
+   "kaggleTeamId": 1196,
+   "teamName": "Florida",
+   "spellings": [
+    "florida"
+   ],
+   "elo": 1968.3509
+  },
+  {
+   "kaggleTeamId": 1197,
+   "teamName": "Florida A&M",
+   "spellings": [
+    "florida a&m",
+    "florida-am"
+   ],
+   "elo": 1403.5208
+  },
+  {
+   "kaggleTeamId": 1198,
+   "teamName": "Florida Intl",
+   "spellings": [
+    "fiu",
+    "florida internationa",
+    "florida international",
+    "florida intl",
+    "florida-international"
+   ],
+   "elo": 1456.0156
+  },
+  {
+   "kaggleTeamId": 1199,
+   "teamName": "Florida St",
+   "spellings": [
+    "florida st",
+    "florida st.",
+    "florida state",
+    "florida-st",
+    "florida-state"
+   ],
+   "elo": 1666.3402
+  },
+  {
+   "kaggleTeamId": 1200,
+   "teamName": "Fordham",
+   "spellings": [
+    "fordham"
+   ],
+   "elo": 1507.7506
+  },
+  {
+   "kaggleTeamId": 1201,
+   "teamName": "Fresno St",
+   "spellings": [
+    "fresno st",
+    "fresno st.",
+    "fresno state",
+    "fresno-st",
+    "fresno-state"
+   ],
+   "elo": 1434.3217
+  },
+  {
+   "kaggleTeamId": 1202,
+   "teamName": "Furman",
+   "spellings": [
+    "furman"
+   ],
+   "elo": 1582.7507
+  },
+  {
+   "kaggleTeamId": 1203,
+   "teamName": "G Washington",
+   "spellings": [
+    "g washington",
+    "george washington",
+    "george-washington"
+   ],
+   "elo": 1578.2506
+  },
+  {
+   "kaggleTeamId": 1204,
+   "teamName": "Ga Southern",
+   "spellings": [
+    "ga southern",
+    "ga-southern",
+    "ga. southern",
+    "georgia southern",
+    "georgia-southern"
+   ],
+   "elo": 1517.2109
+  },
+  {
+   "kaggleTeamId": 1205,
+   "teamName": "Gardner Webb",
+   "spellings": [
+    "gardner webb",
+    "gardner-webb"
+   ],
+   "elo": 1125.0508
+  },
+  {
+   "kaggleTeamId": 1206,
+   "teamName": "George Mason",
+   "spellings": [
+    "george mason",
+    "george-mason"
+   ],
+   "elo": 1621.6184
+  },
+  {
+   "kaggleTeamId": 1207,
+   "teamName": "Georgetown",
+   "spellings": [
+    "georgetown"
+   ],
+   "elo": 1576.3956
+  },
+  {
+   "kaggleTeamId": 1208,
+   "teamName": "Georgia",
+   "spellings": [
+    "georgia"
+   ],
+   "elo": 1743.5439
+  },
+  {
+   "kaggleTeamId": 1209,
+   "teamName": "Georgia St",
+   "spellings": [
+    "georgia st",
+    "georgia st.",
+    "georgia state",
+    "georgia-st",
+    "georgia-state"
+   ],
+   "elo": 1292.0478
+  },
+  {
+   "kaggleTeamId": 1210,
+   "teamName": "Georgia Tech",
+   "spellings": [
+    "georgia tech",
+    "georgia-tech"
+   ],
+   "elo": 1378.8354
+  },
+  {
+   "kaggleTeamId": 1211,
+   "teamName": "Gonzaga",
+   "spellings": [
+    "gonzaga"
+   ],
+   "elo": 1931.415
+  },
+  {
+   "kaggleTeamId": 1212,
+   "teamName": "Grambling",
+   "spellings": [
+    "grambling",
+    "grambling st.",
+    "grambling state",
+    "grambling-state"
+   ],
+   "elo": 1262.1671
+  },
+  {
+   "kaggleTeamId": 1213,
+   "teamName": "Grand Canyon",
+   "spellings": [
+    "grand canyon",
+    "grand-canyon"
+   ],
+   "elo": 1691.7413
+  },
+  {
+   "kaggleTeamId": 1214,
+   "teamName": "Hampton",
+   "spellings": [
+    "hampton"
+   ],
+   "elo": 1377.7325
+  },
+  {
+   "kaggleTeamId": 1217,
+   "teamName": "Harvard",
+   "spellings": [
+    "harvard"
+   ],
+   "elo": 1593.1435
+  },
+  {
+   "kaggleTeamId": 1218,
+   "teamName": "Hawaii",
+   "spellings": [
+    "hawai'i",
+    "hawaii"
+   ],
+   "elo": 1586.1958
+  },
+  {
+   "kaggleTeamId": 1219,
+   "teamName": "High Point",
+   "spellings": [
+    "high point",
+    "high-point"
+   ],
+   "elo": 1751.0524
+  },
+  {
+   "kaggleTeamId": 1220,
+   "teamName": "Hofstra",
+   "spellings": [
+    "hofstra"
+   ],
+   "elo": 1696.007
+  },
+  {
+   "kaggleTeamId": 1221,
+   "teamName": "Holy Cross",
+   "spellings": [
+    "holy cross",
+    "holy-cross"
+   ],
+   "elo": 1241.8538
+  },
+  {
+   "kaggleTeamId": 1222,
+   "teamName": "Houston",
+   "spellings": [
+    "houston"
+   ],
+   "elo": 1952.2847
+  },
+  {
+   "kaggleTeamId": 1223,
+   "teamName": "Houston Chr",
+   "spellings": [
+    "houston bap",
+    "houston baptist",
+    "houston chr",
+    "houston christian",
+    "houston-baptist"
+   ],
+   "elo": 1276.9379
+  },
+  {
+   "kaggleTeamId": 1224,
+   "teamName": "Howard",
+   "spellings": [
+    "howard"
+   ],
+   "elo": 1545.7775
+  },
+  {
+   "kaggleTeamId": 1225,
+   "teamName": "Idaho",
+   "spellings": [
+    "idaho"
+   ],
+   "elo": 1526.0304
+  },
+  {
+   "kaggleTeamId": 1226,
+   "teamName": "Idaho St",
+   "spellings": [
+    "idaho st",
+    "idaho st.",
+    "idaho state",
+    "idaho-st",
+    "idaho-state"
+   ],
+   "elo": 1302.8185
+  },
+  {
+   "kaggleTeamId": 1227,
+   "teamName": "IL Chicago",
+   "spellings": [
+    "il chicago",
+    "ill-chicago",
+    "ill.-chicago",
+    "illinois-chicago",
+    "uic"
+   ],
+   "elo": 1612.3363
+  },
+  {
+   "kaggleTeamId": 1228,
+   "teamName": "Illinois",
+   "spellings": [
+    "illinois"
+   ],
+   "elo": 1877.1785
+  },
+  {
+   "kaggleTeamId": 1229,
+   "teamName": "Illinois St",
+   "spellings": [
+    "illinois st",
+    "illinois st.",
+    "illinois state",
+    "illinois-st",
+    "illinois-state"
+   ],
+   "elo": 1602.5871
+  },
+  {
+   "kaggleTeamId": 1230,
+   "teamName": "Incarnate Word",
+   "spellings": [
+    "incarnate word",
+    "incarnate-word"
+   ],
+   "elo": 1283.6409
+  },
+  {
+   "kaggleTeamId": 1231,
+   "teamName": "Indiana",
+   "spellings": [
+    "indiana"
+   ],
+   "elo": 1628.9627
+  },
+  {
+   "kaggleTeamId": 1232,
+   "teamName": "Indiana St",
+   "spellings": [
+    "indiana st",
+    "indiana st.",
+    "indiana state",
+    "indiana-st",
+    "indiana-state"
+   ],
+   "elo": 1422.2332
+  },
+  {
+   "kaggleTeamId": 1233,
+   "teamName": "Iona",
+   "spellings": [
+    "iona"
+   ],
+   "elo": 1451.5514
+  },
+  {
+   "kaggleTeamId": 1234,
+   "teamName": "Iowa",
+   "spellings": [
+    "iowa"
+   ],
+   "elo": 1722.0931
+  },
+  {
+   "kaggleTeamId": 1235,
+   "teamName": "Iowa St",
+   "spellings": [
+    "iowa st",
+    "iowa st.",
+    "iowa state",
+    "iowa-st",
+    "iowa-state"
+   ],
+   "elo": 1877.2485
+  },
+  {
+   "kaggleTeamId": 1236,
+   "teamName": "PFW",
+   "spellings": [
+    "fort wayne",
+    "fort wayne(ipfw)",
+    "fort-wayne",
+    "ipfw",
+    "iupu - ft. wayne",
+    "iupu-fort wayne",
+    "iupu-fort-wayne",
+    "pfw",
+    "purdue fort wayne"
+   ],
+   "elo": 1413.3161
+  },
+  {
+   "kaggleTeamId": 1237,
+   "teamName": "IUPUI",
+   "spellings": [
+    "indiana - purdue",
+    "iu indianapolis",
+    "iu indy",
+    "iupui"
+   ],
+   "elo": 1206.262
+  },
+  {
+   "kaggleTeamId": 1238,
+   "teamName": "Jackson St",
+   "spellings": [
+    "jackson st",
+    "jackson st.",
+    "jackson state",
+    "jackson-st",
+    "jackson-state"
+   ],
+   "elo": 1283.0959
+  },
+  {
+   "kaggleTeamId": 1239,
+   "teamName": "Jacksonville",
+   "spellings": [
+    "jacksonville"
+   ],
+   "elo": 1339.4738
+  },
+  {
+   "kaggleTeamId": 1240,
+   "teamName": "Jacksonville St",
+   "spellings": [
+    "jacksonville st",
+    "jacksonville st.",
+    "jacksonville state",
+    "jacksonville-st",
+    "jacksonville-state"
+   ],
+   "elo": 1453.0013
+  },
+  {
+   "kaggleTeamId": 1241,
+   "teamName": "James Madison",
+   "spellings": [
+    "james madison",
+    "james-madison"
+   ],
+   "elo": 1534.9958
+  },
+  {
+   "kaggleTeamId": 1242,
+   "teamName": "Kansas",
+   "spellings": [
+    "kansas"
+   ],
+   "elo": 1796.8639
+  },
+  {
+   "kaggleTeamId": 1243,
+   "teamName": "Kansas St",
+   "spellings": [
+    "kansas st",
+    "kansas st.",
+    "kansas state",
+    "kansas-st",
+    "kansas-state"
+   ],
+   "elo": 1490.1388
+  },
+  {
+   "kaggleTeamId": 1244,
+   "teamName": "Kennesaw",
+   "spellings": [
+    "kennesaw",
+    "kennesaw st.",
+    "kennesaw state",
+    "kennesaw-st",
+    "kennesaw-state"
+   ],
+   "elo": 1585.8162
+  },
+  {
+   "kaggleTeamId": 1245,
+   "teamName": "Kent",
+   "spellings": [
+    "kent",
+    "kent st.",
+    "kent state",
+    "kent-st",
+    "kent-state"
+   ],
+   "elo": 1625.7693
+  },
+  {
+   "kaggleTeamId": 1246,
+   "teamName": "Kentucky",
+   "spellings": [
+    "kentucky"
+   ],
+   "elo": 1761.0718
+  },
+  {
+   "kaggleTeamId": 1247,
+   "teamName": "La Salle",
+   "spellings": [
+    "la salle",
+    "la-salle"
+   ],
+   "elo": 1365.943
+  },
+  {
+   "kaggleTeamId": 1248,
+   "teamName": "Lafayette",
+   "spellings": [
+    "lafayette"
+   ],
+   "elo": 1241.5301
+  },
+  {
+   "kaggleTeamId": 1249,
+   "teamName": "Lamar",
+   "spellings": [
+    "lamar",
+    "lamar university",
+    "lamar-university"
+   ],
+   "elo": 1309.6235
+  },
+  {
+   "kaggleTeamId": 1250,
+   "teamName": "Lehigh",
+   "spellings": [
+    "lehigh"
+   ],
+   "elo": 1437.1574
+  },
+  {
+   "kaggleTeamId": 1251,
+   "teamName": "Liberty",
+   "spellings": [
+    "liberty"
+   ],
+   "elo": 1624.8434
+  },
+  {
+   "kaggleTeamId": 1252,
+   "teamName": "Lipscomb",
+   "spellings": [
+    "lipscomb"
+   ],
+   "elo": 1466.04
+  },
+  {
+   "kaggleTeamId": 1253,
+   "teamName": "Long Beach St",
+   "spellings": [
+    "long beach st",
+    "long beach st.",
+    "long beach state",
+    "long-beach-st",
+    "long-beach-state",
+    "longbeach state"
+   ],
+   "elo": 1327.5253
+  },
+  {
+   "kaggleTeamId": 1254,
+   "teamName": "LIU Brooklyn",
+   "spellings": [
+    "liu",
+    "liu brooklyn",
+    "liu-brooklyn",
+    "long island",
+    "long island university",
+    "long-island",
+    "long-island-university"
+   ],
+   "elo": 1544.254
+  },
+  {
+   "kaggleTeamId": 1255,
+   "teamName": "Longwood",
+   "spellings": [
+    "longwood"
+   ],
+   "elo": 1414.65
+  },
+  {
+   "kaggleTeamId": 1256,
+   "teamName": "Louisiana Tech",
+   "spellings": [
+    "louisiana tech",
+    "louisiana-tech"
+   ],
+   "elo": 1535.2984
+  },
+  {
+   "kaggleTeamId": 1257,
+   "teamName": "Louisville",
+   "spellings": [
+    "louisville"
+   ],
+   "elo": 1796.3664
+  },
+  {
+   "kaggleTeamId": 1258,
+   "teamName": "Loy Marymount",
+   "spellings": [
+    "loy marymount",
+    "loyola marymount",
+    "loyola-marymount"
+   ],
+   "elo": 1443.1833
+  },
+  {
+   "kaggleTeamId": 1259,
+   "teamName": "Loyola MD",
+   "spellings": [
+    "loyola (md)",
+    "loyola maryland",
+    "loyola md",
+    "loyola-maryland",
+    "loyola-md"
+   ],
+   "elo": 1313.2945
+  },
+  {
+   "kaggleTeamId": 1260,
+   "teamName": "Loyola-Chicago",
+   "spellings": [
+    "loyola (il)",
+    "loyola chicago",
+    "loyola-c",
+    "loyola-chicago",
+    "loyola-il"
+   ],
+   "elo": 1406.4945
+  },
+  {
+   "kaggleTeamId": 1261,
+   "teamName": "LSU",
+   "spellings": [
+    "louisiana state",
+    "louisiana-state",
+    "lsu"
+   ],
+   "elo": 1512.5351
+  },
+  {
+   "kaggleTeamId": 1262,
+   "teamName": "MA Lowell",
+   "spellings": [
+    "ma lowell",
+    "massachusetts lowell",
+    "massachusetts-lowell",
+    "umass lowell",
+    "umass-lowell"
+   ],
+   "elo": 1394.2576
+  },
+  {
+   "kaggleTeamId": 1263,
+   "teamName": "Maine",
+   "spellings": [
+    "maine"
+   ],
+   "elo": 1247.1179
+  },
+  {
+   "kaggleTeamId": 1264,
+   "teamName": "Manhattan",
+   "spellings": [
+    "manhattan"
+   ],
+   "elo": 1306.3748
+  },
+  {
+   "kaggleTeamId": 1265,
+   "teamName": "Marist",
+   "spellings": [
+    "marist"
+   ],
+   "elo": 1506.8711
+  },
+  {
+   "kaggleTeamId": 1266,
+   "teamName": "Marquette",
+   "spellings": [
+    "marquette"
+   ],
+   "elo": 1613.5943
+  },
+  {
+   "kaggleTeamId": 1267,
+   "teamName": "Marshall",
+   "spellings": [
+    "marshall"
+   ],
+   "elo": 1462.0538
+  },
+  {
+   "kaggleTeamId": 1268,
+   "teamName": "Maryland",
+   "spellings": [
+    "maryland"
+   ],
+   "elo": 1538.6785
+  },
+  {
+   "kaggleTeamId": 1269,
+   "teamName": "Massachusetts",
+   "spellings": [
+    "massachusetts",
+    "umass"
+   ],
+   "elo": 1459.5352
+  },
+  {
+   "kaggleTeamId": 1270,
+   "teamName": "McNeese St",
+   "spellings": [
+    "mcneese",
+    "mcneese st",
+    "mcneese st.",
+    "mcneese state",
+    "mcneese-state"
+   ],
+   "elo": 1764.7286
+  },
+  {
+   "kaggleTeamId": 1271,
+   "teamName": "MD E Shore",
+   "spellings": [
+    "maryland - e. shore",
+    "maryland eastern shore",
+    "maryland-eastern shore",
+    "maryland-eastern-shore",
+    "md e shore",
+    "md. eastern shore",
+    "umes"
+   ],
+   "elo": 1178.6904
+  },
+  {
+   "kaggleTeamId": 1272,
+   "teamName": "Memphis",
+   "spellings": [
+    "memphis"
+   ],
+   "elo": 1490.1646
+  },
+  {
+   "kaggleTeamId": 1273,
+   "teamName": "Mercer",
+   "spellings": [
+    "mercer"
+   ],
+   "elo": 1497.9306
+  },
+  {
+   "kaggleTeamId": 1274,
+   "teamName": "Miami FL",
+   "spellings": [
+    "miami (fl)",
+    "miami (fla.)",
+    "miami - florida",
+    "miami fl",
+    "miami-fl",
+    "miami-florida"
+   ],
+   "elo": 1753.8833
+  },
+  {
+   "kaggleTeamId": 1275,
+   "teamName": "Miami OH",
+   "spellings": [
+    "miami (oh)",
+    "miami (ohio)",
+    "miami oh",
+    "miami-oh",
+    "miami-ohio"
+   ],
+   "elo": 1761.399
+  },
+  {
+   "kaggleTeamId": 1276,
+   "teamName": "Michigan",
+   "spellings": [
+    "michigan"
+   ],
+   "elo": 2025.4876
+  },
+  {
+   "kaggleTeamId": 1277,
+   "teamName": "Michigan St",
+   "spellings": [
+    "michigan st",
+    "michigan st.",
+    "michigan state",
+    "michigan-st",
+    "michigan-state"
+   ],
+   "elo": 1873.6477
+  },
+  {
+   "kaggleTeamId": 1278,
+   "teamName": "Minnesota",
+   "spellings": [
+    "minnesota"
+   ],
+   "elo": 1572.7118
+  },
+  {
+   "kaggleTeamId": 1279,
+   "teamName": "Mississippi",
+   "spellings": [
+    "mississippi",
+    "ole miss",
+    "ole-miss"
+   ],
+   "elo": 1593.5083
+  },
+  {
+   "kaggleTeamId": 1280,
+   "teamName": "Mississippi St",
+   "spellings": [
+    "mississippi st",
+    "mississippi st.",
+    "mississippi state",
+    "mississippi-st",
+    "mississippi-state"
+   ],
+   "elo": 1539.0054
+  },
+  {
+   "kaggleTeamId": 1281,
+   "teamName": "Missouri",
+   "spellings": [
+    "missouri"
+   ],
+   "elo": 1668.6493
+  },
+  {
+   "kaggleTeamId": 1282,
+   "teamName": "Missouri KC",
+   "spellings": [
+    "kansas city",
+    "missouri kc",
+    "missouri-kansas city",
+    "missouri-kansas-city",
+    "mo kansas city",
+    "umkc"
+   ],
+   "elo": 1082.8046
+  },
+  {
+   "kaggleTeamId": 1283,
+   "teamName": "Missouri St",
+   "spellings": [
+    "missouri st",
+    "missouri st.",
+    "missouri state",
+    "missouri-st",
+    "missouri-state",
+    "southwest missouri state",
+    "sw missouri st."
+   ],
+   "elo": 1457.8424
+  },
+  {
+   "kaggleTeamId": 1284,
+   "teamName": "Monmouth NJ",
+   "spellings": [
+    "monmouth",
+    "monmouth nj",
+    "monmouth-nj"
+   ],
+   "elo": 1565.0162
+  },
+  {
+   "kaggleTeamId": 1285,
+   "teamName": "Montana",
+   "spellings": [
+    "montana"
+   ],
+   "elo": 1460.22
+  },
+  {
+   "kaggleTeamId": 1286,
+   "teamName": "Montana St",
+   "spellings": [
+    "montana st",
+    "montana st.",
+    "montana state",
+    "montana-st",
+    "montana-state"
+   ],
+   "elo": 1507.024
+  },
+  {
+   "kaggleTeamId": 1287,
+   "teamName": "Morehead St",
+   "spellings": [
+    "morehead st",
+    "morehead st.",
+    "morehead state",
+    "morehead-st",
+    "morehead-state"
+   ],
+   "elo": 1459.7536
+  },
+  {
+   "kaggleTeamId": 1288,
+   "teamName": "Morgan St",
+   "spellings": [
+    "morgan st",
+    "morgan st.",
+    "morgan state",
+    "morgan-st",
+    "morgan-state"
+   ],
+   "elo": 1287.695
+  },
+  {
+   "kaggleTeamId": 1290,
+   "teamName": "MS Valley St",
+   "spellings": [
+    "miss valley st.",
+    "mississippi val.",
+    "mississippi valley state",
+    "mississippi-val",
+    "mississippi-valley-state",
+    "ms valley st",
+    "ms valley state",
+    "mvsu(miss. valley st"
+   ],
+   "elo": 948.4977
+  },
+  {
+   "kaggleTeamId": 1291,
+   "teamName": "Mt St Mary's",
+   "spellings": [
+    "mount saint mary`s",
+    "mount st. mary's",
+    "mount st. marys",
+    "mount-st-marys",
+    "mt st mary's",
+    "mt st. mary's",
+    "mt-st-marys",
+    "mt. st. mary's",
+    "mt. st. mary`s"
+   ],
+   "elo": 1476.7178
+  },
+  {
+   "kaggleTeamId": 1292,
+   "teamName": "MTSU",
+   "spellings": [
+    "middle tenn st",
+    "middle tenn st.",
+    "middle tenn.",
+    "middle tennessee",
+    "middle tennessee st.",
+    "middle tennessee state",
+    "middle-tenn",
+    "middle-tennessee",
+    "middle-tennessee-state",
+    "mtsu"
+   ],
+   "elo": 1519.2518
+  },
+  {
+   "kaggleTeamId": 1293,
+   "teamName": "Murray St",
+   "spellings": [
+    "murray st",
+    "murray st.",
+    "murray state",
+    "murray-st",
+    "murray-state"
+   ],
+   "elo": 1533.0973
+  },
+  {
+   "kaggleTeamId": 1294,
+   "teamName": "N Colorado",
+   "spellings": [
+    "n colorado",
+    "northern colo.",
+    "northern colorado",
+    "northern-colo",
+    "northern-colorado"
+   ],
+   "elo": 1533.6427
+  },
+  {
+   "kaggleTeamId": 1295,
+   "teamName": "N Dakota St",
+   "spellings": [
+    "n dakota st",
+    "north dakota st.",
+    "north dakota state",
+    "north-dakota-st",
+    "north-dakota-state"
+   ],
+   "elo": 1658.7096
+  },
+  {
+   "kaggleTeamId": 1296,
+   "teamName": "N Illinois",
+   "spellings": [
+    "n illinois",
+    "northern ill.",
+    "northern illinois",
+    "northern-ill",
+    "northern-illinois"
+   ],
+   "elo": 1193.5244
+  },
+  {
+   "kaggleTeamId": 1297,
+   "teamName": "N Kentucky",
+   "spellings": [
+    "n kentucky",
+    "northern kentucky",
+    "northern ky.",
+    "northern-kentucky",
+    "northern-ky"
+   ],
+   "elo": 1500.513
+  },
+  {
+   "kaggleTeamId": 1298,
+   "teamName": "Navy",
+   "spellings": [
+    "navy"
+   ],
+   "elo": 1627.2297
+  },
+  {
+   "kaggleTeamId": 1299,
+   "teamName": "NC A&T",
+   "spellings": [
+    "n. carolina a&t",
+    "n.c. a&t",
+    "nc a&t",
+    "nc-at",
+    "no.carolina a&t",
+    "north carolina a&t",
+    "north-carolina-at"
+   ],
+   "elo": 1296.9504
+  },
+  {
+   "kaggleTeamId": 1300,
+   "teamName": "NC Central",
+   "spellings": [
+    "n.c. central",
+    "nc central",
+    "nc-central",
+    "north carolina central",
+    "north-carolina-central"
+   ],
+   "elo": 1275.8215
+  },
+  {
+   "kaggleTeamId": 1301,
+   "teamName": "NC State",
+   "spellings": [
+    "n.c. state",
+    "nc state",
+    "nc-state",
+    "north carolina st.",
+    "north carolina state",
+    "north-carolina-st",
+    "north-carolina-state"
+   ],
+   "elo": 1689.1653
+  },
+  {
+   "kaggleTeamId": 1303,
+   "teamName": "NE Omaha",
+   "spellings": [
+    "ne omaha",
+    "nebraska omaha",
+    "nebraska-omaha",
+    "omaha"
+   ],
+   "elo": 1445.4175
+  },
+  {
+   "kaggleTeamId": 1304,
+   "teamName": "Nebraska",
+   "spellings": [
+    "nebraska"
+   ],
+   "elo": 1785.5751
+  },
+  {
+   "kaggleTeamId": 1305,
+   "teamName": "Nevada",
+   "spellings": [
+    "nevada"
+   ],
+   "elo": 1651.9479
+  },
+  {
+   "kaggleTeamId": 1306,
+   "teamName": "New Hampshire",
+   "spellings": [
+    "new hampshire",
+    "new-hampshire"
+   ],
+   "elo": 1226.2675
+  },
+  {
+   "kaggleTeamId": 1307,
+   "teamName": "New Mexico",
+   "spellings": [
+    "new mexico",
+    "new-mexico"
+   ],
+   "elo": 1731.3359
+  },
+  {
+   "kaggleTeamId": 1308,
+   "teamName": "New Mexico St",
+   "spellings": [
+    "new mexico st",
+    "new mexico st.",
+    "new mexico state",
+    "new-mexico-st",
+    "new-mexico-state"
+   ],
+   "elo": 1487.3588
+  },
+  {
+   "kaggleTeamId": 1309,
+   "teamName": "New Orleans",
+   "spellings": [
+    "new orleans",
+    "new-orleans",
+    "neworleans"
+   ],
+   "elo": 1423.0586
+  },
+  {
+   "kaggleTeamId": 1310,
+   "teamName": "Niagara",
+   "spellings": [
+    "niagara"
+   ],
+   "elo": 1239.5196
+  },
+  {
+   "kaggleTeamId": 1311,
+   "teamName": "Nicholls St",
+   "spellings": [
+    "nicholls",
+    "nicholls st",
+    "nicholls st.",
+    "nicholls state",
+    "nicholls-st",
+    "nicholls-state"
+   ],
+   "elo": 1368.1238
+  },
+  {
+   "kaggleTeamId": 1312,
+   "teamName": "NJIT",
+   "spellings": [
+    "n.j.i.t.",
+    "new jersey tech",
+    "new-jersey-tech",
+    "njit"
+   ],
+   "elo": 1320.3985
+  },
+  {
+   "kaggleTeamId": 1313,
+   "teamName": "Norfolk St",
+   "spellings": [
+    "norfolk st",
+    "norfolk st.",
+    "norfolk state",
+    "norfolk-st",
+    "norfolk-state"
+   ],
+   "elo": 1356.8304
+  },
+  {
+   "kaggleTeamId": 1314,
+   "teamName": "North Carolina",
+   "spellings": [
+    "north carolina",
+    "north-carolina",
+    "unc"
+   ],
+   "elo": 1787.7145
+  },
+  {
+   "kaggleTeamId": 1315,
+   "teamName": "North Dakota",
+   "spellings": [
+    "north dakota",
+    "north-dakota"
+   ],
+   "elo": 1399.1745
+  },
+  {
+   "kaggleTeamId": 1316,
+   "teamName": "North Florida",
+   "spellings": [
+    "north florida",
+    "north-florida"
+   ],
+   "elo": 1212.6091
+  },
+  {
+   "kaggleTeamId": 1317,
+   "teamName": "North Texas",
+   "spellings": [
+    "north texas",
+    "north-texas"
+   ],
+   "elo": 1575.6283
+  },
+  {
+   "kaggleTeamId": 1318,
+   "teamName": "Northeastern",
+   "spellings": [
+    "northeastern"
+   ],
+   "elo": 1286.2538
+  },
+  {
+   "kaggleTeamId": 1319,
+   "teamName": "Northern Arizona",
+   "spellings": [
+    "northern ariz.",
+    "northern arizona",
+    "northern-ariz",
+    "northern-arizona"
+   ],
+   "elo": 1236.1559
+  },
+  {
+   "kaggleTeamId": 1320,
+   "teamName": "Northern Iowa",
+   "spellings": [
+    "northern iowa",
+    "northern-iowa",
+    "uni"
+   ],
+   "elo": 1717.4711
+  },
+  {
+   "kaggleTeamId": 1321,
+   "teamName": "Northwestern",
+   "spellings": [
+    "northwestern"
+   ],
+   "elo": 1607.2222
+  },
+  {
+   "kaggleTeamId": 1322,
+   "teamName": "Northwestern LA",
+   "spellings": [
+    "northwestern la",
+    "northwestern st.",
+    "northwestern state",
+    "northwestern-st",
+    "northwestern-state"
+   ],
+   "elo": 1295.5534
+  },
+  {
+   "kaggleTeamId": 1323,
+   "teamName": "Notre Dame",
+   "spellings": [
+    "notre dame",
+    "notre-dame"
+   ],
+   "elo": 1478.1715
+  },
+  {
+   "kaggleTeamId": 1324,
+   "teamName": "Oakland",
+   "spellings": [
+    "oakland"
+   ],
+   "elo": 1458.767
+  },
+  {
+   "kaggleTeamId": 1325,
+   "teamName": "Ohio",
+   "spellings": [
+    "ohio"
+   ],
+   "elo": 1419.4346
+  },
+  {
+   "kaggleTeamId": 1326,
+   "teamName": "Ohio St",
+   "spellings": [
+    "ohio st",
+    "ohio st.",
+    "ohio state",
+    "ohio-st",
+    "ohio-state"
+   ],
+   "elo": 1775.3286
+  },
+  {
+   "kaggleTeamId": 1328,
+   "teamName": "Oklahoma",
+   "spellings": [
+    "oklahoma"
+   ],
+   "elo": 1736.1407
+  },
+  {
+   "kaggleTeamId": 1329,
+   "teamName": "Oklahoma St",
+   "spellings": [
+    "oklahoma st",
+    "oklahoma st.",
+    "oklahoma state",
+    "oklahoma-st",
+    "oklahoma-state"
+   ],
+   "elo": 1624.7783
+  },
+  {
+   "kaggleTeamId": 1330,
+   "teamName": "Old Dominion",
+   "spellings": [
+    "old dominion",
+    "old-dominion"
+   ],
+   "elo": 1395.9988
+  },
+  {
+   "kaggleTeamId": 1331,
+   "teamName": "Oral Roberts",
+   "spellings": [
+    "oral roberts",
+    "oral-roberts"
+   ],
+   "elo": 1282.0103
+  },
+  {
+   "kaggleTeamId": 1332,
+   "teamName": "Oregon",
+   "spellings": [
+    "oregon"
+   ],
+   "elo": 1542.3934
+  },
+  {
+   "kaggleTeamId": 1333,
+   "teamName": "Oregon St",
+   "spellings": [
+    "oregon st",
+    "oregon st.",
+    "oregon state",
+    "oregon-st",
+    "oregon-state"
+   ],
+   "elo": 1530.2009
+  },
+  {
+   "kaggleTeamId": 1334,
+   "teamName": "Pacific",
+   "spellings": [
+    "pacific"
+   ],
+   "elo": 1481.8037
+  },
+  {
+   "kaggleTeamId": 1335,
+   "teamName": "Penn",
+   "spellings": [
+    "penn",
+    "pennsylvania"
+   ],
+   "elo": 1611.7976
+  },
+  {
+   "kaggleTeamId": 1336,
+   "teamName": "Penn St",
+   "spellings": [
+    "penn st",
+    "penn st.",
+    "penn state",
+    "penn-st",
+    "penn-state"
+   ],
+   "elo": 1421.9569
+  },
+  {
+   "kaggleTeamId": 1337,
+   "teamName": "Pepperdine",
+   "spellings": [
+    "pepperdine"
+   ],
+   "elo": 1309.5805
+  },
+  {
+   "kaggleTeamId": 1338,
+   "teamName": "Pittsburgh",
+   "spellings": [
+    "pitt",
+    "pittsburgh"
+   ],
+   "elo": 1534.9153
+  },
+  {
+   "kaggleTeamId": 1339,
+   "teamName": "Portland",
+   "spellings": [
+    "portland"
+   ],
+   "elo": 1410.6046
+  },
+  {
+   "kaggleTeamId": 1340,
+   "teamName": "Portland St",
+   "spellings": [
+    "portland st",
+    "portland st.",
+    "portland state",
+    "portland-st",
+    "portland-state"
+   ],
+   "elo": 1491.9879
+  },
+  {
+   "kaggleTeamId": 1341,
+   "teamName": "Prairie View",
+   "spellings": [
+    "prairie view",
+    "prairie view a&m",
+    "prairie-view",
+    "prairie-view-am"
+   ],
+   "elo": 1401.006
+  },
+  {
+   "kaggleTeamId": 1342,
+   "teamName": "Presbyterian",
+   "spellings": [
+    "presbyterian"
+   ],
+   "elo": 1365.29
+  },
+  {
+   "kaggleTeamId": 1343,
+   "teamName": "Princeton",
+   "spellings": [
+    "princeton"
+   ],
+   "elo": 1417.2894
+  },
+  {
+   "kaggleTeamId": 1344,
+   "teamName": "Providence",
+   "spellings": [
+    "providence"
+   ],
+   "elo": 1570.7299
+  },
+  {
+   "kaggleTeamId": 1345,
+   "teamName": "Purdue",
+   "spellings": [
+    "purdue"
+   ],
+   "elo": 1919.6311
+  },
+  {
+   "kaggleTeamId": 1346,
+   "teamName": "Quinnipiac",
+   "spellings": [
+    "quinnipiac"
+   ],
+   "elo": 1517.4178
+  },
+  {
+   "kaggleTeamId": 1347,
+   "teamName": "Radford",
+   "spellings": [
+    "radford"
+   ],
+   "elo": 1417.1963
+  },
+  {
+   "kaggleTeamId": 1348,
+   "teamName": "Rhode Island",
+   "spellings": [
+    "rhode island",
+    "rhode-island"
+   ],
+   "elo": 1476.1126
+  },
+  {
+   "kaggleTeamId": 1349,
+   "teamName": "Rice",
+   "spellings": [
+    "rice"
+   ],
+   "elo": 1409.8205
+  },
+  {
+   "kaggleTeamId": 1350,
+   "teamName": "Richmond",
+   "spellings": [
+    "richmond"
+   ],
+   "elo": 1445.0524
+  },
+  {
+   "kaggleTeamId": 1351,
+   "teamName": "Rider",
+   "spellings": [
+    "rider"
+   ],
+   "elo": 1192.2131
+  },
+  {
+   "kaggleTeamId": 1352,
+   "teamName": "Robert Morris",
+   "spellings": [
+    "robert morris",
+    "robert-morris"
+   ],
+   "elo": 1610.0529
+  },
+  {
+   "kaggleTeamId": 1353,
+   "teamName": "Rutgers",
+   "spellings": [
+    "rutgers"
+   ],
+   "elo": 1545.0407
+  },
+  {
+   "kaggleTeamId": 1354,
+   "teamName": "S Carolina St",
+   "spellings": [
+    "s carolina st",
+    "s carolina state",
+    "sc state",
+    "south carolina st.",
+    "south carolina state",
+    "south-carolina-st",
+    "south-carolina-state"
+   ],
+   "elo": 1289.9237
+  },
+  {
+   "kaggleTeamId": 1355,
+   "teamName": "S Dakota St",
+   "spellings": [
+    "s dakota st",
+    "south dakota st.",
+    "south dakota state",
+    "south-dakota-st",
+    "south-dakota-state"
+   ],
+   "elo": 1408.8652
+  },
+  {
+   "kaggleTeamId": 1356,
+   "teamName": "S Illinois",
+   "spellings": [
+    "s illinois",
+    "southern ill.",
+    "southern illinois",
+    "southern-ill",
+    "southern-illinois"
+   ],
+   "elo": 1547.6902
+  },
+  {
+   "kaggleTeamId": 1357,
+   "teamName": "Sacred Heart",
+   "spellings": [
+    "sacred heart",
+    "sacred-heart"
+   ],
+   "elo": 1439.3475
+  },
+  {
+   "kaggleTeamId": 1358,
+   "teamName": "Sam Houston St",
+   "spellings": [
+    "sam houston",
+    "sam houston st",
+    "sam houston st.",
+    "sam houston state",
+    "sam-houston-st",
+    "sam-houston-state"
+   ],
+   "elo": 1598.756
+  },
+  {
+   "kaggleTeamId": 1359,
+   "teamName": "Samford",
+   "spellings": [
+    "samford"
+   ],
+   "elo": 1560.2226
+  },
+  {
+   "kaggleTeamId": 1360,
+   "teamName": "San Diego",
+   "spellings": [
+    "san diego",
+    "san-diego"
+   ],
+   "elo": 1330.2576
+  },
+  {
+   "kaggleTeamId": 1361,
+   "teamName": "San Diego St",
+   "spellings": [
+    "san diego st",
+    "san diego st.",
+    "san diego state",
+    "san-diego-st",
+    "san-diego-state",
+    "sd state"
+   ],
+   "elo": 1747.7434
+  },
+  {
+   "kaggleTeamId": 1362,
+   "teamName": "San Francisco",
+   "spellings": [
+    "san francisco",
+    "san-francisco"
+   ],
+   "elo": 1556.0623
+  },
+  {
+   "kaggleTeamId": 1363,
+   "teamName": "San Jose St",
+   "spellings": [
+    "san jose st",
+    "san jose st.",
+    "san jose state",
+    "san-jose-st",
+    "san-jose-state"
+   ],
+   "elo": 1390.8793
+  },
+  {
+   "kaggleTeamId": 1364,
+   "teamName": "UC Santa Barbara",
+   "spellings": [
+    "california-santa barbara",
+    "california-santa-barbara",
+    "santa barbara",
+    "uc santa barb.",
+    "uc santa barbara",
+    "uc-santa barbara",
+    "uc-santa-barbara",
+    "ucsb"
+   ],
+   "elo": 1506.3408
+  },
+  {
+   "kaggleTeamId": 1365,
+   "teamName": "Santa Clara",
+   "spellings": [
+    "santa clara",
+    "santa-clara"
+   ],
+   "elo": 1802.0193
+  },
+  {
+   "kaggleTeamId": 1367,
+   "teamName": "SC Upstate",
+   "spellings": [
+    "sc upstate",
+    "south carolina upstat",
+    "south carolina upstate",
+    "south-carolina-upstate",
+    "usc upstate",
+    "usc-upstate"
+   ],
+   "elo": 1279.2811
+  },
+  {
+   "kaggleTeamId": 1368,
+   "teamName": "SE Louisiana",
+   "spellings": [
+    "se louisiana",
+    "southeastern la.",
+    "southeastern louisiana",
+    "southeastern-la",
+    "southeastern-louisiana"
+   ],
+   "elo": 1300.48
+  },
+  {
+   "kaggleTeamId": 1369,
+   "teamName": "SE Missouri St",
+   "spellings": [
+    "se missouri st",
+    "se missouri st.",
+    "se missouri st.(se",
+    "se missouri state",
+    "southeast missouri state",
+    "southeast mo. st.",
+    "southeast-missouri-state",
+    "southeast-mo-st"
+   ],
+   "elo": 1497.7548
+  },
+  {
+   "kaggleTeamId": 1370,
+   "teamName": "Seattle",
+   "spellings": [
+    "seattle",
+    "seattle u",
+    "seattle-u"
+   ],
+   "elo": 1556.841
+  },
+  {
+   "kaggleTeamId": 1371,
+   "teamName": "Seton Hall",
+   "spellings": [
+    "seton hall",
+    "seton-hall"
+   ],
+   "elo": 1645.4856
+  },
+  {
+   "kaggleTeamId": 1372,
+   "teamName": "SF Austin",
+   "spellings": [
+    "sf austin",
+    "sfa",
+    "stephen f. austin",
+    "stephen-f-austin"
+   ],
+   "elo": 1664.5262
+  },
+  {
+   "kaggleTeamId": 1373,
+   "teamName": "Siena",
+   "spellings": [
+    "siena"
+   ],
+   "elo": 1603.6236
+  },
+  {
+   "kaggleTeamId": 1374,
+   "teamName": "SMU",
+   "spellings": [
+    "smu",
+    "southern methodist",
+    "southern-methodist"
+   ],
+   "elo": 1658.0545
+  },
+  {
+   "kaggleTeamId": 1375,
+   "teamName": "South Alabama",
+   "spellings": [
+    "south ala.",
+    "south alabama",
+    "south-ala",
+    "south-alabama"
+   ],
+   "elo": 1510.4619
+  },
+  {
+   "kaggleTeamId": 1376,
+   "teamName": "South Carolina",
+   "spellings": [
+    "south carolina",
+    "south-carolina"
+   ],
+   "elo": 1501.3861
+  },
+  {
+   "kaggleTeamId": 1377,
+   "teamName": "South Dakota",
+   "spellings": [
+    "south dakota",
+    "south-dakota"
+   ],
+   "elo": 1380.1406
+  },
+  {
+   "kaggleTeamId": 1378,
+   "teamName": "South Florida",
+   "spellings": [
+    "south fla.",
+    "south florida",
+    "south-fla",
+    "south-florida"
+   ],
+   "elo": 1807.3749
+  },
+  {
+   "kaggleTeamId": 1379,
+   "teamName": "Southern Miss",
+   "spellings": [
+    "southern miss",
+    "southern miss.",
+    "southern mississippi",
+    "southern-miss",
+    "southern-mississippi"
+   ],
+   "elo": 1515.8452
+  },
+  {
+   "kaggleTeamId": 1380,
+   "teamName": "Southern Univ",
+   "spellings": [
+    "southern",
+    "southern u",
+    "southern u.",
+    "southern un",
+    "southern univ",
+    "southern-u",
+    "southern-university"
+   ],
+   "elo": 1417.9514
+  },
+  {
+   "kaggleTeamId": 1381,
+   "teamName": "Southern Utah",
+   "spellings": [
+    "southern utah",
+    "southern-utah"
+   ],
+   "elo": 1338.2925
+  },
+  {
+   "kaggleTeamId": 1382,
+   "teamName": "St Bonaventure",
+   "spellings": [
+    "saint bonaventure",
+    "st bonaventure",
+    "st-bonaventure",
+    "st. bonaventure"
+   ],
+   "elo": 1520.8244
+  },
+  {
+   "kaggleTeamId": 1384,
+   "teamName": "St Francis PA",
+   "spellings": [
+    "saint francis (pa)",
+    "saint-francis-pa",
+    "st francis (pa)",
+    "st francis pa",
+    "st-francis-pa",
+    "st. francis (pa)"
+   ],
+   "elo": 1173.2258
+  },
+  {
+   "kaggleTeamId": 1385,
+   "teamName": "St John's",
+   "spellings": [
+    "saint john`s",
+    "st john's",
+    "st john's (ny)",
+    "st-johns",
+    "st-johns-ny",
+    "st. john's",
+    "st. john's (ny)",
+    "st. john`s (ny)"
+   ],
+   "elo": 1961.7369
+  },
+  {
+   "kaggleTeamId": 1386,
+   "teamName": "St Joseph's PA",
+   "spellings": [
+    "saint joseph's",
+    "saint joseph`s",
+    "saint-josephs",
+    "sju (pa)",
+    "st joseph's",
+    "st joseph's pa",
+    "st-josephs-pa",
+    "st. joseph's",
+    "st. joseph's pa"
+   ],
+   "elo": 1663.4038
+  },
+  {
+   "kaggleTeamId": 1387,
+   "teamName": "St Louis",
+   "spellings": [
+    "saint louis",
+    "saint-louis",
+    "saintlouis",
+    "st louis"
+   ],
+   "elo": 1754.5385
+  },
+  {
+   "kaggleTeamId": 1388,
+   "teamName": "St Mary's CA",
+   "spellings": [
+    "saint mary's",
+    "saint mary's (ca)",
+    "saint mary`s",
+    "saint-marys",
+    "saint-marys-ca",
+    "st mary's (ca)",
+    "st mary's ca",
+    "st-marys-ca",
+    "st. mary's",
+    "st. mary's (ca)",
+    "st. mary`s (ca)"
+   ],
+   "elo": 1880.139
+  },
+  {
+   "kaggleTeamId": 1389,
+   "teamName": "St Peter's",
+   "spellings": [
+    "saint peter's",
+    "saint peter`s",
+    "saint-peters",
+    "st peter's",
+    "st-peters",
+    "st. peter's"
+   ],
+   "elo": 1478.2948
+  },
+  {
+   "kaggleTeamId": 1390,
+   "teamName": "Stanford",
+   "spellings": [
+    "stanford"
+   ],
+   "elo": 1649.2639
+  },
+  {
+   "kaggleTeamId": 1391,
+   "teamName": "Stetson",
+   "spellings": [
+    "stetson"
+   ],
+   "elo": 1321.9737
+  },
+  {
+   "kaggleTeamId": 1392,
+   "teamName": "Stony Brook",
+   "spellings": [
+    "stony brook",
+    "stony-brook"
+   ],
+   "elo": 1420.8595
+  },
+  {
+   "kaggleTeamId": 1393,
+   "teamName": "Syracuse",
+   "spellings": [
+    "syracuse"
+   ],
+   "elo": 1520.0511
+  },
+  {
+   "kaggleTeamId": 1394,
+   "teamName": "TAM C. Christi",
+   "spellings": [
+    "a&m-corpus chris",
+    "a&m-corpus christi",
+    "am-corpus-chris",
+    "tam c",
+    "tam c. christi",
+    "texas a&m cc",
+    "texas a&m corpus",
+    "texas a&m-cc",
+    "texas a&m-corpus christi",
+    "texas-am-corpus-christi"
+   ],
+   "elo": 1492.2308
+  },
+  {
+   "kaggleTeamId": 1395,
+   "teamName": "TCU",
+   "spellings": [
+    "tcu",
+    "texas christian",
+    "texas-christian"
+   ],
+   "elo": 1759.8487
+  },
+  {
+   "kaggleTeamId": 1396,
+   "teamName": "Temple",
+   "spellings": [
+    "temple"
+   ],
+   "elo": 1464.5545
+  },
+  {
+   "kaggleTeamId": 1397,
+   "teamName": "Tennessee",
+   "spellings": [
+    "tennessee"
+   ],
+   "elo": 1810.9389
+  },
+  {
+   "kaggleTeamId": 1398,
+   "teamName": "Tennessee St",
+   "spellings": [
+    "tennessee st",
+    "tennessee st.",
+    "tennessee state",
+    "tennessee-st",
+    "tennessee-state"
+   ],
+   "elo": 1606.7256
+  },
+  {
+   "kaggleTeamId": 1399,
+   "teamName": "Tennessee Tech",
+   "spellings": [
+    "tennessee tech",
+    "tennessee-tech"
+   ],
+   "elo": 1330.2026
+  },
+  {
+   "kaggleTeamId": 1400,
+   "teamName": "Texas",
+   "spellings": [
+    "texas"
+   ],
+   "elo": 1669.9073
+  },
+  {
+   "kaggleTeamId": 1401,
+   "teamName": "Texas A&M",
+   "spellings": [
+    "texas a&m",
+    "texas-am",
+    "texasa&m"
+   ],
+   "elo": 1711.2409
+  },
+  {
+   "kaggleTeamId": 1402,
+   "teamName": "Texas St",
+   "spellings": [
+    "texas st",
+    "texas st.",
+    "texas state",
+    "texas-st",
+    "texas-state"
+   ],
+   "elo": 1502.6578
+  },
+  {
+   "kaggleTeamId": 1403,
+   "teamName": "Texas Tech",
+   "spellings": [
+    "texas tech",
+    "texas-tech"
+   ],
+   "elo": 1794.1238
+  },
+  {
+   "kaggleTeamId": 1404,
+   "teamName": "TN Martin",
+   "spellings": [
+    "tenn-martin",
+    "tennessee-martin",
+    "tn martin",
+    "ut martin",
+    "ut-martin"
+   ],
+   "elo": 1442.846
+  },
+  {
+   "kaggleTeamId": 1405,
+   "teamName": "Toledo",
+   "spellings": [
+    "toledo"
+   ],
+   "elo": 1569.7707
+  },
+  {
+   "kaggleTeamId": 1406,
+   "teamName": "Towson",
+   "spellings": [
+    "towson"
+   ],
+   "elo": 1597.138
+  },
+  {
+   "kaggleTeamId": 1407,
+   "teamName": "Troy",
+   "spellings": [
+    "troy",
+    "troy st."
+   ],
+   "elo": 1606.3232
+  },
+  {
+   "kaggleTeamId": 1408,
+   "teamName": "Tulane",
+   "spellings": [
+    "tulane"
+   ],
+   "elo": 1467.2926
+  },
+  {
+   "kaggleTeamId": 1409,
+   "teamName": "Tulsa",
+   "spellings": [
+    "tulsa"
+   ],
+   "elo": 1685.6496
+  },
+  {
+   "kaggleTeamId": 1410,
+   "teamName": "UTRGV",
+   "spellings": [
+    "tex.-pan american",
+    "texas rio grande valley",
+    "texas-pan american",
+    "texas-pan-american",
+    "texas-rio grande valley",
+    "tx pan american",
+    "utrgv"
+   ],
+   "elo": 1548.5772
+  },
+  {
+   "kaggleTeamId": 1411,
+   "teamName": "TX Southern",
+   "spellings": [
+    "texas southern",
+    "texas-southern",
+    "tx southern"
+   ],
+   "elo": 1316.6243
+  },
+  {
+   "kaggleTeamId": 1412,
+   "teamName": "UAB",
+   "spellings": [
+    "alabama-birmingham",
+    "uab"
+   ],
+   "elo": 1608.4091
+  },
+  {
+   "kaggleTeamId": 1413,
+   "teamName": "UC Davis",
+   "spellings": [
+    "california-davis",
+    "uc davis",
+    "uc-davis"
+   ],
+   "elo": 1502.5567
+  },
+  {
+   "kaggleTeamId": 1414,
+   "teamName": "UC Irvine",
+   "spellings": [
+    "california-irvine",
+    "uc irvine",
+    "uc-irvine"
+   ],
+   "elo": 1652.0591
+  },
+  {
+   "kaggleTeamId": 1415,
+   "teamName": "UC Riverside",
+   "spellings": [
+    "cal riverside",
+    "california-riverside",
+    "uc riverside",
+    "uc-riverside"
+   ],
+   "elo": 1360.1608
+  },
+  {
+   "kaggleTeamId": 1416,
+   "teamName": "UCF",
+   "spellings": [
+    "central florida",
+    "central florida(ucf)",
+    "central-florida",
+    "ucf"
+   ],
+   "elo": 1669.3591
+  },
+  {
+   "kaggleTeamId": 1417,
+   "teamName": "UCLA",
+   "spellings": [
+    "ucla"
+   ],
+   "elo": 1792.3997
+  },
+  {
+   "kaggleTeamId": 1418,
+   "teamName": "Louisiana",
+   "spellings": [
+    "la.-lafayette",
+    "louisiana",
+    "louisiana-lafayette",
+    "ull"
+   ],
+   "elo": 1369.7308
+  },
+  {
+   "kaggleTeamId": 1419,
+   "teamName": "ULM",
+   "spellings": [
+    "la-monroe",
+    "la.-monroe",
+    "louisiana-monroe",
+    "ulm"
+   ],
+   "elo": 1115.7877
+  },
+  {
+   "kaggleTeamId": 1420,
+   "teamName": "UMBC",
+   "spellings": [
+    "maryland-baltimore county",
+    "maryland-baltimore-county",
+    "md baltimore co",
+    "md baltimore cty",
+    "umbc"
+   ],
+   "elo": 1604.4509
+  },
+  {
+   "kaggleTeamId": 1421,
+   "teamName": "UNC Asheville",
+   "spellings": [
+    "n.c. asheville",
+    "nc asheville",
+    "north carolina-asheville",
+    "north-carolina-asheville",
+    "unc asheville",
+    "unc-asheville"
+   ],
+   "elo": 1434.5615
+  },
+  {
+   "kaggleTeamId": 1422,
+   "teamName": "UNC Greensboro",
+   "spellings": [
+    "nc greensboro",
+    "nc-greensboro",
+    "north carolina-greensboro",
+    "north-carolina-greensboro",
+    "unc greensboro",
+    "uncg"
+   ],
+   "elo": 1410.6894
+  },
+  {
+   "kaggleTeamId": 1423,
+   "teamName": "UNC Wilmington",
+   "spellings": [
+    "nc wilmington",
+    "nc-wilmington",
+    "north carolina-wilmington",
+    "north-carolina-wilmington",
+    "unc wilmington",
+    "uncw"
+   ],
+   "elo": 1670.0236
+  },
+  {
+   "kaggleTeamId": 1424,
+   "teamName": "UNLV",
+   "spellings": [
+    "nevada-las vegas",
+    "nevada-las-vegas",
+    "unlv"
+   ],
+   "elo": 1620.2291
+  },
+  {
+   "kaggleTeamId": 1425,
+   "teamName": "USC",
+   "spellings": [
+    "southern california",
+    "southern-california",
+    "usc"
+   ],
+   "elo": 1548.7984
+  },
+  {
+   "kaggleTeamId": 1426,
+   "teamName": "UT Arlington",
+   "spellings": [
+    "texas arlington",
+    "texas-arlington",
+    "ut arlington",
+    "ut-arlington"
+   ],
+   "elo": 1492.4845
+  },
+  {
+   "kaggleTeamId": 1427,
+   "teamName": "UT San Antonio",
+   "spellings": [
+    "texas san antonio",
+    "texas-san antonio",
+    "texas-san antonio(ut",
+    "texas-san-antonio",
+    "ut san antonio",
+    "utsa"
+   ],
+   "elo": 1233.3154
+  },
+  {
+   "kaggleTeamId": 1428,
+   "teamName": "Utah",
+   "spellings": [
+    "utah"
+   ],
+   "elo": 1422.8116
+  },
+  {
+   "kaggleTeamId": 1429,
+   "teamName": "Utah St",
+   "spellings": [
+    "utah st",
+    "utah st.",
+    "utah state",
+    "utah-st",
+    "utah-state"
+   ],
+   "elo": 1829.4185
+  },
+  {
+   "kaggleTeamId": 1430,
+   "teamName": "Utah Valley",
+   "spellings": [
+    "utah valley",
+    "utah valley st.",
+    "utah-valley",
+    "utah-valley-state"
+   ],
+   "elo": 1684.8668
+  },
+  {
+   "kaggleTeamId": 1431,
+   "teamName": "UTEP",
+   "spellings": [
+    "texas-el paso",
+    "texas-el-paso",
+    "utep"
+   ],
+   "elo": 1390.3717
+  },
+  {
+   "kaggleTeamId": 1433,
+   "teamName": "VCU",
+   "spellings": [
+    "va commonwealth",
+    "vcu",
+    "vcu(va. commonwealth",
+    "virginia commonwealth",
+    "virginia-commonwealth"
+   ],
+   "elo": 1850.9411
+  },
+  {
+   "kaggleTeamId": 1434,
+   "teamName": "Valparaiso",
+   "spellings": [
+    "valparaiso"
+   ],
+   "elo": 1564.048
+  },
+  {
+   "kaggleTeamId": 1435,
+   "teamName": "Vanderbilt",
+   "spellings": [
+    "vanderbilt"
+   ],
+   "elo": 1871.1846
+  },
+  {
+   "kaggleTeamId": 1436,
+   "teamName": "Vermont",
+   "spellings": [
+    "vermont"
+   ],
+   "elo": 1528.1265
+  },
+  {
+   "kaggleTeamId": 1437,
+   "teamName": "Villanova",
+   "spellings": [
+    "villanova"
+   ],
+   "elo": 1749.1504
+  },
+  {
+   "kaggleTeamId": 1438,
+   "teamName": "Virginia",
+   "spellings": [
+    "virginia"
+   ],
+   "elo": 1878.2716
+  },
+  {
+   "kaggleTeamId": 1439,
+   "teamName": "Virginia Tech",
+   "spellings": [
+    "virginia tech",
+    "virginia-tech"
+   ],
+   "elo": 1619.0253
+  },
+  {
+   "kaggleTeamId": 1440,
+   "teamName": "VMI",
+   "spellings": [
+    "virginia military",
+    "virginia military institute",
+    "virginia-military-institute",
+    "vmi"
+   ],
+   "elo": 1115.5835
+  },
+  {
+   "kaggleTeamId": 1441,
+   "teamName": "W Carolina",
+   "spellings": [
+    "estern carolina",
+    "w carolina",
+    "western caro.",
+    "western carolina",
+    "western-caro",
+    "western-carolina"
+   ],
+   "elo": 1472.4927
+  },
+  {
+   "kaggleTeamId": 1442,
+   "teamName": "W Illinois",
+   "spellings": [
+    "w illinois",
+    "western ill.",
+    "western illinois",
+    "western-ill",
+    "western-illinois"
+   ],
+   "elo": 1074.7265
+  },
+  {
+   "kaggleTeamId": 1443,
+   "teamName": "WKU",
+   "spellings": [
+    "w kentucky",
+    "western kentucky",
+    "western ky.",
+    "western-kentucky",
+    "western-ky",
+    "wku"
+   ],
+   "elo": 1491.9848
+  },
+  {
+   "kaggleTeamId": 1444,
+   "teamName": "W Michigan",
+   "spellings": [
+    "w michigan",
+    "western mich.",
+    "western michigan",
+    "western-mich",
+    "western-michigan"
+   ],
+   "elo": 1336.1523
+  },
+  {
+   "kaggleTeamId": 1447,
+   "teamName": "Wagner",
+   "spellings": [
+    "wagner"
+   ],
+   "elo": 1361.9155
+  },
+  {
+   "kaggleTeamId": 1448,
+   "teamName": "Wake Forest",
+   "spellings": [
+    "wake forest",
+    "wake-forest"
+   ],
+   "elo": 1614.3179
+  },
+  {
+   "kaggleTeamId": 1449,
+   "teamName": "Washington",
+   "spellings": [
+    "washington"
+   ],
+   "elo": 1600.2671
+  },
+  {
+   "kaggleTeamId": 1450,
+   "teamName": "Washington St",
+   "spellings": [
+    "washington st",
+    "washington st.",
+    "washington state",
+    "washington-st",
+    "washington-state"
+   ],
+   "elo": 1443.4352
+  },
+  {
+   "kaggleTeamId": 1451,
+   "teamName": "Weber St",
+   "spellings": [
+    "weber st",
+    "weber st.",
+    "weber state",
+    "weber-st",
+    "weber-state"
+   ],
+   "elo": 1412.4435
+  },
+  {
+   "kaggleTeamId": 1452,
+   "teamName": "West Virginia",
+   "spellings": [
+    "west virginia",
+    "west-virginia"
+   ],
+   "elo": 1633.3832
+  },
+  {
+   "kaggleTeamId": 1453,
+   "teamName": "WI Green Bay",
+   "spellings": [
+    "green bay",
+    "green-bay",
+    "wi green bay",
+    "wis.-green bay",
+    "wisconsin-green bay",
+    "wisconsin-green-bay"
+   ],
+   "elo": 1452.5191
+  },
+  {
+   "kaggleTeamId": 1454,
+   "teamName": "WI Milwaukee",
+   "spellings": [
+    "milwaukee",
+    "wi milwaukee",
+    "wis.-milwaukee",
+    "wisconsin-milwaukee"
+   ],
+   "elo": 1368.0491
+  },
+  {
+   "kaggleTeamId": 1455,
+   "teamName": "Wichita St",
+   "spellings": [
+    "wichita st",
+    "wichita st.",
+    "wichita state",
+    "wichita-st",
+    "wichita-state",
+    "wichitastate"
+   ],
+   "elo": 1695.2703
+  },
+  {
+   "kaggleTeamId": 1456,
+   "teamName": "William & Mary",
+   "spellings": [
+    "william & mary",
+    "william--mary",
+    "william-mary"
+   ],
+   "elo": 1541.4551
+  },
+  {
+   "kaggleTeamId": 1457,
+   "teamName": "Winthrop",
+   "spellings": [
+    "winthrop"
+   ],
+   "elo": 1599.2231
+  },
+  {
+   "kaggleTeamId": 1458,
+   "teamName": "Wisconsin",
+   "spellings": [
+    "wisconsin"
+   ],
+   "elo": 1827.1832
+  },
+  {
+   "kaggleTeamId": 1459,
+   "teamName": "Wofford",
+   "spellings": [
+    "wofford"
+   ],
+   "elo": 1454.4378
+  },
+  {
+   "kaggleTeamId": 1460,
+   "teamName": "Wright St",
+   "spellings": [
+    "wright st",
+    "wright st.",
+    "wright state",
+    "wright-st",
+    "wright-state"
+   ],
+   "elo": 1592.2114
+  },
+  {
+   "kaggleTeamId": 1461,
+   "teamName": "Wyoming",
+   "spellings": [
+    "wyoming"
+   ],
+   "elo": 1571.7163
+  },
+  {
+   "kaggleTeamId": 1462,
+   "teamName": "Xavier",
+   "spellings": [
+    "xavier"
+   ],
+   "elo": 1547.364
+  },
+  {
+   "kaggleTeamId": 1463,
+   "teamName": "Yale",
+   "spellings": [
+    "yale"
+   ],
+   "elo": 1729.9842
+  },
+  {
+   "kaggleTeamId": 1464,
+   "teamName": "Youngstown St",
+   "spellings": [
+    "youngstown st",
+    "youngstown st.",
+    "youngstown state",
+    "youngstown-st",
+    "youngstown-state"
+   ],
+   "elo": 1430.9572
+  },
+  {
+   "kaggleTeamId": 1465,
+   "teamName": "Cal Baptist",
+   "spellings": [
+    "cal baptist",
+    "california baptist"
+   ],
+   "elo": 1668.2249
+  },
+  {
+   "kaggleTeamId": 1466,
+   "teamName": "North Alabama",
+   "spellings": [
+    "north ala.",
+    "north alabama"
+   ],
+   "elo": 1249.9842
+  },
+  {
+   "kaggleTeamId": 1467,
+   "teamName": "Merrimack",
+   "spellings": [
+    "merrimack"
+   ],
+   "elo": 1633.1141
+  },
+  {
+   "kaggleTeamId": 1468,
+   "teamName": "Bellarmine",
+   "spellings": [
+    "bellarmine"
+   ],
+   "elo": 1363.9177
+  },
+  {
+   "kaggleTeamId": 1469,
+   "teamName": "Utah Tech",
+   "spellings": [
+    "dixie st",
+    "dixie state",
+    "utah tech"
+   ],
+   "elo": 1469.7607
+  },
+  {
+   "kaggleTeamId": 1470,
+   "teamName": "Tarleton St",
+   "spellings": [
+    "tarleton st",
+    "tarleton state"
+   ],
+   "elo": 1341.1922
+  },
+  {
+   "kaggleTeamId": 1471,
+   "teamName": "UC San Diego",
+   "spellings": [
+    "uc san diego",
+    "uc-san diego"
+   ],
+   "elo": 1589.5306
+  },
+  {
+   "kaggleTeamId": 1472,
+   "teamName": "St Thomas MN",
+   "spellings": [
+    "saint thomas (minn.)",
+    "st thomas mn",
+    "st. thomas"
+   ],
+   "elo": 1640.3997
+  },
+  {
+   "kaggleTeamId": 1473,
+   "teamName": "Lindenwood",
+   "spellings": [
+    "lindenwood"
+   ],
+   "elo": 1363.715
+  },
+  {
+   "kaggleTeamId": 1474,
+   "teamName": "Queens NC",
+   "spellings": [
+    "queens (nc)",
+    "queens nc"
+   ],
+   "elo": 1564.1887
+  },
+  {
+   "kaggleTeamId": 1475,
+   "teamName": "Southern Indiana",
+   "spellings": [
+    "southern indiana"
+   ],
+   "elo": 1187.5744
+  },
+  {
+   "kaggleTeamId": 1476,
+   "teamName": "Stonehill",
+   "spellings": [
+    "stonehill"
+   ],
+   "elo": 1286.8098
+  },
+  {
+   "kaggleTeamId": 1477,
+   "teamName": "East Texas A&M",
+   "spellings": [
+    "east texas a&m",
+    "texas a&m-commerce",
+    "tx a&m commerce"
+   ],
+   "elo": 1252.7178
+  },
+  {
+   "kaggleTeamId": 1478,
+   "teamName": "Le Moyne",
+   "spellings": [
+    "le moyne"
+   ],
+   "elo": 1297.8945
+  },
+  {
+   "kaggleTeamId": 1479,
+   "teamName": "Mercyhurst",
+   "spellings": [
+    "mercyhurst"
+   ],
+   "elo": 1408.4971
+  },
+  {
+   "kaggleTeamId": 1480,
+   "teamName": "West Georgia",
+   "spellings": [
+    "west georgia"
+   ],
+   "elo": 1340.4004
+  },
+  {
+   "kaggleTeamId": 1481,
+   "teamName": "New Haven",
+   "spellings": [
+    "new haven"
+   ],
+   "elo": 1336.4698
+  }
+ ]
+}
