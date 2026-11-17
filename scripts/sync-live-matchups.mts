@@ -68,11 +68,11 @@ const runRecord = {
 run("liveMatchups:importRatings", { run: runRecord, teams: ratings });
 console.log(`Stored ${ratings.length} team ratings.`);
 
-// Predict D1 games in the next seven days and refresh results for stored games.
+// Predict D1 games (including the NCAA tournament and NIT) in the next seven days and refresh
+// results for stored games. Ratings above still use regular-season games only.
 const pending = new Set<number>(run("liveMatchups:unfinishedGameIds", { season }));
 const horizon = now.getTime() + 7 * DAY;
 const toSync = games.filter(game => divisionOne.has(game.homeTeamId) && divisionOne.has(game.awayTeamId)
-  && game.seasonType === "regular"
   && (pending.has(game.id) || (Date.parse(game.startDate) > now.getTime() && Date.parse(game.startDate) <= horizon)))
   .map(game => ({
     gameId: game.id, startDate: game.startDate, status: game.status, neutralSite: Boolean(game.neutralSite),

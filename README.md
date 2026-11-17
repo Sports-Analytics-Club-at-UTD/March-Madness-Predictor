@@ -265,7 +265,8 @@ games between Division I teams, which includes conference tournaments but not
 the NCAA tournament or NIT, the same games the Kaggle regular season covers. From
 these it computes the three features in `scripts/lib/live-ratings.mjs` and stores
 them in `liveTeamRatings`, with run details in `liveRatingRuns`. It then stores
-predictions in `liveGamePredictions` for Division I games in the next seven days
+predictions in `liveGamePredictions` for Division I games in the next seven days,
+including NCAA tournament and NIT games,
 and refreshes results for stored games that are not final. A prediction is made
 only before tip-off, from ratings that exclude the game, and is refreshed on each
 sync until tip-off. After that, only the status and score change. Games first
