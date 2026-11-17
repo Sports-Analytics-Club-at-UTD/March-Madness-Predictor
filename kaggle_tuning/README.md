@@ -136,4 +136,5 @@ which also matches. The scorer reproduces goto_conversion's 0.12584 on `market26
 Strategy re-evaluation (issue #67, `STRATEGY_REEVAL.md`): Hedge (the RL-adjacent method from PR #66),
 logistic stacking and GBM probability mappings were run with `python -m kaggle_tuning.strat_reeval
 kaggle_tuning/configs/strat_reeval.py`. None beats `women_recommended` on 2025, 2026 and history under the
-guard. Stacking improves v21–24 by up to 0.0026 but worsens the 2025/2026 mean by 0.0015.
+guard. Unpenalized stacking improves v21–24 by up to 0.0026 but worsens the 2025/2026 mean by
+0.0015–0.0021. Ridge-to-current stacking worsens it by 0.0003.

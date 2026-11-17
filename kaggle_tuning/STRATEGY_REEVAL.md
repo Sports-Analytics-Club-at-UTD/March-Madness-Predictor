@@ -80,8 +80,8 @@ Raw per-season and per-gender scores are in [`configs/strat_reeval.results.json`
   - Starting from the current weights helps history a little (−0.00011) but hurts the targets (+0.00031).
   - This is the measured answer to PR #66's open question: the RL-adjacent method does not beat the current blend.
 - **B. Stacking wins history and loses the targets.** It gives the largest history gain of any run, with v21–24
-  improving by up to −0.00258 and 6 of 9 seasons better, but the 2025/2026 mean worsens by 0.0015–0.0021, even
-  without the market (`mo25` .12085 vs .11419). Two effects push in opposite directions:
+  improving by up to −0.00258 and 6 of 9 seasons better. But the unpenalized stacks worsen the 2025/2026 mean by
+  0.0015–0.0021, even without the market (`mo25` .12085 vs .11419). `stack_ridge` worsens it by 0.00029. Two effects push in opposite directions:
   - **Men.** The stack learns a temperature of 0.81–0.86, so the model shrinks toward 0.5. That matches the fixed
     0.9 multiplier in `MENS_ALLYEARS.md` and helps the upset-heavy 2021–2024. It hurts the chalky 2025 (men's
     model-only .14315 vs .13424).
